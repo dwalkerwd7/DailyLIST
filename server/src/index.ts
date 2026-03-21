@@ -5,10 +5,6 @@ const PORT = process.env.PORT!
 
 app.use(express.json())
 
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok' })
-})
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
