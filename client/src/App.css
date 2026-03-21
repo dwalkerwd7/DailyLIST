@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* Light mode theme variables */
+:root {
+  --bg-primary: white;
+  --bg-secondary: #f0f0f0;
+  --text-primary: black;
+  --border-primary: #e5e7eb;
+}
+
+/* Dark mode theme variables */
+:root.dark {
+  --bg-primary: #1f2937;
+  --bg-secondary: #374151;
+  --text-primary: #f3f4f6;
+  --border-primary: #374151;
+}
+
+/* Map theme variables to Tailwind's color system */
+@theme {
+  --color-primary-bg: var(--bg-primary);
+  --color-secondary-bg: var(--bg-secondary);
+  --color-primary-text: var(--text-primary);
+  --color-primary-border: var(--border-primary);
+}
+
+/* Custom utilities for animations */
+@layer utilities {
+  .spacing-ease-in {
+    letter-spacing: 0.2em;
+    animation: spacing-extend 0.15s ease-in forwards;
+  }
+  .spacing-ease-out {
+    letter-spacing: normal;
+    animation: spacing-contract 0.15s ease-out forwards;
+  }
+}
+
+/* Keyframes */
+@keyframes spacing-extend {
+  0% {
+    letter-spacing: normal;
+  }
+  100% {
+    letter-spacing: 0.2em;
+  }
+}
+
+@keyframes spacing-contract {
+  0% {
+    letter-spacing: 0.2em;
+  }
+  100% {
+    letter-spacing: normal;
+  }
+}
