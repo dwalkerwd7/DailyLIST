@@ -6,6 +6,8 @@
   --bg-secondary: #f0f0f0;
   --text-primary: black;
   --border-primary: #e5e7eb;
+  --on: #10b981;
+  --off: #9ca3af;
 }
 
 /* Dark mode theme variables */
@@ -14,6 +16,8 @@
   --bg-secondary: #374151;
   --text-primary: #f3f4f6;
   --border-primary: #374151;
+  --on: #34d399;
+  --off: #6b7280;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -22,6 +26,8 @@
   --color-secondary-bg: var(--bg-secondary);
   --color-primary-text: var(--text-primary);
   --color-primary-border: var(--border-primary);
+  --color-on: var(--on);
+  --color-off: var(--off);
 }
 
 /* Custom utilities for animations */

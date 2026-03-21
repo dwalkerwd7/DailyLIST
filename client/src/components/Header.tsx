@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { type Theme } from '../App';
+import ToggleSwitch from './utils/ToggleSwitch';
 
 export default function Header() {
   const [titleHovered, setTitleHovered] = useState(false);
@@ -38,9 +39,9 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex items-center gap-6">
-            <div className="uppercase text-primary-text cursor-pointer bg-secondary-bg p-4 rounded-2xl" onClick={handleThemeToggle}>
-              <span className="mr-3">{`${theme} mode`}</span>
-              <input type="checkbox" id="theme-toggle" checked={theme === 'dark'} readOnly />
+            <div className="flex items-center gap-3">
+              <span className="uppercase text-primary-text font-semibold text-sm">{`${theme} mode`}</span>
+              <ToggleSwitch isOn={theme === 'dark'} handleToggle={handleThemeToggle} />
             </div>
             <Link
               to="/about"
