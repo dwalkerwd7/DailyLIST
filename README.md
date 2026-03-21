@@ -91,7 +91,7 @@ DailyLIST/
 
 ## Status
 
-**Version:** 0.1 (Active Development)
+**Version:** 0.2 (Active Development)
 
 Currently building towards v1.0 with core todo functionality. See issues and pull requests for planned features and work in progress.
 

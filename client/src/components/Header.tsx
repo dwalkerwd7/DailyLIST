@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <header className="border-b border-primary-border bg-primary-bg">
       <nav className="mx-auto max-w-5xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-col sm:flex-row">
           <Link
             to="/"
             className="text-3xl font-black text-primary-text"
