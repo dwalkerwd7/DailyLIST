@@ -55,8 +55,8 @@ export default function Alert({ title = '', closable = false, msg, type }: Alert
                     type="button" 
                     aria-label="Close alert"
                     className="group absolute top-1 right-1 inline-flex h-7 w-7 items-center justify-center 
-                        rounded-full border border-black/10 bg-white/90 text-black shadow-sm transition-all duration-150 
-                        hover:scale-105 hover:bg-white focus:outline-none focus:ring-2 focus:ring-black/30"
+                        rounded-full border border-primary-border bg-primary-bg text-primary-text shadow-sm transition-all duration-150 
+                        hover:scale-105 hover:bg-secondary-bg focus:outline-none focus:ring-2 focus:ring-button-primary"
                 onClick={(e) => handleClose(e.currentTarget)}
             >
                 <RotatingX /> 

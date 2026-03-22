@@ -45,13 +45,13 @@ export default function Header() {
             </div>
             <Link
               to="/about"
-              className="text-gray-700 hover:text-primary-text"
+              className="text-link hover:text-link-hover"
             >
               About
             </Link>
             <Link
               to="/feedback"
-              className="text-gray-700 hover:text-primary-text"
+              className="text-link hover:text-link-hover"
             >
               Feedback
             </Link>

@@ -7,8 +7,8 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-primary-text text-center">
           Daily Todo List
         </h1>
-        <p className="text-lg text-gray-700">
-          Your daily list resets every 24 hours. Start fresh each day.
+        <p className="text-lg text-center text-muted">
+          Your todo list resets in: 00:00:00
         </p>
 
         <TodoApp />

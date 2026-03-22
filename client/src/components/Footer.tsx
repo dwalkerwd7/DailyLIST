@@ -17,14 +17,14 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-700 hover:text-primary-text transition-colors"
+                  className="text-link hover:text-link-hover transition-colors"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-primary-text">
             <p>&copy; {currentYear} DailyLIST. MIT License.</p>
           </div>
         </div>

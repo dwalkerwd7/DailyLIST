@@ -13,27 +13,37 @@
   --alert-error-bg: #ef444450;
   --on: #10b981;
   --off: #9ca3af;
-  --button-primary: #3b82f6;
-  --button-primary-hover: #2563eb;
+  --submit-primary: #3b82f6;
+  --submit-primary-hover: #2563eb;
+  --button-primary: #93c5fd;
+  --button-primary-hover: #60a5fa;
+  --link: #64748b;
+  --link-hover: #1d4ed8;
   --required: #ef4444;
+  --muted: #6b7280;
 }
 
 /* Dark mode theme variables */
 :root.dark {
-  --bg-primary: #1f2937;
-  --bg-secondary: #374151;
-  --text-primary: #f3f4f6;
-  --border-primary: #374151;
-  --form-input: #4b5563;
-  --alert-success: #10b981;
-  --alert-success-bg: #10b98150;
-  --alert-error: #ef4444;
-  --alert-error-bg: #ef444450;
-  --on: #34d399;
-  --off: #6b7280;
-  --button-primary: #3b82f6;
-  --button-primary-hover: #2563eb;
-  --required: #ef4444;
+  --bg-primary: #0b1220;
+  --bg-secondary: #131c2e;
+  --text-primary: #e6edf7;
+  --border-primary: #2a364f;
+  --form-input: #334155;
+  --alert-success: #34d399;
+  --alert-success-bg: #34d39926;
+  --alert-error: #f87171;
+  --alert-error-bg: #f8717126;
+  --on: #22c55e;
+  --off: #64748b;
+  --submit-primary: #3b82f6;
+  --submit-primary-hover: #0073ff;
+  --button-primary: #93c5fd;
+  --button-primary-hover: #60a5fa;
+  --link: #cbd5e1;
+  --link-hover: #93c5fd;
+  --required: #fb7185;
+  --muted: #dddddd;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -50,8 +60,13 @@
   --color-required: var(--required);
   --color-on: var(--on);
   --color-off: var(--off);
+  --color-submit-primary: var(--submit-primary);
+  --color-submit-primary-hover: var(--submit-primary-hover);
   --color-button-primary: var(--button-primary);
   --color-button-primary-hover: var(--button-primary-hover);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
+  --color-muted: var(--muted);
 }
 
 /* Custom utilities for animations */

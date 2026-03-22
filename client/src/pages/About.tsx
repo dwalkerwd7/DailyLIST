@@ -5,7 +5,7 @@ export default function About() {
         <h1 className="text-4xl font-bold text-primary-text text-center">
           About DailyLIST
         </h1>
-        <div className="space-y-4 text-gray-700">
+        <div className="space-y-4 text-primary-text">
           <p>
             DailyLIST is a minimal todo app designed for focus and simplicity.
             Each day, your list resets, encouraging a fresh approach to what
