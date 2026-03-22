@@ -17,10 +17,15 @@
   --submit-primary-hover: #2563eb;
   --button-primary: #93c5fd;
   --button-primary-hover: #60a5fa;
+  --button-secondary: #64748b;
+  --button-secondary-hover: #475569;
   --link: #64748b;
   --link-hover: #1d4ed8;
   --required: #ef4444;
+  --delete: #ef4444;
+  --delete-hover: #dc2626;
   --muted: #6b7280;
+  --todo-text: #111111;
 }
 
 /* Dark mode theme variables */
@@ -40,10 +45,15 @@
   --submit-primary-hover: #0073ff;
   --button-primary: #93c5fd;
   --button-primary-hover: #60a5fa;
+  --button-secondary: #64748b;
+  --button-secondary-hover: #475569;
+  --delete: #ef4444;
+  --delete-hover: #dc2626;
   --link: #cbd5e1;
   --link-hover: #93c5fd;
   --required: #fb7185;
   --muted: #dddddd;
+  --todo-text: #e6edf7;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -64,9 +74,14 @@
   --color-submit-primary-hover: var(--submit-primary-hover);
   --color-button-primary: var(--button-primary);
   --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-secondary: var(--button-secondary);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-delete: var(--delete);
+  --color-delete-hover: var(--delete-hover);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-muted: var(--muted);
+  --color-todo-text: var(--todo-text);
 }
 
 /* Custom utilities for animations */
