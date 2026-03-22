@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Alert, { type AlertMessage } from '../components/utils/Alert';
+import Alert, { type AlertProps } from '../components/utils/Alert';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -7,11 +7,19 @@ export default function Feedback() {
     email: '',
     message: '',
   });
-  const [alertMessage, setAlertMessage] = useState<AlertMessage>({ title: 'Feedback Submitted!', msg: 'Thank you for your feedback!', type: 'success' });
+
+  const successAlert: AlertProps = {
+    title: 'Feedback Submitted!',
+    msg: 'Thank you for your feedback!',
+    type: 'success'
+  };
+
+  const [alertMessage, setAlertMessage] = useState<AlertProps>({ msg: '', type: 'success' });
+  let hasSubmittedFeedback = false;
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setAlertMessage({ msg: 'Thank you for your feedback!', type: 'success' });
+    setAlertMessage(successAlert);
 
     // TODO: send the form data through backend api
 
@@ -20,14 +28,21 @@ export default function Feedback() {
 
   useEffect(() => {
     // TODO: check if IP already has submitted feedback using backend api
+    hasSubmittedFeedback = false; // Placeholder until backend is implemented
   }, []);
 
   return (
     <main className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8 text-center">
       <h1 className="text-4xl font-bold mb-4">We'd love to hear from you!</h1>
       <p className="text-lg text-gray-700 mb-8">Your feedback helps us improve DailyList. Please share your thoughts, suggestions, or report any issues you encounter.</p>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
-        <Alert message={alertMessage} />
+      { !hasSubmittedFeedback ? (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
+        <Alert 
+          title={alertMessage.title} 
+          msg={alertMessage.msg} 
+          type={alertMessage.type} 
+          closable
+        />
         <div className="flex flex-col">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
             Name
@@ -77,6 +92,12 @@ export default function Feedback() {
           Submit Feedback
         </button>
       </form>
+      ) : (
+        <Alert 
+          msg={successAlert.msg} 
+          type={successAlert.type} 
+        />
+      )}
     </main>
   );
 }

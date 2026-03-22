@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
+import RotatingX from "./svg/RotatingX";
 
-type AlertMessage = {
+type AlertProps = {
     title?: string,
+    closable?: boolean,
     msg: string,
     type: 'error' | 'success'
 };
 
-export default function Alert({ message }: { message: AlertMessage }) {
-    const { title, msg, type } = message;
+export default function Alert({ title = '', closable = false, msg, type }: AlertProps) {
     const [closed, setClosed] = useState(false);
 
     // Reset close state only when a new alert message arrives.
@@ -17,6 +18,10 @@ export default function Alert({ message }: { message: AlertMessage }) {
     }, [msg, type]);
 
     const handleClose = (elem: HTMLButtonElement | null) => {
+        if(!closable) {
+            return; // Don't close if the button is disabled
+        }
+
         if(elem && elem.parentElement) {
             elem.parentElement.classList.add('alert-fade-out');
             setTimeout(() => {
@@ -45,15 +50,20 @@ export default function Alert({ message }: { message: AlertMessage }) {
                 {title && <h3 className="font-bold mb-1">{title}</h3>}
                 <p>{ msg }</p>
             </div>
-            <button 
-                type="button" 
-                className={`absolute top-0 right-0 h-6 w-6 items-center justify-center rounded-lg text-sm bg-white text-black`} 
+            { closable && (
+                <button 
+                    type="button" 
+                    aria-label="Close alert"
+                    className="group absolute top-1 right-1 inline-flex h-7 w-7 items-center justify-center 
+                        rounded-full border border-black/10 bg-white/90 text-black shadow-sm transition-all duration-150 
+                        hover:scale-105 hover:bg-white focus:outline-none focus:ring-2 focus:ring-black/30"
                 onClick={(e) => handleClose(e.currentTarget)}
             >
-                X
+                <RotatingX /> 
             </button>
+            )}
         </div>
     ) : null;
 };
 
-export type { AlertMessage };
+export type { AlertProps };
