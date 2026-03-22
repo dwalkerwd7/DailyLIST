@@ -6,8 +6,16 @@
   --bg-secondary: #f0f0f0;
   --text-primary: black;
   --border-primary: #e5e7eb;
+  --form-input: #d1d5db;
+  --alert-success: #10b981;
+  --alert-success-bg: #10b98150;
+  --alert-error: #ef4444;
+  --alert-error-bg: #ef444450;
   --on: #10b981;
   --off: #9ca3af;
+  --button-primary: #3b82f6;
+  --button-primary-hover: #2563eb;
+  --required: #ef4444;
 }
 
 /* Dark mode theme variables */
@@ -16,8 +24,16 @@
   --bg-secondary: #374151;
   --text-primary: #f3f4f6;
   --border-primary: #374151;
+  --form-input: #4b5563;
+  --alert-success: #10b981;
+  --alert-success-bg: #10b98150;
+  --alert-error: #ef4444;
+  --alert-error-bg: #ef444450;
   --on: #34d399;
   --off: #6b7280;
+  --button-primary: #3b82f6;
+  --button-primary-hover: #2563eb;
+  --required: #ef4444;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -26,8 +42,16 @@
   --color-secondary-bg: var(--bg-secondary);
   --color-primary-text: var(--text-primary);
   --color-primary-border: var(--border-primary);
+  --color-form-input: var(--form-input);
+  --color-alert-success: var(--alert-success);
+  --color-alert-error: var(--alert-error);
+  --color-alert-success-bg: var(--alert-success-bg);
+  --color-alert-error-bg: var(--alert-error-bg);
+  --color-required: var(--required);
   --color-on: var(--on);
   --color-off: var(--off);
+  --color-button-primary: var(--button-primary);
+  --color-button-primary-hover: var(--button-primary-hover);
 }
 
 /* Custom utilities for animations */
@@ -39,6 +63,9 @@
   .spacing-ease-out {
     letter-spacing: normal;
     animation: spacing-contract 0.15s ease-out forwards;
+  }
+  .alert-fade-out {
+    animation: fade-out 0.2s ease-out forwards;
   }
 }
 
@@ -58,5 +85,14 @@
   }
   100% {
     letter-spacing: normal;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
