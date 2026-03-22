@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Global styles */
+body {
+  caret-color: var(--caret-color);
+}
+
 /* Light mode theme variables */
 :root {
   --bg-primary: white;
@@ -17,8 +22,10 @@
   --submit-primary-hover: #2563eb;
   --button-primary: #93c5fd;
   --button-primary-hover: #60a5fa;
-  --button-secondary: #64748b;
-  --button-secondary-hover: #475569;
+  --button-secondary: #7095c9;
+  --button-secondary-hover: #83aee9;
+  --button-tertiary: #e5e7eb;
+  --button-tertiary-hover: #d1d5db;
   --link: #64748b;
   --link-hover: #1d4ed8;
   --required: #ef4444;
@@ -26,6 +33,8 @@
   --delete-hover: #dc2626;
   --muted: #6b7280;
   --todo-text: #111111;
+  --todo-notes-bg: #f9fafb;
+  --caret-color: #006cfa;
 }
 
 /* Dark mode theme variables */
@@ -43,10 +52,12 @@
   --off: #64748b;
   --submit-primary: #3b82f6;
   --submit-primary-hover: #0073ff;
-  --button-primary: #93c5fd;
-  --button-primary-hover: #60a5fa;
-  --button-secondary: #64748b;
-  --button-secondary-hover: #475569;
+  --button-primary: #65abfa;
+  --button-primary-hover: #3c94ff;
+  --button-secondary: #305c9b;
+  --button-secondary-hover: #0546a1;
+  --button-tertiary: #596780;
+  --button-tertiary-hover: #404b5e;
   --delete: #ef4444;
   --delete-hover: #dc2626;
   --link: #cbd5e1;
@@ -54,6 +65,8 @@
   --required: #fb7185;
   --muted: #dddddd;
   --todo-text: #e6edf7;
+  --todo-notes-bg: #1f2937;
+  --caret-color: #57ebff;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -74,6 +87,8 @@
   --color-submit-primary-hover: var(--submit-primary-hover);
   --color-button-primary: var(--button-primary);
   --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-tertiary: var(--button-tertiary);
+  --color-button-tertiary-hover: var(--button-tertiary-hover);
   --color-button-secondary: var(--button-secondary);
   --color-button-secondary-hover: var(--button-secondary-hover);
   --color-delete: var(--delete);
@@ -82,6 +97,7 @@
   --color-link-hover: var(--link-hover);
   --color-muted: var(--muted);
   --color-todo-text: var(--todo-text);
+  --color-todo-notes-bg: var(--todo-notes-bg);
 }
 
 /* Custom utilities for animations */
