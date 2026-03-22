@@ -13,15 +13,7 @@ type UpdateNotesHandler = (id: number, notes: string) => void;
 type DeleteHandler = (id: number) => void;
 type ToggleExpandHandler = (id: number) => void;
 
-function TodoList({ children }: { children: React.ReactNode }) {
-    return (
-        <ul className="flex flex-col items-start w-full list-none p-0 m-0">
-            {children}
-        </ul>
-    );
-}
-
-function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
+function Todo({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
 
     return (
@@ -139,9 +131,9 @@ export default function TodoApp() {
                     Reset List
                 </button>
             </div>
-            <TodoList>
+            <ul className="flex flex-col items-start w-full list-none p-0 m-0">
                 {todos.map((todo) => (
-                    <TodoItem 
+                    <Todo 
                         key={todo.id} 
                         todo={todo} 
                         onToggleExpand={handleToggleExpand}
@@ -150,7 +142,7 @@ export default function TodoApp() {
                         onDelete={handleOnDelete}
                     />
                 ))}
-            </TodoList>
+            </ul>
             <button className="w-25 h-15 font-bold text-lg bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded" onClick={handleAddTodo}>
                 +
             </button>
