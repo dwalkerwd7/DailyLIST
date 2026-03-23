@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { GripVertical, Minus, Plus } from "lucide-react";
 import {
     DndContext,
@@ -20,7 +20,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
 import DynamicTextarea from "./utils/DynamicTextarea";
-import CountTimer from "./utils/CountTimer";
+import Counter, { type CounterHandle } from "./utils/Counter";
 
 type Todo = {
     id: number;
@@ -120,6 +120,8 @@ export default function TodoApp() {
     const [allExpanded, setAllExpanded] = useState(false);
     const [allChecked, setAllChecked] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
+    
+    const counterHandle = useRef<CounterHandle>(null);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -127,6 +129,14 @@ export default function TodoApp() {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+
+    useEffect(() => {
+        if (todos.length === 0) {
+            counterHandle.current?.stopTimer();
+        } else if (todos.length === 1) {
+            counterHandle.current?.startTimer();
+        }
+    }, [todos]);
 
     const generateNewTodoID = () => {
         return Math.floor(Math.random() * 9000) + 1000;
@@ -223,10 +233,33 @@ export default function TodoApp() {
         });
     };
 
+    const timeLeftFormatString = (seconds: number) => {
+        if (seconds < 0) {
+            return "--:--:--";
+        }
+
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    };
+
     return (
         <div className="flex flex-col items-center gap-4 w-lg">
             <p className="text-lg text-center text-muted mb-2">
-                Your list automatically resets in: <CountTimer startTime={24 * 3600} step={-1} />
+                Your list automatically resets in: 
+                <div id="countdown-timer-bg">
+                    <Counter
+                        ref={counterHandle}
+                        startTime={24 * 3600}
+                        endTime={0}
+                        step={-1}
+                        formatString={timeLeftFormatString}
+                        indicateStartStop={true}
+                        indicateStartStopClass="counttimer-highlight"
+                        className="text-primary-text font-bold"
+                    />
+                </div>
             </p>
             <div className="flex flex-row gap-2 justify-between w-full border-b border-primary-border pb-3 mb-5">
                 <button className={`

@@ -132,6 +132,9 @@ body {
   .alert-fade-out {
     animation: fade-out 0.2s ease-out forwards;
   }
+  .counttimer-highlight {
+    animation: bg-in-out 1s ease-in-out forwards;
+  }
 }
 
 /* Keyframes */
@@ -159,5 +162,17 @@ body {
   }
   100% {
     opacity: 0;
+  }
+}
+
+@keyframes bg-in-out {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: var(--color-alert-info);
+  }
+  100% {
+    background-color: transparent;
   }
 }
