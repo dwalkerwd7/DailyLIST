@@ -33,6 +33,9 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
 
     useEffect(() => {
         if(active) {
+            if (currentTime === -1) {
+                setCurrentTime(startTime);
+            }
             intervalRef.current = setInterval(() => {
                 if(currentTime !== endTime) {
                     setCurrentTime((prev) => prev + step);
@@ -64,7 +67,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
 
     const stopTimer = () => {
         setActive(false);
-        setCurrentTime(startTime);
+        setCurrentTime(-1);
     };
 
     useImperativeHandle(ref, () => ({

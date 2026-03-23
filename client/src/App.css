@@ -22,7 +22,6 @@ a:hover {
 }
 
 #header-title:hover {
-  color: var(--color-link-hover);
   text-decoration: none;
 }
 

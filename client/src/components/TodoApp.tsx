@@ -267,7 +267,7 @@ export default function TodoApp() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-4 w-lg">
+        <div className="flex flex-col items-center gap-4 w-lg sm:w-2xl md:w-3xl">
             <p className="text-lg text-center text-muted mb-2">
                 Your list automatically resets in: 
                 <div id="countdown-timer-bg">
