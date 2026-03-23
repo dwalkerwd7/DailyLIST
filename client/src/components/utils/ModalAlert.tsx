@@ -25,11 +25,11 @@ const colorsByType: Record<AlertType, string> = {
 };
 
 const buttonColorsByType: Record<AlertType, string> = {
-    success: "bg-alert-success-bg text-alert-success hover:brightness-95",
-    error: "bg-alert-error-bg text-alert-error hover:brightness-95",
-    info: "bg-alert-info-bg text-alert-info hover:brightness-95",
-    warning: "bg-alert-warning-bg text-alert-warning hover:brightness-95",
-    critical: "bg-alert-critical-bg text-alert-critical hover:brightness-95"
+    success: "bg-alert-success-bg text-white hover:brightness-95",
+    error: "bg-alert-error-bg text-white hover:brightness-95",
+    info: "bg-alert-info-bg text-white hover:brightness-95",
+    warning: "bg-alert-warning-bg text-white hover:brightness-95",
+    critical: "bg-alert-critical-bg text-white hover:brightness-95"
 };
 
 function openModalAlert(
