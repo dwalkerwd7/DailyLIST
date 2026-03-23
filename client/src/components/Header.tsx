@@ -26,8 +26,9 @@ export default function Header() {
       <nav className="mx-auto max-w-5xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between flex-col sm:flex-row">
           <Link
+            id="header-title"
             to="/"
-            className="text-3xl font-black text-primary-text"
+            className="text-3xl"
             onMouseEnter={() => { setTitleHovered(true); setTitleHasHovered(true); }}
             onMouseLeave={() => setTitleHovered(false)}
           >

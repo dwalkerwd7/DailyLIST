@@ -31,11 +31,12 @@ type Todo = {
 };
 
 type ToggleCompleteHandler = (id: number) => void;
+type UpdateTitleHandler = (id: number, title: string) => void;
 type UpdateNotesHandler = (id: number, notes: string) => void;
 type DeleteHandler = (id: number) => void;
 type ToggleExpandHandler = (id: number) => void;
 
-function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
+function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
     const { active } = useDndContext();
     const {
@@ -88,9 +89,15 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <span className={completed ? "line-through text-muted" : "text-todo-text"}>
-                {title}
-            </span>
+            <input 
+                className={
+                    `${completed ? "line-through text-muted" : "text-todo-text"} 
+                    text-center flex-1 mx-2 text-wrap 
+                    border-none focus:ring-1 focus:outline-none
+                    focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg`} 
+                value={title} 
+                onChange={(e) => onUpdateTitle(id, e.target.value)}
+            />
             <input
                 type="checkbox"
                 checked={completed}
@@ -143,10 +150,15 @@ export default function TodoApp() {
     };
 
     const handleAddTodo = () => {
-        setTodos((prev) => [...prev, { id: generateNewTodoID(), completed: false, title: "New Todo", expanded: false }]);
+        setTodos((prev) => [...prev, { 
+            id: generateNewTodoID(), 
+            completed: false, 
+            title: "New Todo", 
+            expanded: false 
+        }]);
     };
 
-    const handleOnToggleComplete: ToggleCompleteHandler = (id: number) => {
+    const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
         setTodos(newTodos);
 
@@ -166,6 +178,16 @@ export default function TodoApp() {
         } else {
             setAllExpanded(false);
         }
+    };
+
+    const handleUpdateTitle: UpdateTitleHandler = (id: number, title: string) => {
+        if(title.length === 0) {
+            title = "New Todo";
+        } else if(title.length >= 50) {
+            title = title.slice(0, 50);
+        }
+
+        setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, title } : todo));
     };
 
     const handleUpdateNotes: UpdateNotesHandler = (id: number, notes: string) => {
@@ -288,7 +310,8 @@ export default function TodoApp() {
                                 key={todo.id}
                                 todo={todo}
                                 onToggleExpand={handleToggleExpand}
-                                onToggleComplete={handleOnToggleComplete}
+                                onToggleComplete={handleToggleComplete}
+                                onUpdateTitle={handleUpdateTitle}
                                 onUpdateNotes={handleUpdateNotes}
                                 onDelete={handleDeleteTodo}
                             />

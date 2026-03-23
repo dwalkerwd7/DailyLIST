@@ -6,12 +6,32 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+#header-title {
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary-text);
+}
+
+#header-title:hover {
+  color: var(--color-link-hover);
+  text-decoration: none;
+}
+
 /* Light mode theme variables */
 :root {
   --bg-primary: white;
   --bg-secondary: #f0f0f0;
   --text-primary: black;
-  --border-primary: #e5e7eb;
+  --border-primary: #d1d2d6;
   --form-input: #d1d5db;
   --alert-success: #5ef76a;
   --alert-success-bg: #0e9b6c;
@@ -27,8 +47,8 @@ body {
   --off: #9ca3af;
   --submit-primary: #3b82f6;
   --submit-primary-hover: #2563eb;
-  --button-primary: #93c5fd;
-  --button-primary-hover: #60a5fa;
+  --button-primary: #51a2ff;
+  --button-primary-hover: #5594e0;
   --button-secondary: #7095c9;
   --button-secondary-hover: #83aee9;
   --button-tertiary: #e5e7eb;
