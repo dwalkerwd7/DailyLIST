@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Alert, { type AlertProps } from '../components/utils/Alert';
+import PageAlert, { type AlertProps } from '../components/utils/PageAlert';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -37,7 +37,7 @@ export default function Feedback() {
       <p className="text-lg text-primary-text mb-8">Your feedback helps us improve DailyLIST. Please share your thoughts, suggestions, or report any issues you encounter.</p>
       { !hasSubmittedFeedback ? (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
-        <Alert 
+        <PageAlert
           title={alertMessage.title} 
           msg={alertMessage.msg} 
           type={alertMessage.type} 
@@ -93,7 +93,7 @@ export default function Feedback() {
         </button>
       </form>
       ) : (
-        <Alert 
+        <PageAlert
           msg={successAlert.msg} 
           type={successAlert.type} 
         />

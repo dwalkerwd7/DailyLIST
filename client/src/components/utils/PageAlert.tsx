@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import RotatingX from "./svg/RotatingX";
 
-type AlertProps = {
+type AlertType = 'error' | 'success' | 'info' | 'warning' | 'critical';
+type PageAlertProps = {
     title?: string,
     closable?: boolean,
     msg: string,
-    type: 'error' | 'success'
+    type: AlertType
 };
 
-export default function Alert({ title = '', closable = false, msg, type }: AlertProps) {
+export default function PageAlert({ title = '', closable = false, msg, type }: PageAlertProps) {
     const [closed, setClosed] = useState(false);
 
     // Reset close state only when a new alert message arrives.
@@ -35,6 +36,10 @@ export default function Alert({ title = '', closable = false, msg, type }: Alert
     const getClassesBasedOnMessageType = () => {
         if (type === 'success') {
             return 'text-alert-success bg-alert-success-bg border-alert-success';
+        } else if (type === 'info') {
+            return 'text-alert-info bg-alert-info-bg border-alert-info';
+        } else if (type === 'warning') {
+            return 'text-alert-warning bg-alert-warning-bg border-alert-warning';
         } else {
             return 'text-alert-error bg-alert-error-bg border-alert-error';
         }
@@ -42,7 +47,7 @@ export default function Alert({ title = '', closable = false, msg, type }: Alert
 
     return msg.length > 0 && !closed ? (
         <div className={`
-            relative flex justify-center 
+            relative flex justify-center
             ${getClassesBasedOnMessageType()}
             mt-4 px-4 py-2 rounded-md border
         `}>
@@ -51,19 +56,19 @@ export default function Alert({ title = '', closable = false, msg, type }: Alert
                 <p>{ msg }</p>
             </div>
             { closable && (
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     aria-label="Close alert"
-                    className="group absolute top-1 right-1 inline-flex h-7 w-7 items-center justify-center 
-                        rounded-full border border-primary-border bg-primary-bg text-primary-text shadow-sm transition-all duration-150 
+                    className="group absolute top-1 right-1 inline-flex h-7 w-7 items-center justify-center
+                        rounded-full border border-primary-border bg-primary-bg text-primary-text shadow-sm transition-all duration-150
                         hover:scale-105 hover:bg-secondary-bg focus:outline-none focus:ring-2 focus:ring-button-primary"
                 onClick={(e) => handleClose(e.currentTarget)}
             >
-                <RotatingX /> 
+                <RotatingX />
             </button>
             )}
         </div>
     ) : null;
 };
 
-export type { AlertProps };
+export type { PageAlertProps, AlertType };

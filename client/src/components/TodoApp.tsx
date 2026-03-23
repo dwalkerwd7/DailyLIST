@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
     DndContext,
     PointerSensor,
@@ -17,6 +17,8 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
+import DynamicTextarea from "./utils/DynamicTextarea";
 
 type Todo = {
     id: number;
@@ -33,7 +35,6 @@ type ToggleExpandHandler = (id: number) => void;
 
 function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
-    const notesRef = useRef<HTMLTextAreaElement | null>(null);
     const { active } = useDndContext();
     const {
         attributes,
@@ -51,24 +52,6 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
         opacity: isDragging ? 0.7 : 1,
     };
 
-    const resizeNotesTextarea = (textarea: HTMLTextAreaElement) => {
-        const computedStyle = window.getComputedStyle(textarea);
-        const minHeight = Number.parseFloat(computedStyle.minHeight) || 0;
-        const maxHeightRaw = Number.parseFloat(computedStyle.maxHeight);
-        const maxHeight = Number.isFinite(maxHeightRaw) ? maxHeightRaw : Number.POSITIVE_INFINITY;
-
-        textarea.style.height = "auto";
-        const nextHeight = Math.min(Math.max(textarea.scrollHeight, minHeight), maxHeight);
-        textarea.style.height = `${nextHeight}px`;
-        textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
-    };
-
-    useEffect(() => {
-        if (expanded && notesRef.current) {
-            resizeNotesTextarea(notesRef.current);
-        }
-    }, [expanded, notes]);
-
     return (
         <li
             ref={setNodeRef}
@@ -83,8 +66,8 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
                 <button
                     ref={setActivatorNodeRef}
                     className="
-                        w-8 h-8 p-2 text-todo-text p-2 
-                        rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing 
+                        w-8 h-8 text-todo-text
+                        rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing
                         inline-flex items-center justify-center
                     "
                     aria-label="Drag todo"
@@ -94,9 +77,9 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
                     ::
                 </button>
                 <button className="
-                    w-8 h-8 p-2
-                    text-todo-text font-bold rounded 
-                    bg-button-secondary hover:bg-button-secondary-hover 
+                    w-8 h-8
+                    text-todo-text font-bold rounded
+                    bg-button-secondary hover:bg-button-secondary-hover
                     inline-flex items-center justify-center
                     " onClick={() => onToggleExpand(id)}
                 >
@@ -116,14 +99,10 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
             />
             {expanded && (
                 <div className="flex flex-col gap-2 mt-2 w-full">
-                    <textarea
-                        ref={notesRef}
+                    <DynamicTextarea
                         className="text-todo-text min-h-20 max-h-50 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
-                        onChange={(e) => {
-                            onUpdateNotes(id, e.target.value);
-                            resizeNotesTextarea(e.currentTarget);
-                        }}
+                        onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
                     <button className="h-7 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
                         Delete
@@ -138,6 +117,7 @@ export default function TodoApp() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [allExpanded, setAllExpanded] = useState(false);
     const [allChecked, setAllChecked] = useState(false);
+    const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -180,12 +160,13 @@ export default function TodoApp() {
         setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, notes } : todo));
     };
 
-    const handleOnDelete: DeleteHandler = (id: number) => {
-        if (confirm("Are you sure you want to delete this todo?")) {
+    const handleDeleteTodo: DeleteHandler = (id: number) => {
+        openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
             setAllExpanded(false);
             setAllChecked(false);
-        }
+            setModalAlertProps(null);
+        });
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -228,9 +209,12 @@ export default function TodoApp() {
     };
 
     const handleResetList = () => {
-        if (confirm("Are you sure you want to reset the list?")) {
+        openModalAlert(setModalAlertProps, "critical", "Reset List", "Are you sure you want to delete all your todos? This process is irreversible.", "Reset", () => {
             setTodos([]);
-        }
+            setAllExpanded(false);
+            setAllChecked(false);
+            setModalAlertProps(null);
+        });
     };
 
     return (
@@ -264,15 +248,22 @@ export default function TodoApp() {
                                 onToggleExpand={handleToggleExpand}
                                 onToggleComplete={handleOnToggleComplete}
                                 onUpdateNotes={handleUpdateNotes}
-                                onDelete={handleOnDelete}
+                                onDelete={handleDeleteTodo}
                             />
                         ))}
                     </ul>
                 </SortableContext>
             </DndContext>
-            <button className="w-25 h-15 font-bold text-3xl bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded" onClick={handleAddTodo}>
+            <button className="w-25 h-15 font-bold text-3xl bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
                 +
             </button>
+            {modalAlertProps && (
+                <ModalAlert
+                    {...modalAlertProps}
+                    cancelLabel="Cancel"
+                    showCancel
+                />
+            )}
         </div>
     );
 }
