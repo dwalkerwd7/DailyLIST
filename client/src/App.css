@@ -2,7 +2,8 @@
 
 /* Global styles */
 body {
-  caret-color: var(--caret-color);
+  caret-color: --caret-color;
+  font-family: "Inter", sans-serif;
 }
 
 /* Light mode theme variables */
