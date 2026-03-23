@@ -20,6 +20,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
 import DynamicTextarea from "./utils/DynamicTextarea";
+import CountTimer from "./utils/CountTimer";
 
 type Todo = {
     id: number;
@@ -224,6 +225,9 @@ export default function TodoApp() {
 
     return (
         <div className="flex flex-col items-center gap-4 w-lg">
+            <p className="text-lg text-center text-muted mb-2">
+                Your list automatically resets in: <CountTimer startTime={24 * 3600} step={-1} />
+            </p>
             <div className="flex flex-row gap-2 justify-between w-full border-b border-primary-border pb-3 mb-5">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
