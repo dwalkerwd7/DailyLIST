@@ -23,8 +23,8 @@ export default function Header() {
 
   return (
     <header className="border-b border-primary-border bg-primary-bg">
-      <nav className="mx-auto max-w-5xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between flex-col sm:flex-row">
+      <nav className="mx-auto max-w-5xl px-4 py-4">
+        <div className="flex items-center justify-between flex-col sm:flex-row gap-4">
           <Link
             id="header-title"
             to="/"
@@ -39,11 +39,11 @@ export default function Header() {
               LIST
             </span>
           </Link>
+          <div className="flex items-center gap-3">
+            <span className="uppercase text-primary-text font-semibold text-sm">{`${theme} mode`}</span>
+            <ToggleSwitch isOn={theme === 'dark'} handleToggle={handleThemeToggle} />
+          </div>
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
-              <span className="uppercase text-primary-text font-semibold text-sm">{`${theme} mode`}</span>
-              <ToggleSwitch isOn={theme === 'dark'} handleToggle={handleThemeToggle} />
-            </div>
             <Link
               to="/about"
               className="text-link hover:text-link-hover"
