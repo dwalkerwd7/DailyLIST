@@ -17,19 +17,19 @@ type ModalAlertProps = {
 type ModalAlertState = ModalAlertProps | null;
 
 const colorsByType: Record<AlertType, string> = {
-    success: "bg-alert-success-bg/60 text-green-500 border-alert-success",
-    error: "bg-alert-error-bg/60 text-red-500 border-alert-error",
-    info: "bg-alert-info-bg/60 text-blue-500 border-alert-info",
-    warning: "bg-alert-warning-bg/60 text-yellow-500 border-alert-warning",
-    critical: "bg-alert-critical-bg/60 text-red-500 border-alert-critical"
+    success: "bg-alert-success-bg/60 text-alert-success border-alert-success",
+    error: "bg-alert-error-bg/60 text-alert-error border-alert-error",
+    info: "bg-alert-info-bg/60 text-alert-info border-alert-info",
+    warning: "bg-alert-warning-bg/60 text-alert-warning border-alert-warning",
+    critical: "bg-alert-critical-bg/60 text-alert-critical border-alert-critical"
 };
 
 const buttonColorsByType: Record<AlertType, string> = {
-    success: "bg-green-500 text-white hover:bg-alert-success",
-    error: "bg-red-500 text-white hover:bg-alert-error",
-    info: "bg-blue-500 text-white hover:bg-alert-info",
-    warning: "bg-yellow-500 text-white hover:bg-alert-warning",
-    critical: "bg-red-500 text-white hover:bg-alert-critical"
+    success: "bg-alert-success-bg text-alert-success hover:brightness-95",
+    error: "bg-alert-error-bg text-alert-error hover:brightness-95",
+    info: "bg-alert-info-bg text-alert-info hover:brightness-95",
+    warning: "bg-alert-warning-bg text-alert-warning hover:brightness-95",
+    critical: "bg-alert-critical-bg text-alert-critical hover:brightness-95"
 };
 
 function openModalAlert(

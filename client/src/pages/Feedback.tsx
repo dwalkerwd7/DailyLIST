@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import PageAlert, { type AlertProps } from '../components/utils/PageAlert';
+import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -8,13 +8,13 @@ export default function Feedback() {
     message: '',
   });
 
-  const successAlert: AlertProps = {
+  const successAlert: PageAlertProps = {
     title: 'Feedback Submitted!',
     msg: 'Thank you for your feedback!',
     type: 'success'
   };
 
-  const [alertMessage, setAlertMessage] = useState<AlertProps>({ msg: '', type: 'success' });
+  const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: 'Test Alert', msg: 'test', type: 'warning' });
   let hasSubmittedFeedback = false;
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {

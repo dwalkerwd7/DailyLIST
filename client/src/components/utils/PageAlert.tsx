@@ -33,22 +33,18 @@ export default function PageAlert({ title = '', closable = false, msg, type }: P
         }
     };
 
-    const getClassesBasedOnMessageType = () => {
-        if (type === 'success') {
-            return 'text-alert-success bg-alert-success-bg border-alert-success';
-        } else if (type === 'info') {
-            return 'text-alert-info bg-alert-info-bg border-alert-info';
-        } else if (type === 'warning') {
-            return 'text-alert-warning bg-alert-warning-bg border-alert-warning';
-        } else {
-            return 'text-alert-error bg-alert-error-bg border-alert-error';
-        }
+    const colorsBasedOnType: Record<AlertType, string> = {
+        success: "bg-alert-success-bg/80 text-alert-success border-alert-success",
+        error: "bg-alert-error-bg/80 text-alert-error border-alert-error",
+        info: "bg-alert-info-bg/80 text-alert-info border-alert-info",
+        warning: "bg-alert-warning-bg/80 text-alert-warning border-alert-warning",
+        critical: "bg-alert-critical-bg/80 text-alert-critical border-alert-critical"
     };
 
     return msg.length > 0 && !closed ? (
         <div className={`
             relative flex justify-center
-            ${getClassesBasedOnMessageType()}
+            ${colorsBasedOnType[type]}
             mt-4 px-4 py-2 rounded-md border
         `}>
             <div className="flex flex-col items-center">
