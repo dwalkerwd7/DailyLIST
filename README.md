@@ -59,9 +59,10 @@ Variables are managed via `varlock`. Check `server/.env.schema.example` for defa
 
 To validate env setup:
 
-1. rename .env.schema.example --> .env.schema
+1. `rename` .env.schema.example --> .env.schema
 
-2. ```bash
+2. 
+```bash
 cd server
 npx varlock load
 ```
