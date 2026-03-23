@@ -55,15 +55,13 @@ The Vite dev server automatically proxies `/api/*` requests to the backend, so n
 
 ### Environment Variables
 
-Variables are managed via `varlock`. Check `server/.env.schema` for defaults:
-
-```
-PORT=3001 (@required @type=port)
-```
+Variables are managed via `varlock`. Check `server/.env.schema.example` for defaults:
 
 To validate env setup:
 
-```bash
+1. rename .env.schema.example --> .env.schema
+
+2. ```bash
 cd server
 npx varlock load
 ```
