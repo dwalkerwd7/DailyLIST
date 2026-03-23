@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 
-export default function ResetTimer() {
-    const [timeLeft, setTimeLeft] = useState(-1);
+export default function CountTimer({ startTime, step }: { startTime: number; step: number }) {
+    const [timeLeft, setTimeLeft] = useState(startTime);
 
     useEffect(() => {
-        setTimeLeft(24 * 3600);
         const interval = setInterval(() => {
-            setTimeLeft((prev) => prev - 1);
-        }, 1000);
+            setTimeLeft((prev) => prev + step);
+        }, Math.abs(step * 1000));
         return () => clearInterval(interval);
     }, []);
 

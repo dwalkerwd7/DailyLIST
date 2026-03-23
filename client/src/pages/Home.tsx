@@ -1,4 +1,4 @@
-import ResetTimer from '../components/ResetTimer';
+import CountTimer from '../components/utils/CountTimer';
 import TodoApp from '../components/TodoApp';
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
           Daily Todo List
         </h1>
         <p className="text-lg text-center text-muted">
-          Your list automatically resets in: <ResetTimer />
+          Your list automatically resets in: <CountTimer startTime={24 * 3600} step={-1} />
         </p>
 
         <TodoApp />
