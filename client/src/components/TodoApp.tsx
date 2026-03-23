@@ -210,6 +210,10 @@ export default function TodoApp() {
     };
 
     const handleResetList = () => {
+        if (todos.length === 0) {
+            return;
+        }
+        
         openModalAlert(setModalAlertProps, "critical", "Reset List", "Are you sure you want to delete all your todos? This process is irreversible.", "Reset", () => {
             setTodos([]);
             setAllExpanded(false);
