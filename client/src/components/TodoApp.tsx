@@ -1,4 +1,22 @@
 import { useState } from "react";
+import {
+    DndContext,
+    PointerSensor,
+    KeyboardSensor,
+    closestCenter,
+    useDndContext,
+    useSensor,
+    useSensors,
+    type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+    SortableContext,
+    useSortable,
+    arrayMove,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type Todo = {
     id: number;
@@ -13,15 +31,49 @@ type UpdateNotesHandler = (id: number, notes: string) => void;
 type DeleteHandler = (id: number) => void;
 type ToggleExpandHandler = (id: number) => void;
 
-function Todo({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
+function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
+    const { active } = useDndContext();
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        setActivatorNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.7 : 1,
+    };
 
     return (
-        <li key={id} className="flex flex-row flex-3 flex-wrap justify-between border-b border-primary-border py-2 block w-full">
+        <li
+            ref={setNodeRef}
+            style={style}
+            className={`
+                flex flex-row flex-wrap items-start justify-between py-2 px-2 block w-full mb-2 rounded
+                border-2 border-dashed
+                ${active ? (isDragging ? "border-button-primary bg-button-tertiary" : "border-primary-border") : "border-transparent"}
+            `}
+        >
+            <button
+                ref={setActivatorNodeRef}
+                className="w-6 h-6 p-2 text-todo-text p-2 rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing inline-flex items-center justify-center text-center leading-none"
+                aria-label="Drag todo"
+                {...attributes}
+                {...listeners}
+            >
+                ::
+            </button>
             <button className="
-                text-todo-text font-bold p-2 rounded 
+                w-5 h-5 p-2
+                text-todo-text font-bold rounded 
                 bg-button-secondary hover:bg-button-secondary-hover 
-                inline-flex items-center justify-center leading-none
+                inline-flex items-center justify-center text-center leading-none
                 " onClick={() => onToggleExpand(id)}
             >
                 {expanded ? "-" : "+"}
@@ -40,8 +92,7 @@ function Todo({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete 
             {expanded && (
                 <div className="flex flex-col gap-2 mt-2 w-full">
                     <textarea
-                        autoFocus
-                        className="text-todo-text h-20 bg-todo-notes-bg p-2 rounded resize-none w-full"
+                        className="text-todo-text h-20 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
                         onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
@@ -56,31 +107,73 @@ function Todo({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete 
 
 export default function TodoApp() {
     const [todos, setTodos] = useState<Todo[]>([]);
+    const [allExpanded, setAllExpanded] = useState(false);
+    const [allChecked, setAllChecked] = useState(false);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
     const generateNewTodoID = () => {
         return Math.floor(Math.random() * 9000) + 1000;
     };
 
     const handleAddTodo = () => {
-        setTodos([...todos, { id: generateNewTodoID(), completed: false, title: "New Todo", expanded: false }]);
+        setTodos((prev) => [...prev, { id: generateNewTodoID(), completed: false, title: "New Todo", expanded: false }]);
     };
 
     const handleOnToggleComplete: ToggleCompleteHandler = (id: number) => {
-        setTodos(todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo));
+        const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
+        setTodos(newTodos);
+        
+        if(newTodos.every((todo) => todo.completed)) {
+            setAllChecked(true);
+        } else {
+            setAllChecked(false);
+        }
     };
 
     const handleToggleExpand: ToggleExpandHandler = (id: number) => {
-        setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, expanded: !todo.expanded } : todo));
+        const newTodos = todos.map((todo) => todo.id === id ? { ...todo, expanded: !todo.expanded } : todo);
+        setTodos(newTodos);
+
+        if(newTodos.every((todo) => todo.expanded)) {
+            setAllExpanded(true);
+        } else {
+            setAllExpanded(false);
+        }
     };
 
     const handleUpdateNotes: UpdateNotesHandler = (id: number, notes: string) => {
-        setTodos(todos.map((todo) => todo.id === id ? { ...todo, notes } : todo));
+        setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, notes } : todo));
     };
 
     const handleOnDelete: DeleteHandler = (id: number) => {
         if (confirm("Are you sure you want to delete this todo?")) {
-            setTodos(todos.filter((todo) => todo.id !== id));
+            setTodos((prev) => prev.filter((todo) => todo.id !== id));
         }
+    };
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (!over || active.id === over.id) {
+            return;
+        }
+
+        setTodos((prev) => {
+            const oldIndex = prev.findIndex((todo) => todo.id === active.id);
+            const newIndex = prev.findIndex((todo) => todo.id === over.id);
+
+            if (oldIndex === -1 || newIndex === -1) {
+                return prev;
+            }
+
+            return arrayMove(prev, oldIndex, newIndex);
+        });
     };
 
     const handleToggleExpandAll = () => {
@@ -88,8 +181,9 @@ export default function TodoApp() {
             return;
         }
 
-        const areAllExpanded = todos.every((todo) => todo.expanded);
-        setTodos((prev) => prev.map((todo) => ({ ...todo, expanded: !areAllExpanded })));
+        const newAllExpanded = !todos.every((todo) => todo.expanded);
+        setAllExpanded(newAllExpanded);
+        setTodos((prev) => prev.map((todo) => ({ ...todo, expanded: newAllExpanded })));
     };
 
     const handleToggleCompleteAll = () => {
@@ -97,8 +191,9 @@ export default function TodoApp() {
             return;
         }
 
-        const areAllCompleted = todos.every((todo) => todo.completed);
-        setTodos((prev) => prev.map((todo) => ({ ...todo, completed: !areAllCompleted })));
+        const newAllChecked = !todos.every((todo) => todo.completed);
+        setAllChecked(newAllChecked);
+        setTodos((prev) => prev.map((todo) => ({ ...todo, completed: newAllChecked })));
     };
 
     const handleResetList = () => {
@@ -107,42 +202,43 @@ export default function TodoApp() {
         }
     };
 
-    const areAllExpanded = todos.length > 0 && todos.every((todo) => todo.expanded);
-    const areAllCompleted = todos.length > 0 && todos.every((todo) => todo.completed);
-
     return (
         <div className="flex flex-col items-center gap-4">
             <div className="flex flex-row gap-2 justify-between w-full border-b border-primary-border pb-3 mb-5">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
-                    ${areAllExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
+                    ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
                 `} onClick={handleToggleExpandAll}
                 >
-                    {areAllExpanded ? "Collapse All" : "Expand All"}
+                    {allExpanded ? "Collapse All" : "Expand All"}
                 </button>
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
-                    ${areAllCompleted ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
+                    ${allChecked ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
                 `} onClick={handleToggleCompleteAll}
                 >
-                    {areAllCompleted ? "Uncheck All" : "Check All"}
+                    {allChecked ? "Uncheck All" : "Check All"}
                 </button>
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
             </div>
-            <ul className="flex flex-col items-start w-full list-none p-0 m-0">
-                {todos.map((todo) => (
-                    <Todo 
-                        key={todo.id} 
-                        todo={todo} 
-                        onToggleExpand={handleToggleExpand}
-                        onToggleComplete={handleOnToggleComplete} 
-                        onUpdateNotes={handleUpdateNotes}
-                        onDelete={handleOnDelete}
-                    />
-                ))}
-            </ul>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
+                    <ul className="flex flex-col items-start w-full list-none p-0 m-0">
+                        {todos.map((todo) => (
+                            <TodoItem
+                                key={todo.id}
+                                todo={todo}
+                                onToggleExpand={handleToggleExpand}
+                                onToggleComplete={handleOnToggleComplete}
+                                onUpdateNotes={handleUpdateNotes}
+                                onDelete={handleOnDelete}
+                            />
+                        ))}
+                    </ul>
+                </SortableContext>
+            </DndContext>
             <button className="w-25 h-15 font-bold text-lg bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded" onClick={handleAddTodo}>
                 +
             </button>
