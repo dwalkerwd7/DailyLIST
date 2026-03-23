@@ -68,27 +68,6 @@ cd server
 npx varlock load
 ```
 
-## Project Structure
-
-```
-DailyLIST/
-├── client/                    # React + TypeScript frontend
-│   ├── src/
-│   │   ├── App.tsx           # Main app component
-│   │   ├── index.css         # Tailwind CSS imports
-│   │   └── main.tsx
-│   ├── tailwind.config.ts    # Tailwind theme config (light & dark)
-│   ├── vite.config.ts        # Vite + Tailwind plugin setup
-│   └── package.json
-│
-└── server/                    # Express + TypeScript backend
-    ├── src/
-    │   └── index.ts          # Express server entry point
-    ├── .env.schema           # varlock schema
-    ├── tsconfig.json
-    └── package.json
-```
-
 ## Status
 
 **Version:** 0.3 (Active Development)
