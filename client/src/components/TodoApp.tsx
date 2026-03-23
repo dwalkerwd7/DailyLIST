@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { GripVertical, Minus, Plus } from "lucide-react";
 import {
     DndContext,
     PointerSensor,
@@ -74,7 +75,7 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
                     {...attributes}
                     {...listeners}
                 >
-                    ::
+                    <GripVertical size={16} />
                 </button>
                 <button className="
                     w-8 h-8
@@ -83,7 +84,7 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
                     inline-flex items-center justify-center
                     " onClick={() => onToggleExpand(id)}
                 >
-                    {expanded ? "-" : "+"}
+                    {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
             <span className={completed ? "line-through text-muted" : "text-todo-text"}>
@@ -161,7 +162,7 @@ export default function TodoApp() {
     };
 
     const handleDeleteTodo: DeleteHandler = (id: number) => {
-        openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
+        openModalAlert(setModalAlertProps, "critical", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
             setAllExpanded(false);
             setAllChecked(false);
@@ -254,8 +255,8 @@ export default function TodoApp() {
                     </ul>
                 </SortableContext>
             </DndContext>
-            <button className="w-25 h-15 font-bold text-3xl bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
-                +
+            <button className="w-25 h-15 bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
+                <Plus size={28} />
             </button>
             {modalAlertProps && (
                 <ModalAlert
