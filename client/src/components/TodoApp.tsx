@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
     DndContext,
     PointerSensor,
@@ -33,6 +33,7 @@ type ToggleExpandHandler = (id: number) => void;
 
 function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
+    const notesRef = useRef<HTMLTextAreaElement | null>(null);
     const { active } = useDndContext();
     const {
         attributes,
@@ -50,34 +51,58 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
         opacity: isDragging ? 0.7 : 1,
     };
 
+    const resizeNotesTextarea = (textarea: HTMLTextAreaElement) => {
+        const computedStyle = window.getComputedStyle(textarea);
+        const minHeight = Number.parseFloat(computedStyle.minHeight) || 0;
+        const maxHeightRaw = Number.parseFloat(computedStyle.maxHeight);
+        const maxHeight = Number.isFinite(maxHeightRaw) ? maxHeightRaw : Number.POSITIVE_INFINITY;
+
+        textarea.style.height = "auto";
+        const nextHeight = Math.min(Math.max(textarea.scrollHeight, minHeight), maxHeight);
+        textarea.style.height = `${nextHeight}px`;
+        textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+    };
+
+    useEffect(() => {
+        if (expanded && notesRef.current) {
+            resizeNotesTextarea(notesRef.current);
+        }
+    }, [expanded, notes]);
+
     return (
         <li
             ref={setNodeRef}
             style={style}
             className={`
-                flex flex-row flex-wrap items-start justify-between py-2 px-2 block w-full mb-2 rounded
+                flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
                 border-2 border-dashed
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary" : "border-primary-border") : "border-transparent"}
             `}
         >
-            <button
-                ref={setActivatorNodeRef}
-                className="w-6 h-6 p-2 text-todo-text p-2 rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing inline-flex items-center justify-center text-center leading-none"
-                aria-label="Drag todo"
-                {...attributes}
-                {...listeners}
-            >
-                ::
-            </button>
-            <button className="
-                w-5 h-5 p-2
-                text-todo-text font-bold rounded 
-                bg-button-secondary hover:bg-button-secondary-hover 
-                inline-flex items-center justify-center text-center leading-none
-                " onClick={() => onToggleExpand(id)}
-            >
-                {expanded ? "-" : "+"}
-            </button>
+            <div className="flex flex-row items-center gap-2">
+                <button
+                    ref={setActivatorNodeRef}
+                    className="
+                        w-8 h-8 p-2 text-todo-text p-2 
+                        rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing 
+                        inline-flex items-center justify-center
+                    "
+                    aria-label="Drag todo"
+                    {...attributes}
+                    {...listeners}
+                >
+                    ::
+                </button>
+                <button className="
+                    w-8 h-8 p-2
+                    text-todo-text font-bold rounded 
+                    bg-button-secondary hover:bg-button-secondary-hover 
+                    inline-flex items-center justify-center
+                    " onClick={() => onToggleExpand(id)}
+                >
+                    {expanded ? "-" : "+"}
+                </button>
+            </div>
             <span className={completed ? "line-through text-muted" : "text-todo-text"}>
                 {title}
             </span>
@@ -92,9 +117,13 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateNotes, onDel
             {expanded && (
                 <div className="flex flex-col gap-2 mt-2 w-full">
                     <textarea
-                        className="text-todo-text h-20 bg-todo-notes-bg p-3 rounded resize-none w-full"
+                        ref={notesRef}
+                        className="text-todo-text min-h-20 max-h-50 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
-                        onChange={(e) => onUpdateNotes(id, e.target.value)}
+                        onChange={(e) => {
+                            onUpdateNotes(id, e.target.value);
+                            resizeNotesTextarea(e.currentTarget);
+                        }}
                     />
                     <button className="h-7 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
                         Delete
@@ -128,7 +157,7 @@ export default function TodoApp() {
     const handleOnToggleComplete: ToggleCompleteHandler = (id: number) => {
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
         setTodos(newTodos);
-        
+
         if(newTodos.every((todo) => todo.completed)) {
             setAllChecked(true);
         } else {
@@ -154,6 +183,8 @@ export default function TodoApp() {
     const handleOnDelete: DeleteHandler = (id: number) => {
         if (confirm("Are you sure you want to delete this todo?")) {
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            setAllExpanded(false);
+            setAllChecked(false);
         }
     };
 
@@ -203,7 +234,7 @@ export default function TodoApp() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 w-lg">
             <div className="flex flex-row gap-2 justify-between w-full border-b border-primary-border pb-3 mb-5">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
@@ -239,7 +270,7 @@ export default function TodoApp() {
                     </ul>
                 </SortableContext>
             </DndContext>
-            <button className="w-25 h-15 font-bold text-lg bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded" onClick={handleAddTodo}>
+            <button className="w-25 h-15 font-bold text-3xl bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded" onClick={handleAddTodo}>
                 +
             </button>
         </div>

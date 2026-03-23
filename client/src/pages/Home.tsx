@@ -8,7 +8,7 @@ export default function Home() {
           Daily Todo List
         </h1>
         <p className="text-lg text-center text-muted">
-          Your todo list resets in: 00:00:00
+          Your list resets in: 00:00:00
         </p>
 
         <TodoApp />
