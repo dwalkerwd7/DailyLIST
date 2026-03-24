@@ -62,8 +62,7 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateTitle, onUpd
             style={style}
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
-                border-2 border-dashed
-                ${active ? (isDragging ? "border-button-primary bg-button-tertiary" : "border-primary-border") : "border-transparent"}
+                ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
             `}
         >
             <div className="flex flex-row items-center gap-2">
@@ -141,12 +140,39 @@ export default function TodoApp() {
         })
     );
 
+    const saveTodos = async(todos: Todo[]) => {
+        try {
+            const response = await fetch("/api/todos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ todos }),
+            });
+            if(!response.ok) {
+                const errorData = await response.json();
+                console.error("Error saving todos:", errorData.message);
+            }
+        } catch(err) {
+            console.error("Error posting todos:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetch("/api/todos")
+            .then((response) => response.json())
+            .then((data) => setTodos(data))
+            .catch((error) => console.error("Error fetching todos:", error));
+    }, []);
+
     useEffect(() => {
         if (todos.length === 0) {
             counterHandle.current?.stopTimer();
         } else if (todos.length === 1) {
             counterHandle.current?.startTimer();
         }
+
+        saveTodos(todos);
     }, [todos]);
 
     const generateNewTodoID = () => {
