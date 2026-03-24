@@ -151,6 +151,18 @@ export default function TodoApp() {
     };
 
     const handleAddTodo = () => {
+        if(todos.length >= 20) {
+            openModalAlert(
+                setModalAlertProps, 
+                "info", 
+                "Limit Reached", 
+                "You have reached the maximum number of todos (20). Please delete some todos before adding new ones.", 
+                "OK", 
+                () => {}
+            );
+            return;
+        }
+
         setTodos((prev) => [...prev, { 
             id: generateNewTodoID(), 
             completed: false, 
