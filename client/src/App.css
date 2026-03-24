@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./components/utils/alerts.vars.css";
 
 /* Global styles */
 body {
@@ -32,16 +33,6 @@ a:hover {
   --text-primary: black;
   --border-primary: #d1d2d6;
   --form-input: #d1d5db;
-  --alert-success: #5ef76a;
-  --alert-success-bg: #0e9b6c;
-  --alert-error: #fca5a5;
-  --alert-error-bg: #be3636;
-  --alert-warning: #fde68a;
-  --alert-warning-bg: #c58009;
-  --alert-info: #bfdbfe;
-  --alert-info-bg: #316ac5;
-  --alert-critical: #fca5a5;
-  --alert-critical-bg: #be3636;
   --on: #10b981;
   --off: #9ca3af;
   --submit-primary: #3b82f6;
@@ -61,6 +52,7 @@ a:hover {
   --todo-text: #111111;
   --todo-notes-bg: #ebebeb;
   --caret-color: #006cfa;
+  --highlight-primary: #27c2ff;
 }
 
 /* Dark mode theme variables */
@@ -70,16 +62,6 @@ a:hover {
   --text-primary: #e6edf7;
   --border-primary: #2a364f;
   --form-input: #334155;
-  --alert-success: #6ee7b7;
-  --alert-success-bg: #0e9b6c;
-  --alert-error: #fca5a5;
-  --alert-error-bg: #be3636;
-  --alert-warning: #fde68a;
-  --alert-warning-bg: #c58009;
-  --alert-info: #bfdbfe;
-  --alert-info-bg: #316ac5;
-  --alert-critical: #fca5a5;
-  --alert-critical-bg: #be3636;
   --on: #22c55e;
   --off: #64748b;
   --submit-primary: #3b82f6;
@@ -99,6 +81,7 @@ a:hover {
   --todo-text: #e6edf7;
   --todo-notes-bg: #1f2937;
   --caret-color: #57ebff;
+  --highlight-primary: #209ecf;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -108,16 +91,6 @@ a:hover {
   --color-primary-text: var(--text-primary);
   --color-primary-border: var(--border-primary);
   --color-form-input: var(--form-input);
-  --color-alert-success: var(--alert-success);
-  --color-alert-success-bg: var(--alert-success-bg);
-  --color-alert-error: var(--alert-error);
-  --color-alert-error-bg: var(--alert-error-bg);
-  --color-alert-critical: var(--alert-critical);
-  --color-alert-critical-bg: var(--alert-critical-bg);
-  --color-alert-warning: var(--alert-warning);
-  --color-alert-warning-bg: var(--alert-warning-bg);
-  --color-alert-info: var(--alert-info);
-  --color-alert-info-bg: var(--alert-info-bg);
   --color-required: var(--required);
   --color-on: var(--on);
   --color-off: var(--off);
@@ -136,6 +109,7 @@ a:hover {
   --color-muted: var(--muted);
   --color-todo-text: var(--todo-text);
   --color-todo-notes-bg: var(--todo-notes-bg);
+  --color-highlight-primary: var(--highlight-primary);
 }
 
 /* Custom utilities for animations */
@@ -147,9 +121,6 @@ a:hover {
   .spacing-ease-out {
     letter-spacing: normal;
     animation: spacing-contract 0.15s ease-out forwards;
-  }
-  .alert-fade-out {
-    animation: fade-out 0.2s ease-out forwards;
   }
   .counttimer-highlight {
     animation: bg-in-out 0.8s ease-in-out forwards;
@@ -175,21 +146,12 @@ a:hover {
   }
 }
 
-@keyframes fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @keyframes bg-in-out {
   0% {
     background-color: transparent;
   }
   50% {
-    background-color: var(--color-alert-info);
+    background-color: var(--color-highlight-primary);
   }
   100% {
     background-color: transparent;

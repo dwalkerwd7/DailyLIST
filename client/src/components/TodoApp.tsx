@@ -195,7 +195,7 @@ export default function TodoApp() {
     };
 
     const handleDeleteTodo: DeleteHandler = (id: number) => {
-        openModalAlert(setModalAlertProps, "critical", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
+        openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
             setAllExpanded(false);
             setAllChecked(false);
@@ -283,7 +283,7 @@ export default function TodoApp() {
                     />
                 </div>
             </p>
-            <div className="flex flex-row gap-2 justify-between w-full border-b border-primary-border pb-3 mb-5">
+            <div className="flex flex-row gap-2 justify-center gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
                     ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}

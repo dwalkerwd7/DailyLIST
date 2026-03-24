@@ -79,7 +79,9 @@ export default function ModalAlert({
             <div className={`mb-4 block w-full rounded-full text-center border px-3 py-1 text-sm font-semibold uppercase tracking-wide ${colorsByType[type]}`}>
                 {type}
             </div>
-            <h2 className="mb-2 text-xl font-bold text-primary-text">{title}</h2>
+            <h2 className={`mb-2 text-xl font-bold text-alert-${type}-title`}>
+                {title}
+            </h2>
             <p className="mb-6 text-sm text-primary-text">{message}</p>
             <div className="flex justify-end gap-3">
                 {showCancel && (

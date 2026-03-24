@@ -1,0 +1,71 @@
+/* Alert color variables — light mode */
+:root {
+  --alert-success: #166534;
+  --alert-success-title: #14532d;
+  --alert-success-bg: #22c55e;
+  --alert-error: #991b1b;
+  --alert-error-title: #7f1d1d;
+  --alert-error-bg: #ef4444;
+  --alert-warning: #92400e;
+  --alert-warning-title: #78350f;
+  --alert-warning-bg: #f59e0b;
+  --alert-info: #1e40af;
+  --alert-info-title: #1e3a8a;
+  --alert-info-bg: #3b82f6;
+  --alert-critical: #7f1d1d;
+  --alert-critical-title: #450a0a;
+  --alert-critical-bg: #dc2626;
+}
+
+/* Alert color variables — dark mode */
+:root.dark {
+  --alert-success: #86efac;
+  --alert-success-title: #bbf7d0;
+  --alert-success-bg: #16a34a;
+  --alert-error: #fca5a5;
+  --alert-error-title: #fecaca;
+  --alert-error-bg: #dc2626;
+  --alert-warning: #fde68a;
+  --alert-warning-title: #fef3c7;
+  --alert-warning-bg: #d97706;
+  --alert-info: #bfdbfe;
+  --alert-info-title: #dbeafe;
+  --alert-info-bg: #2563eb;
+  --alert-critical: #fecaca;
+  --alert-critical-title: #fee2e2;
+  --alert-critical-bg: #b91c1c;
+}
+
+/* Map alert variables to Tailwind's color system */
+@theme {
+  --color-alert-success: var(--alert-success);
+  --color-alert-success-title: var(--alert-success-title);
+  --color-alert-success-bg: var(--alert-success-bg);
+  --color-alert-error: var(--alert-error);
+  --color-alert-error-title: var(--alert-error-title);
+  --color-alert-error-bg: var(--alert-error-bg);
+  --color-alert-warning: var(--alert-warning);
+  --color-alert-warning-title: var(--alert-warning-title);
+  --color-alert-warning-bg: var(--alert-warning-bg);
+  --color-alert-info: var(--alert-info);
+  --color-alert-info-title: var(--alert-info-title);
+  --color-alert-info-bg: var(--alert-info-bg);
+  --color-alert-critical: var(--alert-critical);
+  --color-alert-critical-title: var(--alert-critical-title);
+  --color-alert-critical-bg: var(--alert-critical-bg);
+}
+
+@layer utilities {
+  .alert-fade-out {
+    animation: fade-out 0.2s ease-out forwards;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
