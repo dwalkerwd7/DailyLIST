@@ -275,22 +275,22 @@ export default function TodoApp() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-4 w-lg sm:w-2xl md:w-3xl">
-            <p className="text-lg text-center text-muted mb-2">
+        <div className="flex flex-col items-center gap-3 w-lg sm:w-2xl md:w-3xl">
+            <p className="text-lg text-center text-muted">
                 Your list automatically resets in: 
-                <div id="countdown-timer-bg">
-                    <Counter
-                        ref={counterHandle}
-                        startTime={24 * 3600}
-                        endTime={0}
-                        step={-1}
-                        formatString={timeLeftFormatString}
-                        indicateStartStop={true}
-                        indicateStartStopClass="counttimer-highlight"
-                        className="text-primary-text font-bold"
-                    />
-                </div>
             </p>
+            <span className="inline-flex mb-2">
+                <Counter
+                    ref={counterHandle}
+                    startTime={24 * 3600}
+                    endTime={0}
+                    step={-1}
+                    formatString={timeLeftFormatString}
+                    indicateStartStop={true}
+                    indicateStartStopClass="counttimer-highlight"
+                    className="text-primary-text font-bold text-xl"
+                />
+            </span>
             <div className="flex flex-row gap-2 items-center justify-center gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
@@ -304,7 +304,7 @@ export default function TodoApp() {
                 </button>
                 <div className="flex flex-row gap-2 items-center">
                     <span className="text-sm text-muted mr-2">Auto-Delete Todos</span>
-                    <ToggleSwitch isOn={autoDelete} handleToggle={() => setAutoDelete(!autoDelete)} />
+                    <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={() => setAutoDelete(!autoDelete)} />
                 </div>
             </div>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
