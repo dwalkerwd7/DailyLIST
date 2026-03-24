@@ -132,6 +132,8 @@ export default function TodoApp() {
     });
     
     const counterHandle = useRef<CounterHandle>(null);
+    const expiresAtRef = useRef<number | null>(null);
+    const hasLoaded = useRef(false);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -140,16 +142,30 @@ export default function TodoApp() {
         })
     );
 
+    const MAX_LIFETIME = 24 * 60 * 60 * 1000;
+
+    const generateNewTodoID = () => {
+        return Math.floor(Math.random() * 9000) + 1000;
+    };
+
+    const startTimerAnew = () => {
+        expiresAtRef.current = Date.now() + MAX_LIFETIME;
+        counterHandle.current?.setTime(MAX_LIFETIME);
+        counterHandle.current?.startTimer();
+    }
+
     const loadTodos = async () => {
         try {
             const response = await fetch("/api/todos");
             if(response.ok) {
                 const data = await response.json();
 
+                hasLoaded.current = true;
                 setTodos(data.todos);
-                counterHandle.current?.setTime(data.timeLeft);
                 
-                if(data.timeLeft !== -1) {
+                if(data.expiresAt) {
+                    expiresAtRef.current = data.expiresAt;
+                    counterHandle.current?.setTime(data.expiresAt - Date.now());
                     counterHandle.current?.startTimer();
                 }
             }
@@ -168,8 +184,8 @@ export default function TodoApp() {
                 body: JSON.stringify({ todos }),
             });
             if(!response.ok) {
-                const errorData = await response.json();
-                console.error("Error saving todos:", errorData.message);
+                const resData = await response.json();
+                console.error("Error saving todos:", resData.message);
             }
         } catch(err) {
             console.error("Error posting todos:", err);
@@ -181,18 +197,15 @@ export default function TodoApp() {
     }, []);
 
     useEffect(() => {
-        if (todos.length === 0) {
+        if(todos.length === 0) {
+            expiresAtRef.current = null;
             counterHandle.current?.stopTimer();
-        } else if (todos.length === 1) {
-            counterHandle.current?.startTimer();
         }
-
-        saveTodos(todos);
+        
+        if(hasLoaded.current) {
+            saveTodos(todos);
+        }
     }, [todos]);
-
-    const generateNewTodoID = () => {
-        return Math.floor(Math.random() * 9000) + 1000;
-    };
 
     const handleAddTodo = () => {
         if(todos.length >= 20) {
@@ -207,12 +220,18 @@ export default function TodoApp() {
             return;
         }
 
-        setTodos((prev) => [...prev, { 
+        setTodos((prev) => {
+            if(prev.length === 0) {
+                startTimerAnew();
+            }
+            
+            return [...prev, { 
             id: generateNewTodoID(), 
             completed: false, 
             title: "New Todo", 
             expanded: false 
-        }]);
+            }]
+        });
     };
 
     const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
@@ -313,7 +332,8 @@ export default function TodoApp() {
         localStorage.setItem("autoDelete", String(newAutoDelete));
     };
 
-    const timeLeftFormatString = (ms: number) => {
+    const timeLeftFormatString = (_ms: number) => {
+        const ms = expiresAtRef.current ? expiresAtRef.current - Date.now() : _ms;
         const seconds = Math.floor(ms / 1000);
 
         if (seconds < 0) {

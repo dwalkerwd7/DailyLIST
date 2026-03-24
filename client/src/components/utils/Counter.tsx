@@ -39,11 +39,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
                 setCurrentTime(startTime);
             }
             intervalRef.current = setInterval(() => {
-                if(currentTime !== endTime) {
-                    setCurrentTime((prev) => prev + step);
-                } else {
-                    pauseTimer();
-                }
+                setCurrentTime((prev) => prev !== endTime ? prev + step : prev);
             }, Math.abs(step));
         } else {
             clearInterval(intervalRef.current);
