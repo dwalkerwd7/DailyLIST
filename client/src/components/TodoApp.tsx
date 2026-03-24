@@ -127,7 +127,10 @@ export default function TodoApp() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [allExpanded, setAllExpanded] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
-    const [autoDelete, setAutoDelete] = useState(false);
+    const [autoDelete, setAutoDelete] = useState(() => {
+        const saved = localStorage.getItem("autoDelete");
+        return saved === "true";
+    });
     
     const counterHandle = useRef<CounterHandle>(null);
 
@@ -263,6 +266,12 @@ export default function TodoApp() {
         });
     };
 
+    const handleAutoDeleteToggle = () => {
+        const newAutoDelete = !autoDelete;
+        setAutoDelete(newAutoDelete);
+        localStorage.setItem("autoDelete", String(newAutoDelete));
+    };
+
     const timeLeftFormatString = (seconds: number) => {
         if (seconds < 0) {
             return "--:--:--";
@@ -304,7 +313,7 @@ export default function TodoApp() {
                 </button>
                 <div className="flex flex-row gap-2 items-center">
                     <span className="text-sm text-muted mr-2">Auto-Delete Todos</span>
-                    <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={() => setAutoDelete(!autoDelete)} />
+                    <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={handleAutoDeleteToggle} />
                 </div>
             </div>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
