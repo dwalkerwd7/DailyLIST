@@ -126,7 +126,6 @@ function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateTitle, onUpd
 export default function TodoApp() {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [allExpanded, setAllExpanded] = useState(false);
-    const [allChecked, setAllChecked] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
     const [autoDelete, setAutoDelete] = useState(false);
     
@@ -161,17 +160,13 @@ export default function TodoApp() {
     };
 
     const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
-        if(autoDelete) {
-            setTodos((prev) => prev.filter((todo) => todo.id !== id));
-            setAllChecked(false);
-            return;
-        }
-
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
         setTodos(newTodos);
 
-        if(!autoDelete && newTodos.every((todo) => todo.completed)) {
-            setAllChecked(true);
+        if(autoDelete) {
+            setTimeout(() => {
+                setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            }, 200);
         }
     };
 
@@ -204,7 +199,6 @@ export default function TodoApp() {
         openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
             setTodos((prev) => prev.filter((todo) => todo.id !== id));
             setAllExpanded(false);
-            setAllChecked(false);
             setModalAlertProps(null);
         });
     };
@@ -238,16 +232,6 @@ export default function TodoApp() {
         setTodos((prev) => prev.map((todo) => ({ ...todo, expanded: newAllExpanded })));
     };
 
-    const handleToggleCompleteAll = () => {
-        if (todos.length === 0) {
-            return;
-        }
-
-        const newAllChecked = !todos.every((todo) => todo.completed);
-        setAllChecked(newAllChecked);
-        setTodos((prev) => prev.map((todo) => ({ ...todo, completed: newAllChecked })));
-    };
-
     const handleResetList = () => {
         if (todos.length === 0) {
             return;
@@ -256,7 +240,6 @@ export default function TodoApp() {
         openModalAlert(setModalAlertProps, "critical", "Reset List", "Are you sure you want to delete all your todos? This process is irreversible.", "Reset", () => {
             setTodos([]);
             setAllExpanded(false);
-            setAllChecked(false);
             setModalAlertProps(null);
         });
     };
@@ -297,18 +280,11 @@ export default function TodoApp() {
                 >
                     {allExpanded ? "Collapse All" : "Expand All"}
                 </button>
-                <button className={`
-                    h-9 px-4 text-sm text-todo-text rounded
-                    ${allChecked ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
-                `} onClick={handleToggleCompleteAll}
-                >
-                    {allChecked ? "Uncheck All" : "Check All"}
-                </button>
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
                 <div className="flex flex-col gap-2 items-center">
-                    <span className="text-sm text-primary-text mr-2">Auto-Delete Completed Todos</span>
+                    <span className="text-sm text-primary-text mr-2">Auto-Delete Todo on Complete</span>
                     <ToggleSwitch isOn={autoDelete} handleToggle={() => setAutoDelete(!autoDelete)} />
                 </div>
             </div>
