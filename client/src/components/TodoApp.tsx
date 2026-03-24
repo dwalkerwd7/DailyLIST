@@ -21,6 +21,7 @@ import { CSS } from "@dnd-kit/utilities";
 import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
 import DynamicTextarea from "./utils/DynamicTextarea";
 import Counter, { type CounterHandle } from "./utils/Counter";
+import ToggleSwitch from "./utils/ToggleSwitch";
 
 type Todo = {
     id: number;
@@ -127,6 +128,7 @@ export default function TodoApp() {
     const [allExpanded, setAllExpanded] = useState(false);
     const [allChecked, setAllChecked] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
+    const [autoDelete, setAutoDelete] = useState(false);
     
     const counterHandle = useRef<CounterHandle>(null);
 
@@ -159,13 +161,17 @@ export default function TodoApp() {
     };
 
     const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
+        if(autoDelete) {
+            setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            setAllChecked(false);
+            return;
+        }
+
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
         setTodos(newTodos);
 
-        if(newTodos.every((todo) => todo.completed)) {
+        if(!autoDelete && newTodos.every((todo) => todo.completed)) {
             setAllChecked(true);
-        } else {
-            setAllChecked(false);
         }
     };
 
@@ -283,7 +289,7 @@ export default function TodoApp() {
                     />
                 </div>
             </p>
-            <div className="flex flex-row gap-2 justify-center gap-8 w-full border-b border-primary-border pb-3">
+            <div className="flex flex-row gap-2 items-center justify-center gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
                     ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
@@ -301,6 +307,10 @@ export default function TodoApp() {
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
+                <div className="flex flex-col gap-2 items-center">
+                    <span className="text-sm text-primary-text mr-2">Auto-Delete Completed Todos</span>
+                    <ToggleSwitch isOn={autoDelete} handleToggle={() => setAutoDelete(!autoDelete)} />
+                </div>
             </div>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
