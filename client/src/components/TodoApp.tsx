@@ -290,8 +290,8 @@ export default function TodoApp() {
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
-                <div className="flex flex-row gap-2 items-center border-l-4 px-5">
-                    <span className="text-sm text-primary-text mr-2">Auto-Delete Todos</span>
+                <div className="flex flex-row gap-2 items-center">
+                    <span className="text-sm text-muted mr-2">Auto-Delete Todos</span>
                     <ToggleSwitch isOn={autoDelete} handleToggle={() => setAutoDelete(!autoDelete)} />
                 </div>
             </div>
