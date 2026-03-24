@@ -166,7 +166,7 @@ export default function TodoApp() {
         if(autoDelete) {
             setTimeout(() => {
                 setTodos((prev) => prev.filter((todo) => todo.id !== id));
-            }, 200);
+            }, 300);
         }
     };
 
