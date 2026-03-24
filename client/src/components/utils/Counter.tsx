@@ -4,6 +4,8 @@ type CounterHandle = {
     startTimer: () => void;
     pauseTimer: () => void;
     stopTimer: () => void;
+    setTime: (time: number) => void;
+    getTime: () => number;
 };
 
 type CounterProps = {
@@ -42,7 +44,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
                 } else {
                     pauseTimer();
                 }
-            }, Math.abs(step * 1000));
+            }, Math.abs(step));
         } else {
             clearInterval(intervalRef.current);
         }
@@ -74,6 +76,9 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
         startTimer,
         pauseTimer,
         stopTimer,
+        setTime: (time) => setCurrentTime(time),
+        getTime: () => currentTime,
+
     }));
 
     return (

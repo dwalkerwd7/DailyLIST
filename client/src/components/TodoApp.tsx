@@ -140,6 +140,24 @@ export default function TodoApp() {
         })
     );
 
+    const loadTodos = async () => {
+        try {
+            const response = await fetch("/api/todos");
+            if(response.ok) {
+                const data = await response.json();
+
+                setTodos(data.todos);
+                counterHandle.current?.setTime(data.timeLeft);
+                
+                if(data.timeLeft !== -1) {
+                    counterHandle.current?.startTimer();
+                }
+            }
+        } catch(err) {
+            console.error("Error fetching todos:", err);
+        }
+    };
+
     const saveTodos = async(todos: Todo[]) => {
         try {
             const response = await fetch("/api/todos", {
@@ -159,10 +177,7 @@ export default function TodoApp() {
     };
 
     useEffect(() => {
-        fetch("/api/todos")
-            .then((response) => response.json())
-            .then((data) => setTodos(data))
-            .catch((error) => console.error("Error fetching todos:", error));
+        loadTodos();
     }, []);
 
     useEffect(() => {
@@ -298,7 +313,9 @@ export default function TodoApp() {
         localStorage.setItem("autoDelete", String(newAutoDelete));
     };
 
-    const timeLeftFormatString = (seconds: number) => {
+    const timeLeftFormatString = (ms: number) => {
+        const seconds = Math.floor(ms / 1000);
+
         if (seconds < 0) {
             return "--:--:--";
         }
@@ -317,9 +334,9 @@ export default function TodoApp() {
             <span className="inline-flex mb-2">
                 <Counter
                     ref={counterHandle}
-                    startTime={24 * 3600}
+                    startTime={-1}
                     endTime={0}
-                    step={-1}
+                    step={-1000}
                     formatString={timeLeftFormatString}
                     indicateStartStop={true}
                     indicateStartStopClass="counttimer-highlight"

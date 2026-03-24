@@ -6,8 +6,8 @@ import path from 'path'
 const app = express()
 const PORT = process.env.PORT!
 const COOKIE_KEY = process.env.COOKIE_KEY!
-
 const FULL_CLIENT_PATH = path.join(__dirname, '../../client/dist')
+const MAX_AGE = 24 * 60 * 60 * 1000
 
 app.use(express.json())
 app.use(cookieParser())
@@ -18,24 +18,33 @@ app.use(express.static(FULL_CLIENT_PATH))
 /* APIs */
 app.post('/api/todos', (req, res) => {
   const { todos } = req.body
-  
-  res.cookie(COOKIE_KEY, JSON.stringify(todos), { 
+
+  const existingCookieStartTime = req.cookies[COOKIE_KEY] ? JSON.parse(req.cookies[COOKIE_KEY]).startTime : null
+  const startTime = existingCookieStartTime ?? Date.now()
+  const expiresAt = startTime + MAX_AGE
+  const maxAge = Math.max(0, expiresAt - Date.now())
+
+  res.cookie(COOKIE_KEY, JSON.stringify({ todos, startTime }), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
+    maxAge
   })
 
   return res.json({ ok: true, message: "Todos saved successfully." })
 })
 
 app.get('/api/todos', (req, res) => {
-  const todos = req.cookies[COOKIE_KEY] ? JSON.parse(req.cookies[COOKIE_KEY]) : []
-  return res.json(todos)
-})
+  const { todos, startTime } = req.cookies[COOKIE_KEY] ? JSON.parse(req.cookies[COOKIE_KEY]) : { todos: [], startTime: null }
+  console.log(startTime)
+  const timeLeft = startTime ? Math.max(0, (startTime + MAX_AGE) - Date.now()) : -1
 
-/* SPA fallback */
-app.get('{wildcard}', (req, res) => {
-  res.sendFile(path.join(FULL_CLIENT_PATH, 'index.html'))
+  if(timeLeft === -1) {
+    res.clearCookie(COOKIE_KEY)
+    return res.json({ todos: [], timeLeft })
+  } else {
+    return res.json({ todos, timeLeft })
+  }
 })
 
 /* Start the server */
