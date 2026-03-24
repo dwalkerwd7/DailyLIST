@@ -7,7 +7,7 @@ const app = express()
 const PORT = process.env.PORT!
 const COOKIE_KEY = process.env.COOKIE_KEY!
 const FULL_CLIENT_PATH = path.join(__dirname, '../../client/dist')
-const MAX_AGE = 24 * 60 * 60 * 1000
+const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 
 app.use(express.json())
 app.use(cookieParser())
@@ -21,7 +21,7 @@ app.post('/api/todos', (req, res) => {
 
   const existingCookieStartTime = req.cookies[COOKIE_KEY] ? JSON.parse(req.cookies[COOKIE_KEY]).startTime : null
   const startTime = existingCookieStartTime ?? Date.now()
-  const expiresAt = startTime + MAX_AGE
+  const expiresAt = startTime + COOKIE_LIFETIME
   const maxAge = Math.max(0, expiresAt - Date.now())
 
   res.cookie(COOKIE_KEY, JSON.stringify({ todos, startTime }), {
@@ -37,7 +37,7 @@ app.post('/api/todos', (req, res) => {
 app.get('/api/todos', (req, res) => {
   const { todos, startTime } = req.cookies[COOKIE_KEY] ? JSON.parse(req.cookies[COOKIE_KEY]) : { todos: [], startTime: null }
   console.log(startTime)
-  const timeLeft = startTime ? Math.max(0, (startTime + MAX_AGE) - Date.now()) : -1
+  const timeLeft = startTime ? Math.max(0, (startTime + COOKIE_LIFETIME) - Date.now()) : -1
 
   if(timeLeft === -1) {
     res.clearCookie(COOKIE_KEY)
