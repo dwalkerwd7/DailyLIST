@@ -8,14 +8,14 @@ export default function ToggleSwitch({ isOn, handleToggle, width=14, height=8 }:
     return (
         <button
             onClick={handleToggle}
-            className={`relative inline-flex items-center rounded-full transition-colors caret-off outline-none ${
+            className={`relative inline-flex items-center rounded-full transition-colors outline-none ${
                 isOn ? 'bg-on' : 'bg-off'
             }`}
             style={{width: `${outerWidth}px`, height: `${outerHeight}px`}}
             aria-label="Toggle switch"
         >
             <span
-                className="inline-block transform rounded-full bg-white shadow-lg transition-transform caret-off"
+                className="inline-block transform rounded-full bg-white shadow-lg transition-transform outline-none caret-transparent"
                 style={{
                     width: `${innerWidthEm}em`,
                     height: `${innerHeightEm}em`,
