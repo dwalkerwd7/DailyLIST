@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./components/utils/alerts.vars.css";
+@import "./components/utils/alerts.theme.css";
 
 /* Global styles */
 body {
