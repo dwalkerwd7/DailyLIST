@@ -61,7 +61,7 @@ app.get('/api/todos', (req, res) => {
 })
 
 /* SPA fallback */
-app.get('{*splat}', (_req, res) => {
+app.get(`{*splat}`, (_req, res) => {
   res.sendFile(path.join(PUBLIC_PATH, 'index.html'))
 })
 

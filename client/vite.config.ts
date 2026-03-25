@@ -3,12 +3,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: '/dailylist/',
-  plugins: [react(), tailwindcss()],
-  server: {
-    proxy: {
-      '/api': 'http://localhost:3001',
-    },
-  },
+export default defineConfig(() => {
+  return {
+    base: '/',
+    plugins: [react(), tailwindcss()]
+  }
 })

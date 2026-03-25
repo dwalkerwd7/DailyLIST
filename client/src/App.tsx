@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename={import.meta.env.ROUTER_BASE_PATH}>
+    <Router>
       <Routes>
         <Route
           path="/"
