@@ -1,6 +1,5 @@
-const AppBasePath: string = import.meta.env.BASE_URL
 const APIPaths = {
-    todos: `${AppBasePath}api/todos`
+    todos: `${import.meta.env.BASE_URL}api/todos`
 }
 
-export { AppBasePath, APIPaths };
+export default APIPaths;

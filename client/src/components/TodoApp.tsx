@@ -22,7 +22,7 @@ import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalA
 import DynamicTextarea from "./utils/DynamicTextarea";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import ToggleSwitch from "./utils/ToggleSwitch";
-import { APIPaths } from "../app-constants";
+import APIPaths from "../app-constants";
 
 type Todo = {
     id: number;
