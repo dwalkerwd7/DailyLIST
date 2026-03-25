@@ -4,16 +4,16 @@ import cookieParser from 'cookie-parser'
 import path from 'path'
 
 const app = express()
-const PORT = process.env.PORT!
+const PORT = process.env.DAILYLIST_PORT!
 const COOKIE_KEY = process.env.COOKIE_KEY!
-const FULL_CLIENT_PATH = path.join(__dirname, '../../client/dist')
+const PUBLIC_PATH = path.join(__dirname, '../public/')
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 
 app.use(express.json())
 app.use(cookieParser())
 
-/* Serve client build */
-app.use(express.static(FULL_CLIENT_PATH))
+/* Serve public dir at root */
+app.use(express.static(PUBLIC_PATH))
 
 /* Utility functions */
 const calculateTimeLeft = (startTime: number) => {
@@ -60,7 +60,12 @@ app.get('/api/todos', (req, res) => {
   }
 })
 
+/* SPA fallback */
+app.get('{*splat}', (_req, res) => {
+  res.sendFile(path.join(PUBLIC_PATH, 'index.html'))
+})
+
 /* Start the server */
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  console.log(`DailyLIST server running on port ${PORT}`)
 })
