@@ -1,5 +1,6 @@
 import 'varlock/auto-load'
 import express from 'express'
+import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 
@@ -8,6 +9,16 @@ const PORT = process.env.DAILYLIST_PORT!
 const PUBLIC_PATH = path.join(__dirname, '../public/')
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
+
+// Security middleware because tailwind CDN is not used and styles are inline
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    imgSrc: ["'self'", "data:"],
+  }
+}))
 
 app.use(express.json())
 app.use(cookieParser())
