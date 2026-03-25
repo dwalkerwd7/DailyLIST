@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ mode }) => {
   // cannot use app-constants.ts here because import.meta.env is not supported in defineConfig
   const env = loadEnv(mode, process.cwd(), '')
-  const appBasePath = env.VITE_APP_BASE_PATH || '/'
+  const appBasePath = env.BASE_PATH || '/'
   return {
     base: appBasePath,
     build: {

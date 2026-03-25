@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename={import.meta.env.VITE_APP_BASE_PATH || '/'}>
+    <Router basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route
           path="/"
