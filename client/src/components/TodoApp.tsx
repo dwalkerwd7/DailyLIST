@@ -22,6 +22,7 @@ import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalA
 import DynamicTextarea from "./utils/DynamicTextarea";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import ToggleSwitch from "./utils/ToggleSwitch";
+import APIPaths from "../utils/api-paths";
 
 type Todo = {
     id: number;
@@ -156,7 +157,7 @@ export default function TodoApp() {
 
     const loadTodos = async () => {
         try {
-            const response = await fetch("/api/todos");
+            const response = await fetch(APIPaths.todos);
             if(response.ok) {
                 const data = await response.json();
 
@@ -176,7 +177,7 @@ export default function TodoApp() {
 
     const saveTodos = async(todos: Todo[]) => {
         try {
-            const response = await fetch("/api/todos", {
+            const response = await fetch(APIPaths.todos, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
