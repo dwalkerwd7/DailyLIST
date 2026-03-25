@@ -5,8 +5,8 @@ import path from 'path'
 
 const app = express()
 const PORT = process.env.DAILYLIST_PORT!
-const COOKIE_NAME = process.env.DAILYLIST_COOKIE_SECRET!
 const PUBLIC_PATH = path.join(__dirname, '../public/')
+const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 
 app.use(express.json())
