@@ -2,6 +2,8 @@
 
 A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no unnecessary features, just a clean way to track your daily tasks.
 
+You can view this app in all its glory at derekwalker.xyz/dailylist
+
 ## Features
 
 - **Daily Reset** — Your list automatically resets every 24 hours, encouraging a fresh start each day
