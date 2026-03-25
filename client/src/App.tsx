@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   return (
-    <Router basename="/dailylist">
+    <Router basename={import.meta.env.ROUTER_BASE_PATH}>
       <Routes>
         <Route
           path="/"
