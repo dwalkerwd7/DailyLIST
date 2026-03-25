@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser'
 import path from 'path'
 
 const app = express()
-const DEV_MODE = process.env.NODE_ENV !== 'production'
+const DEV_MODE = process.env.NODE_ENV === 'development'
 const PORT = process.env.DAILYLIST_PORT!
-const PUBLIC_PATH = path.join(__dirname, `${DEV_MODE ? '../public/' : '../../public/'}`)
+const BASE_PATH = process.env.DAILYLIST_BASE_PATH || '/'
+const PUBLIC_PATH = path.join(__dirname, `../public${BASE_PATH}`);
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 
