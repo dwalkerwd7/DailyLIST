@@ -3,13 +3,33 @@ import express from 'express'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import path from 'path'
+import fs from 'fs'
 
 const app = express()
-const PORT = process.env.DAILYLIST_PORT!
-const BASE_PATH = process.env.DAILYLIST_BASE_PATH || '/'
+const PORT = process.env.PORT!
+const DEV_MODE = process.env.NODE_ENV !== 'production'
+const BASE_PATH = process.env.BASE_PATH || '/'
 const PUBLIC_PATH = path.join(__dirname, `../public${BASE_PATH}`);
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
+const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!)
+const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
+const FEEDBACK_CONTENT_PATH = path.join(LOG_DIR, 'feedback_content.log')
+
+/* Initialize server logs and such. */
+const initialize = () => {
+  fs.mkdirSync(LOG_DIR, { recursive: true })
+  if (!fs.existsSync(FEEDBACK_IPS_PATH)) fs.writeFileSync(FEEDBACK_IPS_PATH, '')
+  if (!fs.existsSync(FEEDBACK_CONTENT_PATH)) fs.writeFileSync(FEEDBACK_CONTENT_PATH, '')
+}
+
+/* Run on every startup */
+initialize()
+
+const getSubmittedIPs = (): string[] => {
+  if (!fs.existsSync(FEEDBACK_IPS_PATH)) return []
+  return fs.readFileSync(FEEDBACK_IPS_PATH, 'utf-8').split('\n').filter(Boolean)
+}
 
 // Security middleware because tailwind CDN is not used and styles are inline
 app.use(helmet.contentSecurityPolicy({
@@ -24,13 +44,23 @@ app.use(helmet.contentSecurityPolicy({
 app.use(express.json())
 app.use(cookieParser())
 
-/* Serve public dir at root */
-app.use(express.static(PUBLIC_PATH))
+/* Serve public dir at base path */
+app.use(BASE_PATH, express.static(PUBLIC_PATH))
 
 /* Utility functions */
 const calculateTimeLeft = (startTime: number) => {
   const timeLeft = Math.max(0, startTime + COOKIE_LIFETIME - Date.now())
   return timeLeft
+}
+
+/* Middleware to strip base path from api calls. My portfolio server does this automatically, so only need this for dev mode. */
+if(DEV_MODE) {
+  app.use((req, _res, next) => {
+    if (req.url.startsWith('/dailylist/api/')) {
+      req.url = req.url.slice('/dailylist'.length) || '/'
+    }
+    next()
+  })
 }
 
 /* APIs */
@@ -70,6 +100,22 @@ app.get('/api/todos', (req, res) => {
   } else {
     return res.json({ todos, expiresAt: startTime + COOKIE_LIFETIME })
   }
+})
+
+app.get('/api/feedback', (req, res) => {
+  const ip = req.ip!
+  const hasSubmitted = getSubmittedIPs().includes(ip)
+  return res.json({ hasSubmitted })
+})
+
+app.post('/api/feedback', (req, res) => {
+  const ip = req.ip!
+  if (getSubmittedIPs().includes(ip)) {
+    return res.status(409).json({ ok: false, message: 'Feedback already submitted.' })
+  }
+  fs.appendFileSync(FEEDBACK_IPS_PATH, `${ip}\n`)
+  fs.appendFileSync(FEEDBACK_CONTENT_PATH, `IP: ${ip}\n${JSON.stringify(req.body)}\n---\n`)
+  return res.json({ ok: true })
 })
 
 /* SPA fallback */

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "dev": "nodemon --exec ts-node src/dailylist-server.ts",
     "build": "tsc",
-    "start": "varlock run -- node dist/index.js"
+    "start": "varlock run -- node dist/dailylist-server.js"
   },
   "keywords": [],
   "author": "",

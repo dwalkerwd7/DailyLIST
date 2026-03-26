@@ -12,7 +12,7 @@ export default function Feedback() {
   const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: '', msg: '', type: 'success' });
   const hasSubmittedFeedback = useRef(false);
 
-  const successAlert: PageAlertProps = {
+  const successSubmitAlert: PageAlertProps = {
     title: 'Feedback Submitted!',
     msg: 'Thank you for your feedback!',
     type: 'success'
@@ -27,7 +27,8 @@ export default function Feedback() {
   const alreadySubmittedAlert: PageAlertProps = {
     title: 'Feedback Submitted',
     msg: 'Thank you for your feedback! We appreciate your input.',
-    type: 'info'
+    type: 'info',
+    closable: false
   };
 
   const getHasSubmittedFeedback = async () => {
@@ -38,11 +39,13 @@ export default function Feedback() {
           'Content-Type': 'application/json'
         }
       });
-        const data = await response.json();
-        hasSubmittedFeedback.current = data.hasSubmitted;
-        if (hasSubmittedFeedback.current) {
-          setAlertMessage(alreadySubmittedAlert);
-        }
+
+      const data = await response.json();
+      hasSubmittedFeedback.current = data.hasSubmitted;
+      if (hasSubmittedFeedback.current) {
+        setAlertMessage(alreadySubmittedAlert);
+      }
+      
     } catch (error) {
       console.error('Error checking feedback submission status:', error);
     }
@@ -50,21 +53,27 @@ export default function Feedback() {
 
   const submitFeedback = async () => {
     try {
-      await fetch(APIPaths.feedback, {
+      const response = await fetch(APIPaths.feedback, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       });
+      
+      if(response.ok) {
         hasSubmittedFeedback.current = true;
-        setAlertMessage(successAlert);
+        setAlertMessage(successSubmitAlert);
+      } else {
+        hasSubmittedFeedback.current = false;
+        setAlertMessage(errorSubmitAlert);
+      }
+
     } catch(error) {
       console.error('Error submitting feedback:', error);
       setAlertMessage(errorSubmitAlert);
     }
   };
-
 
   useEffect(() => {
     getHasSubmittedFeedback();
@@ -81,7 +90,6 @@ export default function Feedback() {
       <p className="text-lg text-primary-text mb-8">Your feedback helps us improve DailyLIST. Please share your thoughts, suggestions, or report any issues you encounter.</p>
       <PageAlert
         {...alertMessage}
-        closable
       />
       { !hasSubmittedFeedback.current && (
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
@@ -95,6 +103,7 @@ export default function Feedback() {
             className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your name"
             required
+            maxLength={50}
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
@@ -109,6 +118,7 @@ export default function Feedback() {
             className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your email"
             required
+            maxLength={100}
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
@@ -123,6 +133,7 @@ export default function Feedback() {
             className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your message"
             required
+            maxLength={1000}
             value={formData.message}
             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
           />
