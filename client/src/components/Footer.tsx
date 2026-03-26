@@ -4,6 +4,7 @@ export default function Footer() {
   const socialLinks = [
     { label: 'GitHub', href: 'https://github.com/dwalkerwd7' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/derek-walker-a288663a7/' },
+    { label: 'UpWork', href: 'https://www.upwork.com/freelancers/dwalkerwd7' },
   ];
 
   return (

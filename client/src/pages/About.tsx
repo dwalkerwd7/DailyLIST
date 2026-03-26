@@ -59,7 +59,7 @@ export default function About() {
               rel="noopener noreferrer"
               className="inline-block text-link hover:text-link-hover transition-colors font-medium"
             >
-              github.com/dwalkerwd7/DailyLIST →
+              GitHub Source Code →
             </a>
           </div>
         </section>
