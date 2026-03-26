@@ -8,23 +8,13 @@ import fs from 'fs'
 const app = express()
 const PORT = process.env.PORT!
 const DEV_MODE = process.env.NODE_ENV !== 'production'
-const BASE_PATH = process.env.BASE_PATH || '/'
+const BASE_PATH = process.env.BASE_PATH! || '/'
 const PUBLIC_PATH = path.join(__dirname, `../public${BASE_PATH}`);
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
-const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!, BASE_PATH.replace(/\//g, ''))
+const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!, BASE_PATH.replace(/\//g, '/'))
 const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
 const FEEDBACK_CONTENT_PATH = path.join(LOG_DIR, 'feedback_content.log')
-
-/* Initialize server logs */
-const initialize = () => {
-  fs.mkdirSync(LOG_DIR, { recursive: true })
-  if (!fs.existsSync(FEEDBACK_IPS_PATH)) fs.writeFileSync(FEEDBACK_IPS_PATH, '')
-  if (!fs.existsSync(FEEDBACK_CONTENT_PATH)) fs.writeFileSync(FEEDBACK_CONTENT_PATH, '')
-}
-
-/* Run on every startup */
-initialize()
 
 /* Security middleware because tailwind styles are inline */
 app.use(helmet.contentSecurityPolicy({
@@ -43,6 +33,12 @@ app.use(cookieParser())
 app.use(BASE_PATH, express.static(PUBLIC_PATH))
 
 /* Utility functions */
+const initialize = () => {
+  fs.mkdirSync(LOG_DIR, { recursive: true })
+  if (!fs.existsSync(FEEDBACK_IPS_PATH)) fs.writeFileSync(FEEDBACK_IPS_PATH, '')
+  if (!fs.existsSync(FEEDBACK_CONTENT_PATH)) fs.writeFileSync(FEEDBACK_CONTENT_PATH, '')
+}
+
 const calculateTimeLeft = (startTime: number) => {
   const timeLeft = Math.max(0, startTime + COOKIE_LIFETIME - Date.now())
   return timeLeft
@@ -52,6 +48,9 @@ const getSubmittedIPs = (): string[] => {
   if (!fs.existsSync(FEEDBACK_IPS_PATH)) return []
   return fs.readFileSync(FEEDBACK_IPS_PATH, 'utf-8').split('\n').filter(Boolean)
 }
+
+/* Run on every startup */
+initialize()
 
 /* Middleware to strip base path from api calls. My portfolio server does this automatically, so only need this for dev mode. */
 if(DEV_MODE) {
