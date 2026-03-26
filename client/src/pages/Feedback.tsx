@@ -10,6 +10,8 @@ export default function Feedback() {
   });
 
   const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: '', msg: '', type: 'success' });
+  const [hasLoaded, setHasLoaded] = useState(false);
+
   const hasSubmittedFeedback = useRef(false);
 
   const successSubmitAlert: PageAlertProps = {
@@ -41,10 +43,13 @@ export default function Feedback() {
       });
 
       const data = await response.json();
+
       hasSubmittedFeedback.current = data.hasSubmitted;
       if (hasSubmittedFeedback.current) {
         setAlertMessage(alreadySubmittedAlert);
       }
+
+      setHasLoaded(true);
       
     } catch (error) {
       console.error('Error checking feedback submission status:', error);
@@ -60,7 +65,7 @@ export default function Feedback() {
         },
         body: JSON.stringify(formData)
       });
-      
+
       if(response.ok) {
         hasSubmittedFeedback.current = true;
         setAlertMessage(successSubmitAlert);
@@ -91,7 +96,10 @@ export default function Feedback() {
       <PageAlert
         {...alertMessage}
       />
-      { !hasSubmittedFeedback.current && (
+      { !hasLoaded && (
+        <p className="text-primary-text">Loading...</p>
+      )}
+      { !hasSubmittedFeedback.current && hasLoaded && (
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
         <div className="flex flex-col">
           <label htmlFor="name" className="block text-sm font-medium text-primary-text mb-1">

@@ -16,7 +16,7 @@ const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!)
 const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
 const FEEDBACK_CONTENT_PATH = path.join(LOG_DIR, 'feedback_content.log')
 
-/* Initialize server logs and such. */
+/* Initialize server logs */
 const initialize = () => {
   fs.mkdirSync(LOG_DIR, { recursive: true })
   if (!fs.existsSync(FEEDBACK_IPS_PATH)) fs.writeFileSync(FEEDBACK_IPS_PATH, '')
@@ -26,12 +26,7 @@ const initialize = () => {
 /* Run on every startup */
 initialize()
 
-const getSubmittedIPs = (): string[] => {
-  if (!fs.existsSync(FEEDBACK_IPS_PATH)) return []
-  return fs.readFileSync(FEEDBACK_IPS_PATH, 'utf-8').split('\n').filter(Boolean)
-}
-
-// Security middleware because tailwind CDN is not used and styles are inline
+/* Security middleware because tailwind styles are inline */
 app.use(helmet.contentSecurityPolicy({
   directives: {
     defaultSrc: ["'self'"],
@@ -53,6 +48,11 @@ const calculateTimeLeft = (startTime: number) => {
   return timeLeft
 }
 
+const getSubmittedIPs = (): string[] => {
+  if (!fs.existsSync(FEEDBACK_IPS_PATH)) return []
+  return fs.readFileSync(FEEDBACK_IPS_PATH, 'utf-8').split('\n').filter(Boolean)
+}
+
 /* Middleware to strip base path from api calls. My portfolio server does this automatically, so only need this for dev mode. */
 if(DEV_MODE) {
   app.use((req, _res, next) => {
@@ -63,7 +63,7 @@ if(DEV_MODE) {
   })
 }
 
-/* APIs */
+/* Todo APIs */
 app.post('/api/todos', (req, res) => {
   const { todos } = req.body
 
@@ -102,6 +102,7 @@ app.get('/api/todos', (req, res) => {
   }
 })
 
+/* Feedback APIs */
 app.get('/api/feedback', (req, res) => {
   const ip = req.ip!
   const hasSubmitted = getSubmittedIPs().includes(ip)
@@ -114,7 +115,8 @@ app.post('/api/feedback', (req, res) => {
     return res.status(409).json({ ok: false, message: 'Feedback already submitted.' })
   }
   fs.appendFileSync(FEEDBACK_IPS_PATH, `${ip}\n`)
-  fs.appendFileSync(FEEDBACK_CONTENT_PATH, `IP: ${ip}\n${JSON.stringify(req.body)}\n---\n`)
+  fs.appendFileSync(FEEDBACK_CONTENT_PATH, `IP: ${ip}\n${JSON.stringify(req.body, null, 2)}\n---\n`)
+
   return res.json({ ok: true })
 })
 
