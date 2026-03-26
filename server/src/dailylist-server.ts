@@ -9,7 +9,10 @@ const app = express()
 const PORT = process.env.PORT!
 const DEV_MODE = process.env.NODE_ENV !== 'production'
 const BASE_PATH = process.env.BASE_PATH! || '/'
-const PUBLIC_PATH = path.join(__dirname, `../public${BASE_PATH}`);
+
+// matching public dir path on server if in production mode
+const PUBLIC_PATH = path.join(__dirname, `../../public${BASE_PATH}`);
+
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!, BASE_PATH.replace(/\//g, '/'))

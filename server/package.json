@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/dailylist-server.ts",
     "build": "tsc",
-    "start": "varlock run -- node dist/dailylist-server.js"
+    "start": "varlock run -- node dist/dailylist/dailylist-server.js"
   },
   "keywords": [],
   "author": "",
