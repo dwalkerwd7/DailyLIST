@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser'
 import path from 'path'
 
 const app = express()
-const DEV_MODE = process.env.NODE_ENV === 'development'
 const PORT = process.env.DAILYLIST_PORT!
 const BASE_PATH = process.env.DAILYLIST_BASE_PATH || '/'
 const PUBLIC_PATH = path.join(__dirname, `../public${BASE_PATH}`);
