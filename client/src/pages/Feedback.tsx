@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
+import APIPaths from '../api-paths';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -8,41 +9,82 @@ export default function Feedback() {
     message: '',
   });
 
+  const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: '', msg: '', type: 'success' });
+  const hasSubmittedFeedback = useRef(false);
+
   const successAlert: PageAlertProps = {
     title: 'Feedback Submitted!',
     msg: 'Thank you for your feedback!',
     type: 'success'
   };
 
-  const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: 'Test Alert', msg: 'test', type: 'warning' });
-  let hasSubmittedFeedback = false;
+  const errorSubmitAlert: PageAlertProps = {
+    title: 'Submission Failed',
+    msg: 'There was an issue submitting your feedback. Please try again later.',
+    type: 'error'
+  };
+
+  const alreadySubmittedAlert: PageAlertProps = {
+    title: 'Feedback Submitted',
+    msg: 'Thank you for your feedback! We appreciate your input.',
+    type: 'info'
+  };
+
+  const getHasSubmittedFeedback = async () => {
+    try {
+      const response = await fetch(APIPaths.feedback, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+        const data = await response.json();
+        hasSubmittedFeedback.current = data.hasSubmitted;
+        if (hasSubmittedFeedback.current) {
+          setAlertMessage(alreadySubmittedAlert);
+        }
+    } catch (error) {
+      console.error('Error checking feedback submission status:', error);
+    }
+  };
+
+  const submitFeedback = async () => {
+    try {
+      await fetch(APIPaths.feedback, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+        hasSubmittedFeedback.current = true;
+        setAlertMessage(successAlert);
+    } catch(error) {
+      console.error('Error submitting feedback:', error);
+      setAlertMessage(errorSubmitAlert);
+    }
+  };
+
+
+  useEffect(() => {
+    getHasSubmittedFeedback();
+  }, []);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // TODO: send the form data through backend api
-
-    setAlertMessage(successAlert);
-    setFormData({ name: '', email: '', message: '' });
+    submitFeedback();
   };
-
-  useEffect(() => {
-    // TODO: check if IP already has submitted feedback using backend api
-    hasSubmittedFeedback = false; // Placeholder until backend is implemented
-  }, []);
 
   return (
     <main className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8 text-center">
       <h1 className="text-4xl font-bold mb-4 text-primary-text">We'd love to hear from you!</h1>
       <p className="text-lg text-primary-text mb-8">Your feedback helps us improve DailyLIST. Please share your thoughts, suggestions, or report any issues you encounter.</p>
-      { !hasSubmittedFeedback ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
-        <PageAlert
-          title={alertMessage.title} 
-          msg={alertMessage.msg} 
-          type={alertMessage.type} 
-          closable
-        />
+      <PageAlert
+        {...alertMessage}
+        closable
+      />
+      { !hasSubmittedFeedback.current && (
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
         <div className="flex flex-col">
           <label htmlFor="name" className="block text-sm font-medium text-primary-text mb-1">
             Name
@@ -92,11 +134,6 @@ export default function Feedback() {
           Submit Feedback
         </button>
       </form>
-      ) : (
-        <PageAlert
-          msg={successAlert.msg} 
-          type={successAlert.type} 
-        />
       )}
     </main>
   );
