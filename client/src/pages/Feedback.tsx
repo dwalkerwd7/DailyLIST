@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
-import APIPaths from '../api-paths';
+import { APIPaths } from '../app-constants';
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
