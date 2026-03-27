@@ -132,7 +132,7 @@ export default function TodoApp() {
             return [...prev, { 
             id: generateNewTodoID(), 
             completed: false, 
-            title: "New Todo", 
+            title: "", 
             expanded: false 
             }]
         });
@@ -168,9 +168,7 @@ export default function TodoApp() {
     };
 
     const handleUpdateTitle: UpdateTitleHandler = (id: number, title: string) => {
-        if(title.length === 0) {
-            title = "New Todo";
-        } else if(title.length >= 50) {
+        if(title.length >= 50) {
             title = title.slice(0, 50);
         }
 
@@ -279,7 +277,7 @@ export default function TodoApp() {
                     Reset List
                 </button>
                 <div className="flex flex-row gap-2 items-center">
-                    <span className="text-sm text-muted mr-2">Auto-Delete Todos</span>
+                    <span className="text-sm text-muted mr-2">Auto-Delete</span>
                     <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={handleAutoDeleteToggle} />
                 </div>
             </div>

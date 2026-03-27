@@ -77,6 +77,7 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
                     border-none focus:ring-1 focus:outline-none
                     focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg`}
                 value={title}
+                placeholder="Empty Todo"
                 onChange={(e) => onUpdateTitle(id, e.target.value)}
             />
             <input
