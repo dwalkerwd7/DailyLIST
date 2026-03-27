@@ -93,6 +93,7 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
                     <DynamicTextarea
                         className="text-todo-text min-h-20 max-h-50 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
+                        placeholder="Add notes here..."
                         onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
                     <button className="h-7 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
