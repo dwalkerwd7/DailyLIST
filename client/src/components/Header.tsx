@@ -6,19 +6,18 @@ import ToggleSwitch from './utils/ToggleSwitch';
 export default function Header() {
   const [titleHovered, setTitleHovered] = useState(false);
   const [titleHasHovered, setTitleHasHovered] = useState(false); // needed to prevent animation on first render
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [darkMode, setDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return (savedTheme === 'dark' ? 'dark' : 'light') as Theme;
+    return (savedTheme === 'dark' ? true : false);
   });
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
+    document.documentElement.classList.toggle('dark', darkMode);
+  }, [darkMode]);
 
   const handleThemeToggle = () => {
-    let newTheme: Theme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    setDarkMode(!darkMode);
+    localStorage.setItem('theme', darkMode ? 'light' : 'dark');
   }
 
   return (
@@ -40,8 +39,8 @@ export default function Header() {
             </span>
           </Link>
           <div className="flex items-center gap-3">
-            <span className="uppercase text-primary-text font-semibold text-sm">{`${theme} mode`}</span>
-            <ToggleSwitch isOn={theme === 'dark'} handleToggle={handleThemeToggle} />
+            <span className="uppercase text-primary-text font-semibold text-sm">{`${darkMode ? 'dark' : 'light'} mode`}</span>
+            <ToggleSwitch isOn={darkMode} handleToggle={handleThemeToggle} />
           </div>
           <div className="flex items-center gap-6">
             <Link
