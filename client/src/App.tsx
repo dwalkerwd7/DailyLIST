@@ -6,8 +6,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Feedback from './pages/Feedback';
 
-type Theme = 'light' | 'dark';
-
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-primary-bg">
@@ -63,4 +61,3 @@ function App() {
 }
 
 export default App;
-export type { Theme };

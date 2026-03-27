@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { type Theme } from '../App';
 import ToggleSwitch from './utils/ToggleSwitch';
 
 export default function Header() {
