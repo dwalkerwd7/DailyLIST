@@ -4,3 +4,5 @@ public
 
 .env
 env.d.ts
+
+*.png
