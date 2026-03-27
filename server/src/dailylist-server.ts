@@ -15,7 +15,7 @@ const PUBLIC_PATH = path.join(__dirname, `../../public${BASE_PATH}`);
 
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
-const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!, BASE_PATH.replace(/\//g, '/'))
+const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!)
 const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
 const FEEDBACK_CONTENT_PATH = path.join(LOG_DIR, 'feedback_content.log')
 
