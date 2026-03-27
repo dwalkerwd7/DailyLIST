@@ -75,7 +75,8 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
                     `${completed ? "line-through text-muted" : "text-todo-text"}
                     text-center flex-1 mx-2 text-wrap
                     border-none focus:ring-1 focus:outline-none
-                    focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg`}
+                    focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg
+                    h-7`}
                 value={title}
                 placeholder="Empty Todo"
                 onChange={(e) => onUpdateTitle(id, e.target.value)}
