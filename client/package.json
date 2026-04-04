@@ -4,7 +4,6 @@
   "version": "0.7.0",
   "type": "module",
   "scripts": {
-    "client-install": "npm install && chmod +x node_modules/.bin/*",
     "dev": "vite",
     "build": "tsc -b && vite build --emptyOutDir",
     "lint": "eslint .",
