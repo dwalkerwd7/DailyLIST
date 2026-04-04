@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node src/dailylist-server.ts",
-    "build": "tsc --outDir dist/dailylist",
-    "start": "varlock run -- node dist/dailylist/dailylist-server.js",
+    "build": "tsc --outDir dist/ && cp .env.schema dist/",
+    "start": "varlock run -- node dist/dailylist-server.js",
     "permissions": "chmod +x node_modules/.bin/varlock && chmod +x node_modules/.bin/pm2 && chmod +x node_modules/.bin/tsc"
   },
   "keywords": [],
