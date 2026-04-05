@@ -366,7 +366,7 @@ export default function TodoApp() {
                     <ArrowDown className="hint-arrow" size={20} />
                 </div>
             )}
-            <button className="w-25 h-15 bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
+            <button className="w-25 h-15 bg-linear-to-r from-accent-from to-accent-to hover:from-accent-from-hover hover:to-accent-to-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
                 <Plus size={28} />
             </button>
             {modalAlertProps && (
