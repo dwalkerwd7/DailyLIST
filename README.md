@@ -53,6 +53,8 @@ cd client && npm run dev
 
 Variables are managed by [Varlock](https://varlock.dev). The `package.json` scripts handle loading environment variables automatically — no need to call `npx varlock load` manually.
 
+Varlock is indeed overkill right now, but it was implemented for possible future usage.
+
 ## Contributing
 
 Feel free to fork and submit pull requests. I will most likely pull your changes if they're reasonable.
