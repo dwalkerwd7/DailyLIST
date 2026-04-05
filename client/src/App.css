@@ -139,6 +139,12 @@ a:hover {
   .timer-warning-pulse {
     animation: timer-warning-pulse 0.8s ease-in-out;
   }
+  .todo-enter {
+    animation: todo-enter 0.25s ease-out forwards;
+  }
+  .todo-exit {
+    animation: todo-exit 0.3s ease-in forwards;
+  }
 }
 
 /* Keyframes */
@@ -186,4 +192,14 @@ a:hover {
 @keyframes timer-warning-pulse {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.3; }
+}
+
+@keyframes todo-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes todo-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
 }
