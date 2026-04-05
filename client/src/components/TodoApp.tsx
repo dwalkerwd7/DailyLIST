@@ -20,11 +20,11 @@ import Counter, { type CounterHandle } from "./utils/Counter";
 import ToggleSwitch from "./utils/ToggleSwitch";
 import { MAX_TODO_LIFETIME, APIPaths } from "../app-constants";
 import TodoItem, {
-    type Todo, 
-    type ToggleCompleteHandler, 
-    type UpdateTitleHandler, 
-    type UpdateNotesHandler, 
-    type DeleteHandler, 
+    type Todo,
+    type ToggleCompleteHandler,
+    type UpdateTitleHandler,
+    type UpdateNotesHandler,
+    type DeleteHandler,
     type ToggleExpandHandler
 } from "./TodoItem";
 
@@ -36,7 +36,7 @@ export default function TodoApp() {
         const saved = localStorage.getItem("autoDelete");
         return saved === "true";
     });
-    
+
     const counterHandle = useRef<CounterHandle>(null);
     const expiresAtRef = useRef<number | null>(null);
     const hasLoaded = useRef(false);
@@ -61,24 +61,24 @@ export default function TodoApp() {
     const loadTodos = async () => {
         try {
             const response = await fetch(APIPaths.todos);
-            if(response.ok) {
+            if (response.ok) {
                 const data = await response.json();
 
                 hasLoaded.current = true;
                 setTodos(data.todos);
-                
-                if(data.expiresAt) {
+
+                if (data.expiresAt) {
                     expiresAtRef.current = data.expiresAt;
                     counterHandle.current?.setTime(data.expiresAt - Date.now());
                     counterHandle.current?.startTimer();
                 }
             }
-        } catch(err) {
+        } catch (err) {
             console.error("Error fetching todos:", err);
         }
     };
 
-    const saveTodos = async(todos: Todo[]) => {
+    const saveTodos = async (todos: Todo[]) => {
         try {
             const response = await fetch(APIPaths.todos, {
                 method: "POST",
@@ -87,53 +87,53 @@ export default function TodoApp() {
                 },
                 body: JSON.stringify({ todos }),
             });
-            if(!response.ok) {
+            if (!response.ok) {
                 const resData = await response.json();
                 console.error("Error saving todos:", resData.message);
             }
-        } catch(err) {
+        } catch (err) {
             console.error("Error posting todos:", err);
         }
     };
 
     useEffect(() => {
-        loadTodos();
+        void loadTodos();
     }, []);
 
     useEffect(() => {
-        if(todos.length === 0) {
+        if (todos.length === 0) {
             expiresAtRef.current = null;
             counterHandle.current?.stopTimer();
         }
-        
-        if(hasLoaded.current) {
+
+        if (hasLoaded.current) {
             saveTodos(todos);
         }
     }, [todos]);
 
     const handleAddTodo = () => {
-        if(todos.length >= 20) {
+        if (todos.length >= 20) {
             openModalAlert(
-                setModalAlertProps, 
-                "info", 
-                "Limit Reached", 
-                "You have reached the maximum number of todos (20). Please delete some todos before adding new ones.", 
-                "OK", 
-                () => {}
+                setModalAlertProps,
+                "info",
+                "Limit Reached",
+                "You have reached the maximum number of todos (20). Please delete some todos before adding new ones.",
+                "OK",
+                () => { }
             );
             return;
         }
 
         setTodos((prev) => {
-            if(prev.length === 0) {
+            if (prev.length === 0) {
                 startTimerAnew();
             }
-            
-            return [...prev, { 
-            id: generateNewTodoID(), 
-            completed: false, 
-            title: "", 
-            expanded: false 
+
+            return [...prev, {
+                id: generateNewTodoID(),
+                completed: false,
+                title: "",
+                expanded: false
             }]
         });
     };
@@ -144,8 +144,8 @@ export default function TodoApp() {
             setTodos(newTodos);
         };
 
-        if(autoDelete) {
-            if(!todos.find((todo) => todo.id === id)?.completed) {
+        if (autoDelete) {
+            if (!todos.find((todo) => todo.id === id)?.completed) {
                 updateTodos();
             }
             setTimeout(() => {
@@ -160,7 +160,7 @@ export default function TodoApp() {
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, expanded: !todo.expanded } : todo);
         setTodos(newTodos);
 
-        if(newTodos.every((todo) => todo.expanded)) {
+        if (newTodos.every((todo) => todo.expanded)) {
             setAllExpanded(true);
         } else {
             setAllExpanded(false);
@@ -168,7 +168,7 @@ export default function TodoApp() {
     };
 
     const handleUpdateTitle: UpdateTitleHandler = (id: number, title: string) => {
-        if(title.length >= 50) {
+        if (title.length >= 50) {
             title = title.slice(0, 50);
         }
 
@@ -220,7 +220,7 @@ export default function TodoApp() {
         if (todos.length === 0) {
             return;
         }
-        
+
         openModalAlert(setModalAlertProps, "critical", "Reset List", "Are you sure you want to delete all your todos? This process is irreversible.", "Reset", () => {
             setTodos([]);
             setAllExpanded(false);
@@ -251,7 +251,7 @@ export default function TodoApp() {
     return (
         <div className="flex flex-col items-center gap-3 w-lg sm:w-2xl md:w-3xl">
             <p className="text-lg text-center text-muted">
-                Your list automatically resets in: 
+                Your list automatically resets in:
             </p>
             <span className="inline-flex mb-2">
                 <Counter
