@@ -2,7 +2,7 @@
 
 A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no unnecessary features, just a clean way to track your daily tasks.
 
-You can view this app in all its glory at ```derekwalker.xyz/dailylist```
+You can view this app in all its glory at `derekwalker.xyz/dailylist`
 
 ## Features
 
@@ -15,15 +15,14 @@ You can view this app in all its glory at ```derekwalker.xyz/dailylist```
 
 - **Frontend:** React 19 + TypeScript + Vite + Tailwind CSS v4
 - **Backend:** Express v5 + TypeScript
-- **Environment:** Node.js v24.14.0, npm v11.9.0
+- **Environment:** Node.js v24.14.0
 - **Environment Management:** varlock
 
 ## Getting Started
 
-### Prerequisites
+### Global Prerequisites
 
 - Node.js v24.14.0+
-- npm v11.9.0+
 
 ### Installation
 
@@ -39,46 +38,21 @@ npm install
 
 ### Development
 
-In separate terminals:
-
+Full stack:
 ```bash
-# Terminal 1 - Start the dev server
-cd server
-npm run dev
-# Runs on http://localhost:3001
-
-# Terminal 2 - Start the dev client
-cd client
-npm run dev
-# Runs on http://localhost:5173
+cd client && npm run build
+cd server && npm run dev
 ```
 
-The Vite dev server automatically proxies `/api/*` requests to the backend, so no CORS configuration needed.
+Frontend only:
+```bash
+cd client && npm run dev
+```
 
 ### Environment Variables
 
-Variables are managed via `varlock`. Check `server/.env.schema.example` for defaults:
-
-To validate env setup:
-
-1. `rename` .env.schema.example --> .env.schema
-
-2. 
-```bash
-cd server
-npx varlock load
-```
-
-## Status
-
-**Version:** 0.7 (Active Development)
-
-Currently building towards v1.0 with core todo functionality. See issues and pull requests for planned features and work in progress.
+Variables are managed by [Varlock](https://varlock.dev). The `package.json` scripts handle loading environment variables automatically — no need to call `npx varlock load` manually.
 
 ## Contributing
 
-This is a personal portfolio project, but if you'd like to contribute, feel free to fork and submit pull requests.
-
-## License
-
-MIT License — see LICENSE file for details.
+Feel free to fork and submit pull requests. I will most likely pull your changes if they're reasonable.
