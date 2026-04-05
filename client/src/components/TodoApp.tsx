@@ -17,7 +17,6 @@ import {
 } from "@dnd-kit/sortable";
 import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
 import Counter, { type CounterHandle } from "./utils/Counter";
-import ToggleSwitch from "./utils/ToggleSwitch";
 import { MAX_TODO_LIFETIME, APIPaths } from "../app-constants";
 import TodoItem, {
     type Todo,
@@ -33,11 +32,6 @@ export default function TodoApp() {
     const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
     const [allExpanded, setAllExpanded] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
-    const [autoDelete, setAutoDelete] = useState(() => {
-        const saved = localStorage.getItem("autoDelete");
-        return saved === "true";
-    });
-
     const [isWarning, setIsWarning] = useState(false);
     const [isPulsing, setIsPulsing] = useState(false);
 
@@ -179,19 +173,8 @@ export default function TodoApp() {
     };
 
     const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
-        const updateTodos = () => {
-            const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
-            setTodos(newTodos);
-        };
-
-        if (autoDelete) {
-            if (!todos.find((todo) => todo.id === id)?.completed) {
-                updateTodos();
-            }
-            setRemovingIds((prev) => new Set(prev).add(id));
-        } else {
-            updateTodos();
-        }
+        const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
+        setTodos(newTodos);
     };
 
     const handleToggleExpand: ToggleExpandHandler = (id: number) => {
@@ -271,12 +254,6 @@ export default function TodoApp() {
         });
     };
 
-    const handleAutoDeleteToggle = () => {
-        const newAutoDelete = !autoDelete;
-        setAutoDelete(newAutoDelete);
-        localStorage.setItem("autoDelete", String(newAutoDelete));
-    };
-
     const timeLeftFormatString = (_ms: number) => {
         const ms = expiresAtRef.current ? expiresAtRef.current - Date.now() : _ms;
         const seconds = Math.floor(ms / 1000);
@@ -323,10 +300,6 @@ export default function TodoApp() {
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
-                <div className="flex flex-row gap-2 items-center">
-                    <span className="text-sm text-muted mr-2">Auto-Delete</span>
-                    <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={handleAutoDeleteToggle} />
-                </div>
             </div>
             {todos.length > 0 && (
                 <div className="flex flex-col gap-1 w-full">
