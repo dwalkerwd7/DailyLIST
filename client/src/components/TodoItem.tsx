@@ -62,7 +62,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                 <button
                     ref={setActivatorNodeRef}
                     className="
-                        w-8 h-8 text-todo-text
+                        w-11 h-11 text-todo-text
                         rounded bg-button-tertiary hover:bg-button-tertiary-hover cursor-grab active:cursor-grabbing
                         inline-flex items-center justify-center
                     "
@@ -73,7 +73,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     <GripVertical size={16} />
                 </button>
                 <button className="
-                    w-8 h-8
+                    w-11 h-11
                     text-todo-text font-bold rounded
                     bg-button-secondary hover:bg-button-secondary-hover
                     inline-flex items-center justify-center
@@ -94,14 +94,16 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                 onChange={(e) => onUpdateTitle(id, e.target.value)}
                 onKeyDown={handleTitleKeyDown}
             />
-            <input
-                type="checkbox"
-                checked={completed}
-                className="w-5 h-5"
-                onChange={() => {
-                    onToggleComplete(id);
-                }}
-            />
+            <label className="w-11 h-11 inline-flex items-center justify-center cursor-pointer">
+                <input
+                    type="checkbox"
+                    checked={completed}
+                    className="w-5 h-5"
+                    onChange={() => {
+                        onToggleComplete(id);
+                    }}
+                />
+            </label>
             {expanded && (
                 <div className="flex flex-col gap-2 mt-2 w-full">
                     <DynamicTextarea
@@ -110,7 +112,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                         placeholder="Add notes here..."
                         onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
-                    <button className="h-7 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
+                    <button className="h-9 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
                         Delete
                     </button>
                 </div>
