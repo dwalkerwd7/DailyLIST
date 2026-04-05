@@ -22,11 +22,11 @@ export default function Header() {
   return (
     <header className="border-b border-primary-border bg-primary-bg">
       <nav className="mx-auto max-w-5xl px-4 py-4">
-        <div className="flex items-center justify-between flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <Link
             id="header-title"
             to="/"
-            className="text-3xl"
+            className="text-3xl text-center sm:text-left"
             onMouseEnter={() => { setTitleHovered(true); setTitleHasHovered(true); }}
             onMouseLeave={() => setTitleHovered(false)}
           >
@@ -37,23 +37,15 @@ export default function Header() {
               LIST
             </span>
           </Link>
-          <div className="flex items-center gap-3">
-            <span className="uppercase text-primary-text font-semibold text-sm">{`${darkMode ? 'dark' : 'light'} mode`}</span>
-            <ToggleSwitch isOn={darkMode} handleToggle={handleThemeToggle} />
-          </div>
-          <div className="flex items-center gap-6">
-            <Link
-              to="/about"
-              className="text-link hover:text-link-hover"
-            >
-              About
-            </Link>
-            <Link
-              to="/feedback"
-              className="text-link hover:text-link-hover"
-            >
-              Feedback
-            </Link>
+          <div className="flex items-center justify-between sm:justify-end sm:gap-8">
+            <div className="flex items-center gap-3">
+              <span className="uppercase text-primary-text font-semibold text-sm">{`${darkMode ? 'dark' : 'light'} mode`}</span>
+              <ToggleSwitch isOn={darkMode} handleToggle={handleThemeToggle} />
+            </div>
+            <div className="flex items-center gap-6">
+              <Link to="/about" className="text-link hover:text-link-hover">About</Link>
+              <Link to="/feedback" className="text-link hover:text-link-hover">Feedback</Link>
+            </div>
           </div>
         </div>
       </nav>
