@@ -42,7 +42,9 @@ export default function TodoApp() {
     const hasLoaded = useRef(false);
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 8 },
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
@@ -249,7 +251,7 @@ export default function TodoApp() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-3 w-lg sm:w-2xl md:w-3xl">
+        <div className="flex flex-col items-center gap-3 w-full px-4 sm:px-0">
             <p className="text-lg text-center text-muted">
                 Your list automatically resets in:
             </p>
@@ -265,7 +267,7 @@ export default function TodoApp() {
                     className="text-primary-text font-bold text-xl"
                 />
             </span>
-            <div className="flex flex-row gap-2 items-center justify-center gap-8 w-full border-b border-primary-border pb-3">
+            <div className="flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
                     ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
