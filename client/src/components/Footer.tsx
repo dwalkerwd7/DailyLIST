@@ -26,7 +26,7 @@ export default function Footer() {
                         ))}
                     </ul>
                     <div className="text-center text-sm text-primary-text">
-                        <p>&copy; {currentYear} DailyLIST v0.7. MIT License.</p>
+                        <p>&copy; {currentYear} DailyLIST v0.8. MIT License.</p>
                     </div>
                 </div>
             </div>
