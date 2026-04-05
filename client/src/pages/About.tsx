@@ -44,7 +44,7 @@ export default function About() {
                     <div className="space-y-3 text-primary-text">
                         <p>
                             Built by <strong>Derek Walker</strong>, a full-stack JavaScript
-                            engineer. DailyLIST is a portfolio project — an exercise in
+                            engineer. <strong>DailyLIST</strong> is a portfolio project — an exercise in
                             intentional design and shipping something clean rather than
                             something sprawling.
                         </p>

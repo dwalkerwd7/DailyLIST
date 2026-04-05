@@ -3,7 +3,7 @@
 
 /* Global styles */
 body {
-    caret-color: --caret-color;
+    caret-color: var(--caret-color);
     font-family: "Inter", sans-serif;
 }
 
@@ -24,8 +24,8 @@ h2 {
 }
 
 #header-title {
-    font-weight: var(--font-weight-black);
-    color: var(--color-primary-text);
+    font-weight: bolder;
+    color: var(--color-primary-heading);
     font-size: 1.75rem;
 }
 
