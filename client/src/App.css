@@ -18,6 +18,11 @@ a:hover {
     text-decoration: underline;
 }
 
+h1,
+h2 {
+    color: var(--color-primary-heading);
+}
+
 #header-title {
     font-weight: var(--font-weight-black);
     color: var(--color-primary-text);
@@ -60,6 +65,7 @@ a:hover {
     --accent-to: #3b82f6;
     --accent-from-hover: #7c3aed;
     --accent-to-hover: #2563eb;
+    --primary-heading: #7c3aed;
 }
 
 /* Dark mode theme variables */
@@ -94,6 +100,7 @@ a:hover {
     --accent-to: #2563eb;
     --accent-from-hover: #6d28d9;
     --accent-to-hover: #1d4ed8;
+    --primary-heading: #c4b5fd;
 }
 
 /* Map theme variables to Tailwind's color system */
@@ -127,6 +134,7 @@ a:hover {
     --color-accent-to: var(--accent-to);
     --color-accent-from-hover: var(--accent-from-hover);
     --color-accent-to-hover: var(--accent-to-hover);
+    --color-primary-heading: var(--primary-heading);
 }
 
 /* Custom utilities for animations */
@@ -244,9 +252,17 @@ a:hover {
 }
 
 @keyframes title-tap {
-    0%   { letter-spacing: normal; }
-    50%  { letter-spacing: 0.15em; }
-    100% { letter-spacing: normal; }
+    0% {
+        letter-spacing: normal;
+    }
+
+    50% {
+        letter-spacing: 0.15em;
+    }
+
+    100% {
+        letter-spacing: normal;
+    }
 }
 
 @keyframes todo-enter {
