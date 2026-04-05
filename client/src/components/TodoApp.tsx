@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Plus } from "lucide-react";
+import { Plus, ArrowDown } from "lucide-react";
 import {
     DndContext,
     PointerSensor,
@@ -300,6 +300,12 @@ export default function TodoApp() {
                     </ul>
                 </SortableContext>
             </DndContext>
+            {todos.length === 0 && (
+                <div className="flex flex-col items-center gap-2 py-4 text-muted">
+                    <p className="text-sm">Add your first task for today</p>
+                    <ArrowDown className="hint-arrow" size={20} />
+                </div>
+            )}
             <button className="w-25 h-15 bg-button-primary hover:bg-button-primary-hover hover:cursor-pointer text-white rounded flex items-center justify-center" onClick={handleAddTodo}>
                 <Plus size={28} />
             </button>

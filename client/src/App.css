@@ -169,3 +169,12 @@ a:hover {
 .todo-confirm {
   animation: todo-confirm 0.6s ease-out forwards;
 }
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(6px); }
+}
+
+.hint-arrow {
+  animation: bounce-down 1.2s ease-in-out infinite;
+}
