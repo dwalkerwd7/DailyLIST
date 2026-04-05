@@ -1,6 +1,25 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
 import { APIPaths } from '../app-constants';
+
+const successSubmitAlert: PageAlertProps = {
+  title: 'Feedback Submitted!',
+  msg: 'Thank you for your feedback!',
+  type: 'success'
+};
+
+const errorSubmitAlert: PageAlertProps = {
+  title: 'Submission Failed',
+  msg: 'There was an issue submitting your feedback. Please try again later.',
+  type: 'error'
+};
+
+const alreadySubmittedAlert: PageAlertProps = {
+  title: 'Feedback Submitted',
+  msg: 'Thank you for your feedback! We appreciate your input.',
+  type: 'info',
+  closable: false
+};
 
 export default function Feedback() {
   const [formData, setFormData] = useState({
@@ -11,50 +30,7 @@ export default function Feedback() {
 
   const [alertMessage, setAlertMessage] = useState<PageAlertProps>({ title: '', msg: '', type: 'success' });
   const [hasLoaded, setHasLoaded] = useState(false);
-
-  const hasSubmittedFeedback = useRef(false);
-
-  const successSubmitAlert: PageAlertProps = {
-    title: 'Feedback Submitted!',
-    msg: 'Thank you for your feedback!',
-    type: 'success'
-  };
-
-  const errorSubmitAlert: PageAlertProps = {
-    title: 'Submission Failed',
-    msg: 'There was an issue submitting your feedback. Please try again later.',
-    type: 'error'
-  };
-
-  const alreadySubmittedAlert: PageAlertProps = {
-    title: 'Feedback Submitted',
-    msg: 'Thank you for your feedback! We appreciate your input.',
-    type: 'info',
-    closable: false
-  };
-
-  const getHasSubmittedFeedback = async () => {
-    try {
-      const response = await fetch(APIPaths.feedback, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-
-      hasSubmittedFeedback.current = data.hasSubmitted;
-      if (hasSubmittedFeedback.current) {
-        setAlertMessage(alreadySubmittedAlert);
-      }
-
-      setHasLoaded(true);
-      
-    } catch (error) {
-      console.error('Error checking feedback submission status:', error);
-    }
-  };
+  const [hasSubmittedFeedback, setHasSubmittedFeedback] = useState(false);
 
   const submitFeedback = async () => {
     try {
@@ -67,10 +43,10 @@ export default function Feedback() {
       });
 
       if(response.ok) {
-        hasSubmittedFeedback.current = true;
+        setHasSubmittedFeedback(true);
         setAlertMessage(successSubmitAlert);
       } else {
-        hasSubmittedFeedback.current = false;
+        setHasSubmittedFeedback(false);
         setAlertMessage(errorSubmitAlert);
       }
 
@@ -81,7 +57,23 @@ export default function Feedback() {
   };
 
   useEffect(() => {
-    getHasSubmittedFeedback();
+    const checkSubmissionStatus = async () => {
+      try {
+        const response = await fetch(APIPaths.feedback, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        setHasSubmittedFeedback(data.hasSubmitted);
+        if (data.hasSubmitted) {
+          setAlertMessage(alreadySubmittedAlert);
+        }
+        setHasLoaded(true);
+      } catch (error) {
+        console.error('Error checking feedback submission status:', error);
+      }
+    };
+    void checkSubmissionStatus();
   }, []);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -99,7 +91,7 @@ export default function Feedback() {
       { !hasLoaded && (
         <p className="text-primary-text">Loading...</p>
       )}
-      { !hasSubmittedFeedback.current && hasLoaded && (
+      { !hasSubmittedFeedback && hasLoaded && (
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
         <div className="flex flex-col">
           <label htmlFor="name" className="block text-sm font-medium text-primary-text mb-1">
@@ -108,7 +100,7 @@ export default function Feedback() {
           <input
             type="text"
             id="name"
-            className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
+            className="bg-secondary-bg border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your name"
             required
             maxLength={50}
@@ -123,7 +115,7 @@ export default function Feedback() {
           <input
             type="email"
             id="email"
-            className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
+            className="bg-secondary-bg border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your email"
             required
             maxLength={100}
@@ -138,7 +130,7 @@ export default function Feedback() {
           <textarea
             id="message"
             rows={4}
-            className="border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
+            className="bg-secondary-bg border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
             placeholder="Your message"
             required
             maxLength={1000}
@@ -148,7 +140,7 @@ export default function Feedback() {
         </div>
         <button
           type="submit"
-          className="bg-submit-primary hover:bg-submit-primary-hover text-white font-bold py-2 px-4 rounded-md transition duration=150 ease-in-out"
+          className="bg-gradient-to-r from-accent-from to-accent-to hover:from-accent-from-hover hover:to-accent-to-hover text-white font-bold py-2 px-4 rounded-md"
         >
           Submit Feedback
         </button>

@@ -35,7 +35,7 @@ a:hover {
     --text-primary: black;
     --border-primary: #d1d2d6;
     --form-input: #d1d5db;
-    --on: #10b981;
+    --on: #8b5cf6;
     --off: #9ca3af;
     --submit-primary: #3b82f6;
     --submit-primary-hover: #2563eb;
@@ -69,7 +69,7 @@ a:hover {
     --text-primary: #e6edf7;
     --border-primary: #2a364f;
     --form-input: #334155;
-    --on: #22c55e;
+    --on: #a78bfa;
     --off: #64748b;
     --submit-primary: #3b82f6;
     --submit-primary-hover: #0073ff;
@@ -157,6 +157,10 @@ a:hover {
         animation: timer-warning-pulse 0.8s ease-in-out;
     }
 
+    .title-tap {
+        animation: title-tap 0.5s ease-in-out;
+    }
+
     .todo-enter {
         animation: todo-enter 0.25s ease-out;
     }
@@ -237,6 +241,12 @@ a:hover {
     50% {
         opacity: 0.3;
     }
+}
+
+@keyframes title-tap {
+    0%   { letter-spacing: normal; }
+    50%  { letter-spacing: 0.15em; }
+    100% { letter-spacing: normal; }
 }
 
 @keyframes todo-enter {
