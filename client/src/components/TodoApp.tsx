@@ -30,6 +30,7 @@ import TodoItem, {
 
 export default function TodoApp() {
     const [todos, setTodos] = useState<Todo[]>([]);
+    const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
     const [allExpanded, setAllExpanded] = useState(false);
     const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
     const [autoDelete, setAutoDelete] = useState(() => {
@@ -187,9 +188,7 @@ export default function TodoApp() {
             if (!todos.find((todo) => todo.id === id)?.completed) {
                 updateTodos();
             }
-            setTimeout(() => {
-                setTodos((prev) => prev.filter((todo) => todo.id !== id));
-            }, 300);
+            setRemovingIds((prev) => new Set(prev).add(id));
         } else {
             updateTodos();
         }
@@ -218,11 +217,16 @@ export default function TodoApp() {
         setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, notes } : todo));
     };
 
+    const handleRemoveComplete = (id: number) => {
+        setTodos((prev) => prev.filter((todo) => todo.id !== id));
+        setRemovingIds((prev) => { const s = new Set(prev); s.delete(id); return s; });
+    };
+
     const handleDeleteTodo: DeleteHandler = (id: number) => {
         openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
-            setTodos((prev) => prev.filter((todo) => todo.id !== id));
-            setAllExpanded(false);
             setModalAlertProps(null);
+            setAllExpanded(false);
+            setRemovingIds((prev) => new Set(prev).add(id));
         });
     };
 
@@ -344,6 +348,8 @@ export default function TodoApp() {
                             <TodoItem
                                 key={todo.id}
                                 todo={todo}
+                                isRemoving={removingIds.has(todo.id)}
+                                onRemoveComplete={() => handleRemoveComplete(todo.id)}
                                 onToggleExpand={handleToggleExpand}
                                 onToggleComplete={handleToggleComplete}
                                 onUpdateTitle={handleUpdateTitle}

@@ -19,7 +19,7 @@ export type UpdateNotesHandler = (id: number, notes: string) => void;
 export type DeleteHandler = (id: number) => void;
 export type ToggleExpandHandler = (id: number) => void;
 
-export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
+export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, isRemoving?: boolean, onRemoveComplete?: () => void, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
     const [flashing, setFlashing] = useState(false);
     const { active } = useDndContext();
@@ -50,10 +50,12 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
         <li
             ref={setNodeRef}
             style={style}
+            onAnimationEnd={() => { if (isRemoving) onRemoveComplete?.(); }}
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
                 ${flashing ? "todo-confirm" : ""}
+                ${isRemoving ? "todo-exit" : "todo-enter"}
             `}
         >
             <div className="flex flex-row items-center gap-2">
