@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { GripVertical, Minus, Plus } from "lucide-react";
 import { useDndContext } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
@@ -20,7 +21,15 @@ export type ToggleExpandHandler = (id: number) => void;
 
 export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
+    const [flashing, setFlashing] = useState(false);
     const { active } = useDndContext();
+
+    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            setFlashing(true);
+            setTimeout(() => setFlashing(false), 600);
+        }
+    };
     const {
         attributes,
         listeners,
@@ -44,6 +53,7 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
+                ${flashing ? "todo-confirm" : ""}
             `}
         >
             <div className="flex flex-row items-center gap-2">
@@ -80,6 +90,7 @@ export default function TodoItem({ todo, onToggleExpand, onToggleComplete, onUpd
                 value={title}
                 placeholder="Empty Todo"
                 onChange={(e) => onUpdateTitle(id, e.target.value)}
+                onKeyDown={handleTitleKeyDown}
             />
             <input
                 type="checkbox"

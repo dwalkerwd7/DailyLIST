@@ -159,3 +159,13 @@ a:hover {
     background-color: transparent;
   }
 }
+
+@keyframes todo-confirm {
+  0%   { background-color: transparent; }
+  40%  { background-color: var(--color-on); }
+  100% { background-color: transparent; }
+}
+
+.todo-confirm {
+  animation: todo-confirm 0.6s ease-out forwards;
+}
