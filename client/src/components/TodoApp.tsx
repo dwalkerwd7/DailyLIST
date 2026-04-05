@@ -250,6 +250,8 @@ export default function TodoApp() {
         return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     };
 
+    const completedCount = todos.filter(t => t.completed).length;
+
     return (
         <div className="flex flex-col items-center gap-3 w-full px-4 sm:px-0">
             <p className="text-lg text-center text-muted">
@@ -283,6 +285,19 @@ export default function TodoApp() {
                     <ToggleSwitch isOn={autoDelete} width={11} height={6} handleToggle={handleAutoDeleteToggle} />
                 </div>
             </div>
+            {todos.length > 0 && (
+                <div className="flex flex-col gap-1 w-full">
+                    <span className="text-sm text-muted">
+                        {completedCount} / {todos.length} done
+                    </span>
+                    <div className="w-full h-2 rounded-full bg-secondary-bg">
+                        <div
+                            className="h-2 rounded-full bg-on transition-[width] duration-300 ease-in-out"
+                            style={{ width: `${(completedCount / todos.length) * 100}%` }}
+                        />
+                    </div>
+                </div>
+            )}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
                     <ul className="flex flex-col items-start w-full list-none p-0 m-0">
