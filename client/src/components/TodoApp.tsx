@@ -37,9 +37,14 @@ export default function TodoApp() {
         return saved === "true";
     });
 
+    const [isWarning, setIsWarning] = useState(false);
+    const [isPulsing, setIsPulsing] = useState(false);
+
     const counterHandle = useRef<CounterHandle>(null);
     const expiresAtRef = useRef<number | null>(null);
     const hasLoaded = useRef(false);
+    const isWarningRef = useRef(false);
+    const lastWarningMinuteRef = useRef(-1);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -58,7 +63,29 @@ export default function TodoApp() {
         expiresAtRef.current = Date.now() + MAX_TODO_LIFETIME;
         counterHandle.current?.setTime(MAX_TODO_LIFETIME);
         counterHandle.current?.startTimer();
-    }
+    };
+
+    const handleCounterTick = (currentTime: number) => {
+        const timeLeft = expiresAtRef.current ? expiresAtRef.current - Date.now() : currentTime;
+        const warning = timeLeft > 0 && timeLeft <= 30 * 60 * 1000;
+
+        if (warning !== isWarningRef.current) {
+            isWarningRef.current = warning;
+            setIsWarning(warning);
+            if (!warning) {
+                lastWarningMinuteRef.current = -1;
+            }
+        }
+
+        if (warning) {
+            const currentMinute = Math.floor(timeLeft / 60000);
+            if (currentMinute !== lastWarningMinuteRef.current) {
+                lastWarningMinuteRef.current = currentMinute;
+                setIsPulsing(true);
+                setTimeout(() => setIsPulsing(false), 800);
+            }
+        }
+    };
 
     const loadTodos = async () => {
         try {
@@ -103,13 +130,23 @@ export default function TodoApp() {
     }, []);
 
     useEffect(() => {
+        const allComplete = todos.length > 0 && todos.every(t => t.completed);
+
         if (todos.length === 0) {
             expiresAtRef.current = null;
             counterHandle.current?.stopTimer();
+            setIsWarning(false);
+            setIsPulsing(false);
+            isWarningRef.current = false;
+            lastWarningMinuteRef.current = -1;
+        } else if (allComplete) {
+            counterHandle.current?.pauseTimer();
+        } else if (expiresAtRef.current) {
+            counterHandle.current?.startTimer();
         }
 
         if (hasLoaded.current) {
-            saveTodos(todos);
+            void saveTodos(todos);
         }
     }, [todos]);
 
@@ -251,22 +288,24 @@ export default function TodoApp() {
     };
 
     const completedCount = todos.filter(t => t.completed).length;
+    const allComplete = todos.length > 0 && completedCount === todos.length;
 
     return (
         <div className="flex flex-col items-center gap-3 w-full px-4 sm:px-0">
             <p className="text-lg text-center text-muted">
                 Your list automatically resets in:
             </p>
-            <span className="inline-flex mb-2">
+            <span className={`inline-flex mb-2 ${isPulsing ? "timer-warning-pulse" : ""}`}>
                 <Counter
                     ref={counterHandle}
                     startTime={-1}
                     endTime={0}
                     step={-1000}
                     formatString={timeLeftFormatString}
+                    onTick={handleCounterTick}
                     indicateStartStop={true}
                     indicateStartStopClass="counttimer-highlight"
-                    className="text-primary-text font-bold text-xl"
+                    className={`font-bold text-xl ${allComplete ? "text-on" : isWarning ? "text-warning" : "text-primary-text"}`}
                 />
             </span>
             <div className="flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
