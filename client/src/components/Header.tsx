@@ -7,6 +7,9 @@ export default function Header() {
     const [titleHasHovered, setTitleHasHovered] = useState(false); // needed to prevent animation on first render
     const [darkMode, setDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            return true; // dark mode by default
+        }
         return (savedTheme === 'dark' ? true : false);
     });
 
@@ -40,11 +43,11 @@ export default function Header() {
                     <div className="flex items-center justify-between sm:justify-end sm:gap-8">
                         <div className="flex items-center gap-3">
                             <span className="uppercase text-primary-text font-semibold text-sm">{`${darkMode ? 'Dark' : 'Light'}`}</span>
-                            <ToggleSwitch isOn={darkMode} handleToggle={handleThemeToggle} />
+                            <ToggleSwitch isOn={!darkMode} handleToggle={handleThemeToggle} />
                         </div>
                         <div className="flex items-center gap-6">
-                            <NavLink to="/about" className={({ isActive }) => isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}>About</NavLink>
-                            <NavLink to="/feedback" className={({ isActive }) => isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}>Feedback</NavLink>
+                            <NavLink to="/about" className={({ isActive }) => `py-2 px-1 ${isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}`}>About</NavLink>
+                            <NavLink to="/feedback" className={({ isActive }) => `py-2 px-1 ${isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}`}>Feedback</NavLink>
                         </div>
                     </div>
                 </div>
