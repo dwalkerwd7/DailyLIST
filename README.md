@@ -39,8 +39,9 @@ npm install
 ### Development
 
 Full stack:
+
+# Automatically builds client
 ```bash
-cd client && npm run build
 cd server && npm run dev
 ```
 
@@ -48,6 +49,11 @@ Frontend only:
 ```bash
 cd client && npm run dev
 ```
+
+### Prepare for Deployment
+In `.env.schema`, you need to set NODE_ENV=production to correct pathing.
+The pathing (`.env` BASE_URL and `dailylist-server.ts` PUBLIC_PATH) is set for my personal portfolio server. You may need to change these to fit your needs.
+
 
 ### Environment Variables
 
