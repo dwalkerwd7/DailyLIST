@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import ToggleSwitch from './utils/ToggleSwitch';
 
 export default function Header() {
     const [titleHovered, setTitleHovered] = useState(false);
     const [titleHasHovered, setTitleHasHovered] = useState(false); // needed to prevent animation on first render
+    const [isTapping, setIsTapping] = useState(false);
+    const isTouchRef = useRef(false);
     const [darkMode, setDarkMode] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
         if (!savedTheme) {
@@ -30,12 +32,14 @@ export default function Header() {
                         id="header-title"
                         to="/"
                         className="text-3xl text-center sm:text-left"
-                        onMouseEnter={() => { setTitleHovered(true); setTitleHasHovered(true); }}
-                        onMouseLeave={() => setTitleHovered(false)}
+                        onTouchStart={() => { isTouchRef.current = true; setIsTapping(true); }}
+                        onMouseEnter={() => { if (isTouchRef.current) { isTouchRef.current = false; return; } setTitleHovered(true); setTitleHasHovered(true); }}
+                        onMouseLeave={() => { if (!isTouchRef.current) setTitleHovered(false); }}
                     >
                         Daily
                         <span
-                            className={!titleHasHovered ? '' : (titleHovered ? 'spacing-ease-in' : 'spacing-ease-out')}
+                            className={isTapping ? 'title-tap' : (!titleHasHovered ? '' : (titleHovered ? 'spacing-ease-in' : 'spacing-ease-out'))}
+                            onAnimationEnd={() => { if (isTapping) setIsTapping(false); }}
                         >
                             LIST
                         </span>
