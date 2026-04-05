@@ -58,7 +58,7 @@ initialize()
 /* Middleware to strip base path from api calls. My portfolio server does this automatically, so only need this for dev mode. */
 if (DEV_MODE) {
     app.use((req, _res, next) => {
-        if (req.url.startsWith(`${BASE_PATH}api/`)) {
+        if (req.url.startsWith(`${BASE_PATH}/api/`)) {
             req.url = req.url.slice(BASE_PATH.length) || '/'
         }
         next()
