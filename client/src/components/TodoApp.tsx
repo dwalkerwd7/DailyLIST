@@ -65,8 +65,6 @@ export default function TodoApp() {
             const response = await fetch(APIPaths.todos);
             if (response.ok) {
                 const data = await response.json();
-
-                hasLoaded.current = true;
                 setTodos(data.todos);
 
                 if (data.expiresAt) {
@@ -77,17 +75,19 @@ export default function TodoApp() {
             }
         } catch (err) {
             console.error("Error fetching todos:", err);
+        } finally {
+            hasLoaded.current = true;
         }
     };
 
-    const saveTodos = async (todos: Todo[]) => {
+    const saveTodos = async (todosToSave: Todo[]) => {
         try {
             const response = await fetch(APIPaths.todos, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ todos }),
+                body: JSON.stringify({ todos: todosToSave }),
             });
             if (!response.ok) {
                 const resData = await response.json();
