@@ -4,7 +4,7 @@ export default function Footer() {
     const socialLinks = [
         { label: 'GitHub', href: 'https://github.com/dwalkerwd7' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/derek-walker-a288663a7/' },
-        { label: 'UpWork', href: 'https://www.upwork.com/freelancers/dwalkerwd7' },
+        { label: 'Fiverr', href: 'https://www.fiverr.com/users/dwalkerwd7/seller_dashboard' },
     ];
 
     return (
@@ -26,7 +26,7 @@ export default function Footer() {
                         ))}
                     </ul>
                     <div className="text-center text-sm text-primary-text">
-                        <p>&copy; {currentYear} DailyLIST v0.8. MIT License.</p>
+                        <p>&copy; {currentYear} DailyLIST <strong>v0.8</strong>. MIT License.</p>
                     </div>
                 </div>
             </div>
