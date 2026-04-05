@@ -50,6 +50,7 @@ a:hover {
   --required: #ef4444;
   --delete: #ef4444;
   --delete-hover: #dc2626;
+  --warning: #ef4444;
   --muted: #6b7280;
   --todo-text: #111111;
   --todo-notes-bg: #ebebeb;
@@ -76,6 +77,7 @@ a:hover {
   --button-tertiary-hover: #404b5e;
   --delete: #ef4444;
   --delete-hover: #dc2626;
+  --warning: #f87171;
   --link: #cbd5e1;
   --link-hover: #93c5fd;
   --required: #fb7185;
@@ -106,6 +108,7 @@ a:hover {
   --color-button-secondary-hover: var(--button-secondary-hover);
   --color-delete: var(--delete);
   --color-delete-hover: var(--delete-hover);
+  --color-warning: var(--warning);
   --color-link: var(--link);
   --color-link-hover: var(--link-hover);
   --color-muted: var(--muted);
@@ -126,6 +129,15 @@ a:hover {
   }
   .counttimer-highlight {
     animation: bg-in-out 0.8s ease-in-out forwards;
+  }
+  .todo-confirm {
+    animation: todo-confirm 0.6s ease-out forwards;
+  }
+  .hint-arrow {
+    animation: bounce-down 1.2s ease-in-out infinite;
+  }
+  .timer-warning-pulse {
+    animation: timer-warning-pulse 0.8s ease-in-out;
   }
 }
 
@@ -166,15 +178,12 @@ a:hover {
   100% { background-color: transparent; }
 }
 
-.todo-confirm {
-  animation: todo-confirm 0.6s ease-out forwards;
-}
-
 @keyframes bounce-down {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(6px); }
 }
 
-.hint-arrow {
-  animation: bounce-down 1.2s ease-in-out infinite;
+@keyframes timer-warning-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }
