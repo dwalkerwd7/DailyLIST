@@ -13,6 +13,7 @@ type CounterProps = {
     endTime: number;
     step: number;
     formatString?: (currentTime: number) => string;
+    onTick?: (currentTime: number) => void;
     indicateStartStop?: boolean;
     indicateStartStopClass?: string;
     className?: string;
@@ -23,6 +24,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
     endTime,
     step,
     formatString = (currentTime) => String(currentTime),
+    onTick,
     indicateStartStop = false,
     indicateStartStopClass = "",
     className = "",
@@ -39,7 +41,11 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
                 setCurrentTime(startTime);
             }
             intervalRef.current = setInterval(() => {
-                setCurrentTime((prev) => prev !== endTime ? prev + step : prev);
+                setCurrentTime((prev) => {
+                    const next = prev !== endTime ? prev + step : prev;
+                    onTick?.(next);
+                    return next;
+                });
             }, Math.abs(step));
         } else {
             clearInterval(intervalRef.current);
