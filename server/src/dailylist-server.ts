@@ -11,7 +11,8 @@ const DEV_MODE = process.env.NODE_ENV !== 'production'
 const BASE_PATH = process.env.BASE_PATH! || '/'
 
 // matching public dir path on server if in production mode
-const PUBLIC_PATH = path.join(__dirname, `../../public${BASE_PATH}`);
+let relPubPath = DEV_MODE ? `../public${BASE_PATH}` : `../../public${BASE_PATH}`
+let PUBLIC_PATH = path.join(__dirname, relPubPath)
 
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
