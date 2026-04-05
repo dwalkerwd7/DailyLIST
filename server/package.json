@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/dailylist-server.ts",
+    "update-client": "cd ../client && npm run build",
+    "dev": "npm run update-client && nodemon --exec ts-node src/dailylist-server.ts",
     "build": "tsc --outDir dist/dailylist/ && cp .env.schema dist/dailylist/",
     "start": "varlock run -- node dist/dailylist/dailylist-server.js",
     "permissions": "chmod +x node_modules/.bin/varlock && chmod +x node_modules/.bin/pm2 && chmod +x node_modules/.bin/tsc"
