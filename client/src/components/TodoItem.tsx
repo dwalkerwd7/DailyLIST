@@ -40,7 +40,6 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
     const handleTitleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
         if (e.currentTarget.value !== titleOnFocus.current) {
             setFlashing(true);
-            setTimeout(() => setFlashing(false), 600);
         }
     };
     const {
@@ -66,6 +65,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
             onAnimationEnd={(e) => {
                 if (isRemoving) onRemoveComplete?.();
                 if (e.animationName === "todo-enter") setHasEntered(true);
+                if (e.animationName === "todo-confirm") setFlashing(false);
             }}
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
@@ -98,7 +98,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <div className="flex-1 self-stretch flex items-center mx-1 px-1 rounded bg-secondary-bg focus-within:bg-form-input">
+            <div className={`flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:bg-form-input ${flashing ? "bg-transparent" : "bg-secondary-bg"}`}>
                 <textarea
                     className={
                         `${completed ? "line-through text-muted" : "text-todo-text"}
