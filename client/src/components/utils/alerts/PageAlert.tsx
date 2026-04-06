@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import RotatingX from "./svg/RotatingX";
+import { useState } from "react";
+import RotatingX from "../svg/RotatingX";
 
 type AlertType = 'error' | 'success' | 'info' | 'warning' | 'critical';
 type PageAlertProps = {
@@ -10,26 +10,18 @@ type PageAlertProps = {
 };
 
 export default function PageAlert({ title = '', closable = false, msg, type }: PageAlertProps) {
-    const [closed, setClosed] = useState(false);
-
-    // Reset close state only when a new alert message arrives.
-    useEffect(() => {
-        if(msg.length > 0)
-            setClosed(false);
-    }, [msg, type]);
+    const [dismissedMsg, setDismissedMsg] = useState('');
+    const visible = msg.length > 0 && msg !== dismissedMsg;
 
     const handleClose = (elem: HTMLButtonElement | null) => {
-        if(!closable) {
+        if (!closable) {
             return; // Don't close if the button is disabled
         }
 
-        if(elem && elem.parentElement) {
+        if (elem && elem.parentElement) {
             elem.parentElement.classList.add('alert-fade-out');
-            setTimeout(() => {
-                setClosed(true);
-            }, 200); // Match this duration with the CSS animation duration
         } else {
-            setClosed(true);
+            setDismissedMsg(msg);
         }
     };
 
@@ -49,27 +41,26 @@ export default function PageAlert({ title = '', closable = false, msg, type }: P
         critical: "bg-alert-critical-bg/80 text-alert-critical border-alert-critical"
     };
 
-    return msg.length > 0 && !closed ? (
-        <div className={`
-            relative flex justify-center
-            ${colorsBasedOnType[type]}
-            mt-4 px-4 py-2 rounded-md border
-        `}>
+    return visible ? (
+        <div
+            className={`relative flex justify-center ${colorsBasedOnType[type]} mt-4 px-4 py-2 rounded-md border`}
+            onAnimationEnd={(e) => { if (e.animationName === 'fade-out') setDismissedMsg(msg); }}
+        >
             <div className="flex flex-col items-center">
                 {title && <h3 className={`font-bold mb-1 ${titleColorsByType[type]}`}>{title}</h3>}
-                <p>{ msg }</p>
+                <p>{msg}</p>
             </div>
-            { closable && (
+            {closable && (
                 <button
                     type="button"
                     aria-label="Close alert"
                     className="group absolute top-1 right-1 inline-flex h-7 w-7 items-center justify-center
                         rounded-full border border-primary-border bg-primary-bg text-primary-text shadow-sm transition-all duration-150
                         hover:scale-105 hover:bg-secondary-bg focus:outline-none focus:ring-2 focus:ring-button-primary"
-                onClick={(e) => handleClose(e.currentTarget)}
-            >
-                <RotatingX />
-            </button>
+                    onClick={(e) => handleClose(e.currentTarget)}
+                >
+                    <RotatingX />
+                </button>
             )}
         </div>
     ) : null;

@@ -1,20 +1,7 @@
 import { useEffect } from "react";
 import Modal from "react-modal";
 import type { AlertType } from "./PageAlert";
-
-type ModalAlertProps = {
-    isOpen: boolean;
-    onRequestClose: () => void;
-    onConfirm?: () => void;
-    title: string;
-    message: string;
-    type?: AlertType;
-    confirmLabel?: string;
-    cancelLabel?: string;
-    showCancel?: boolean;
-};
-
-type ModalAlertState = ModalAlertProps | null;
+import type { ModalAlertProps } from "./modalAlertUtils";
 
 const colorsByType: Record<AlertType, string> = {
     success: "bg-alert-success-bg/60 text-alert-success border-alert-success",
@@ -39,25 +26,6 @@ const titleColorsByType: Record<AlertType, string> = {
     warning: "text-alert-warning-title",
     critical: "text-alert-critical-title"
 };
-
-function openModalAlert(
-    setter: React.Dispatch<React.SetStateAction<ModalAlertState>>,
-    type: AlertType,
-    title: string,
-    message: string,
-    confirmLabel: string,
-    action: () => void,
-) {
-    setter({
-        isOpen: true,
-        title,
-        message,
-        type,
-        confirmLabel,
-        onConfirm: action,
-        onRequestClose: () => setter(null),
-    });
-}
 
 export default function ModalAlert({
     isOpen,
@@ -112,6 +80,3 @@ export default function ModalAlert({
         </Modal>
     );
 }
-
-export { openModalAlert };
-export type { ModalAlertState };
