@@ -58,7 +58,7 @@ h2 {
     --warning: #ef4444;
     --muted: #6b7280;
     --todo-text: #111111;
-    --todo-notes-bg: #ebebeb;
+    --todo-notes-bg: #f5f5f5;
     --caret-color: #7c3aed;
     --highlight-primary: #a78bfa;
     --accent-from: #8b5cf6;
@@ -93,7 +93,7 @@ h2 {
     --required: #fb7185;
     --muted: #dddddd;
     --todo-text: #e6edf7;
-    --todo-notes-bg: #1f2937;
+    --todo-notes-bg: #2d3748;
     --caret-color: #a78bfa;
     --highlight-primary: #8b5cf6;
     --accent-from: #7c3aed;
@@ -153,10 +153,6 @@ h2 {
         animation: bg-in-out 0.8s ease-in-out forwards;
     }
 
-    .todo-confirm {
-        animation: todo-confirm 0.6s ease-out forwards;
-    }
-
     .hint-arrow {
         animation: bounce-down 1.2s ease-in-out infinite;
     }
@@ -171,6 +167,10 @@ h2 {
 
     .todo-enter {
         animation: todo-enter 0.25s ease-out;
+    }
+
+    .todo-confirm {
+        animation: todo-confirm 0.6s ease-out forwards;
     }
 
     .todo-exit {
@@ -219,7 +219,7 @@ h2 {
     }
 
     40% {
-        background-color: var(--color-on);
+        background-color: #22c55e;
     }
 
     100% {
