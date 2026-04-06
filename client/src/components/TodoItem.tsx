@@ -24,8 +24,9 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
     const [flashing, setFlashing] = useState(false);
     const { active } = useDndContext();
 
-    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             setFlashing(true);
             setTimeout(() => setFlashing(false), 600);
         }
@@ -83,12 +84,14 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                 </button>
             </div>
             <div className="flex-1 self-stretch flex items-center mx-1 px-1">
-                <input
+                <textarea
                     className={
                         `${completed ? "line-through text-muted" : "text-todo-text"}
-                        text-center w-full h-full text-wrap
+                        text-center w-full h-full
                         border-none focus:ring-1 focus:outline-none
-                        focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg`}
+                        focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg
+                        resize-none whitespace-nowrap overflow-x-auto`}
+                    rows={1}
                     value={title}
                     placeholder="Empty Todo"
                     maxLength={100}
@@ -107,7 +110,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                 <input
                     type="checkbox"
                     checked={completed}
-                    className="w-5 h-5"
+                    className="w-5 h-5 accent-[var(--highlight-primary)]"
                     onChange={() => {
                         onToggleComplete(id);
                     }}
