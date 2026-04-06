@@ -58,7 +58,7 @@ Variables are managed by [Varlock](https://varlock.dev). The `package.json` scri
 
 Varlock is indeed overkill right now, but it was implemented for possible future usage.
 
-### Future Development
+## Future Development
 In the near future, I will modernize my portfolio server by transitioning to a microservices architecture which will make DailyLIST a more accessible project to use out of the box.
 
 ## Contributing
