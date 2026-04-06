@@ -15,7 +15,8 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/ModalAlert";
+import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/alerts/ModalAlert";
+import ProgressBar from "./utils/ProgressBar";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import { MAX_TODO_LIFETIME, APIPaths } from "../app-constants";
 import TodoItem, {
@@ -302,17 +303,7 @@ export default function TodoApp() {
                 </button>
             </div>
             {todos.length > 0 && (
-                <div className="flex flex-col gap-1 w-full">
-                    <span className="text-sm text-muted">
-                        {completedCount} / {todos.length} done
-                    </span>
-                    <div className="w-full h-2 rounded-full bg-secondary-bg">
-                        <div
-                            className="h-2 rounded-full bg-on transition-[width] duration-300 ease-in-out"
-                            style={{ width: `${(completedCount / todos.length) * 100}%` }}
-                        />
-                    </div>
-                </div>
+                <ProgressBar value={completedCount} max={todos.length} />
             )}
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
                 <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
