@@ -2,9 +2,10 @@ export default function Footer() {
     const currentYear = new Date().getFullYear();
 
     const socialLinks = [
-        { label: 'GitHub', href: 'https://github.com/dwalkerwd7' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/derek-walker-a288663a7/' },
+        { label: 'GitHub', href: 'https://github.com/dwalkerwd7' },
         { label: 'Fiverr', href: 'http://www.fiverr.com/s/EgBE7me' },
+        { label: 'Slack', href: 'https://dwalkerwd7.slack.com' }
     ];
 
     return (
