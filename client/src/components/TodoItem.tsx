@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GripVertical, Minus, Plus } from "lucide-react";
+import { GripVertical, Minus, Plus, Trash2 } from "lucide-react";
 import { useDndContext } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -82,18 +82,27 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <input
-                className={
-                    `${completed ? "line-through text-muted" : "text-todo-text"}
-                    text-center flex-1 mx-2 text-wrap
-                    border-none focus:ring-1 focus:outline-none
-                    focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg
-                    h-7`}
-                value={title}
-                placeholder="Empty Todo"
-                onChange={(e) => onUpdateTitle(id, e.target.value)}
-                onKeyDown={handleTitleKeyDown}
-            />
+            <div className="flex-1 self-stretch flex items-center mx-1 px-1">
+                <input
+                    className={
+                        `${completed ? "line-through text-muted" : "text-todo-text"}
+                        text-center w-full h-full text-wrap
+                        border-none focus:ring-1 focus:outline-none
+                        focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg`}
+                    value={title}
+                    placeholder="Empty Todo"
+                    maxLength={100}
+                    onChange={(e) => onUpdateTitle(id, e.target.value)}
+                    onKeyDown={handleTitleKeyDown}
+                />
+            </div>
+            <button
+                className="w-9 h-9 inline-flex items-center justify-center rounded text-delete hover:bg-delete hover:text-white"
+                aria-label="Delete todo"
+                onClick={() => onDelete(id)}
+            >
+                <Trash2 size={16} />
+            </button>
             <label className="w-11 h-11 inline-flex items-center justify-center cursor-pointer">
                 <input
                     type="checkbox"
@@ -110,11 +119,10 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                         className="text-todo-text min-h-20 max-h-50 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
                         placeholder="Add notes here..."
+                        maxLength={500}
                         onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
-                    <button className="h-9 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
-                        Delete
-                    </button>
+                    <span className="text-xs text-muted">{notes.length}/500</span>
                 </div>
             )}
         </li>
