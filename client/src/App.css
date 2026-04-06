@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "./components/utils/alerts.theme.css";
+@import "./components/utils/alerts/alerts.theme.css";
 
 /* Global styles */
 body {
@@ -135,6 +135,7 @@ h2 {
     --color-accent-from-hover: var(--accent-from-hover);
     --color-accent-to-hover: var(--accent-to-hover);
     --color-primary-heading: var(--primary-heading);
+    --animate-rotate-x: rotate-x 0.15s ease-out forwards;
 }
 
 @layer components {
@@ -282,6 +283,16 @@ h2 {
 
     100% {
         letter-spacing: normal;
+    }
+}
+
+@keyframes rotate-x {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(90deg);
     }
 }
 
