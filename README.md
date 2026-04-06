@@ -63,4 +63,4 @@ Varlock is indeed overkill right now, but it was implemented for possible future
 
 ## Contributing
 
-Feel free to fork and submit pull requests. I will most likely pull your changes if they're reasonable.
+Feel free to fork and submit pull requests. This is a basic project, so it's a great opportunity to contribute to open source software!
