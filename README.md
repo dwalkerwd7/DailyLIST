@@ -40,7 +40,7 @@ npm install
 
 Full stack:
 
-# Automatically builds client
+Entire stack:
 ```bash
 cd server && npm run dev
 ```
