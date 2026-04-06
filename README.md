@@ -39,8 +39,6 @@ npm install
 ### Development
 
 Full stack:
-
-Entire stack:
 ```bash
 cd server && npm run dev
 ```
