@@ -32,7 +32,7 @@ cd client
 npm install
 
 # Install server dependencies
-cd ../server
+cd server
 npm install
 ```
 
@@ -50,14 +50,16 @@ cd client && npm run dev
 
 ### Prepare for Deployment
 In `.env.schema`, you need to set NODE_ENV=production to correct pathing.
-The pathing (`.env` BASE_URL and `dailylist-server.ts` PUBLIC_PATH) is set for my personal portfolio server. You may need to change these to fit your needs.
-
+The pathing (`client/.env`, `server/.env.schema` BASE_PATH and `dailylist-server.ts` PUBLIC_PATH) are set for my personal portfolio server. You may need to change these to fit your needs.
 
 ### Environment Variables
 
 Variables are managed by [Varlock](https://varlock.dev). The `package.json` scripts handle loading environment variables automatically — no need to call `npx varlock load` manually.
 
 Varlock is indeed overkill right now, but it was implemented for possible future usage.
+
+### Future Development
+In the near future, I will modernize my portfolio server by transitioning to a microservices architecture which will make DailyLIST a more accessible project to use out of the box.
 
 ## Contributing
 
