@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { GripVertical, Minus, Plus, Trash2 } from "lucide-react";
 import { useDndContext } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
@@ -22,11 +22,23 @@ export type ToggleExpandHandler = (id: number) => void;
 export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, isRemoving?: boolean, onRemoveComplete?: () => void, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
     const [flashing, setFlashing] = useState(false);
+    const [hasEntered, setHasEntered] = useState(false);
+    const titleOnFocus = useRef<string>("");
     const { active } = useDndContext();
 
     const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter') {
             e.preventDefault();
+            e.currentTarget.blur();
+        }
+    };
+
+    const handleTitleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        titleOnFocus.current = e.currentTarget.value;
+    };
+
+    const handleTitleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        if (e.currentTarget.value !== titleOnFocus.current) {
             setFlashing(true);
             setTimeout(() => setFlashing(false), 600);
         }
@@ -51,12 +63,15 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
         <li
             ref={setNodeRef}
             style={style}
-            onAnimationEnd={() => { if (isRemoving) onRemoveComplete?.(); }}
+            onAnimationEnd={(e) => {
+                if (isRemoving) onRemoveComplete?.();
+                if (e.animationName === "todo-enter") setHasEntered(true);
+            }}
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
                 ${flashing ? "todo-confirm" : ""}
-                ${isRemoving ? "todo-exit" : "todo-enter"}
+                ${isRemoving ? "todo-exit" : (hasEntered ? "" : "todo-enter")}
             `}
         >
             <div className="flex flex-row items-center gap-2">
@@ -83,20 +98,22 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <div className="flex-1 self-stretch flex items-center mx-1 px-1">
+            <div className="flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:ring-1 focus-within:ring-primary-border focus-within:bg-secondary-bg">
                 <textarea
                     className={
                         `${completed ? "line-through text-muted" : "text-todo-text"}
-                        text-center w-full h-full
-                        border-none focus:ring-1 focus:outline-none
-                        focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg
-                        resize-none whitespace-nowrap overflow-x-auto`}
+                        text-center w-full
+                        border-none focus:outline-none focus:ring-0
+                        bg-transparent
+                        resize-none whitespace-nowrap overflow-x-auto todo-title-input`}
                     rows={1}
                     value={title}
                     placeholder="Empty Todo"
                     maxLength={100}
                     onChange={(e) => onUpdateTitle(id, e.target.value)}
                     onKeyDown={handleTitleKeyDown}
+                    onFocus={handleTitleFocus}
+                    onBlur={handleTitleBlur}
                 />
             </div>
             <button

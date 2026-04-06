@@ -137,6 +137,26 @@ h2 {
     --color-primary-heading: var(--primary-heading);
 }
 
+@layer components {
+    .todo-title-input {
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight-primary) transparent;
+    }
+
+    .todo-title-input::-webkit-scrollbar {
+        height: 3px;
+    }
+
+    .todo-title-input::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .todo-title-input::-webkit-scrollbar-thumb {
+        background-color: var(--highlight-primary);
+        border-radius: 9999px;
+    }
+}
+
 /* Custom utilities for animations */
 @layer utilities {
     .spacing-ease-in {
@@ -170,7 +190,7 @@ h2 {
     }
 
     .todo-confirm {
-        animation: todo-confirm 0.6s ease-out forwards;
+        animation: todo-confirm 0.25s ease-out forwards;
     }
 
     .todo-exit {
