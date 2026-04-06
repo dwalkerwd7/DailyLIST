@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
+import PageAlert, { type PageAlertProps } from '../components/utils/alerts/PageAlert';
 import { APIPaths } from '../app-constants';
 
 const successSubmitAlert: PageAlertProps = {
