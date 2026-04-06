@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 import type { AlertType } from "./PageAlert";
 
 type ModalAlertProps = {
@@ -15,7 +16,7 @@ type ModalAlertProps = {
 type ModalAlertState = ModalAlertProps | null;
 
 function openModalAlert(
-    setter: React.Dispatch<React.SetStateAction<ModalAlertState>>,
+    setter: Dispatch<SetStateAction<ModalAlertState>>,
     type: AlertType,
     title: string,
     message: string,
