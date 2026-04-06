@@ -4,7 +4,7 @@ export default function Footer() {
     const socialLinks = [
         { label: 'GitHub', href: 'https://github.com/dwalkerwd7' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/derek-walker-a288663a7/' },
-        { label: 'Fiverr', href: 'https://www.fiverr.com/users/dwalkerwd7/seller_dashboard' },
+        { label: 'Fiverr', href: 'http://www.fiverr.com/s/EgBE7me' },
     ];
 
     return (
