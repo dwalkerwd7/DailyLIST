@@ -98,7 +98,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <div className="flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:ring-1 focus-within:ring-primary-border focus-within:bg-secondary-bg">
+            <div className="flex-1 self-stretch flex items-center mx-1 px-1 rounded bg-secondary-bg focus-within:bg-form-input">
                 <textarea
                     className={
                         `${completed ? "line-through text-muted" : "text-todo-text"}
