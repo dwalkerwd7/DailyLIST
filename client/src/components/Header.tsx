@@ -50,6 +50,7 @@ export default function Header() {
                             <ToggleSwitch isOn={!darkMode} handleToggle={handleThemeToggle} />
                         </div>
                         <div className="flex items-center gap-6">
+                            <NavLink to="/" end className={({ isActive }) => `py-2 px-1 ${isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}`}>Home</NavLink>
                             <NavLink to="/about" className={({ isActive }) => `py-2 px-1 ${isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}`}>About</NavLink>
                             <NavLink to="/feedback" className={({ isActive }) => `py-2 px-1 ${isActive ? "text-link-hover font-semibold" : "text-link hover:text-link-hover"}`}>Feedback</NavLink>
                         </div>
