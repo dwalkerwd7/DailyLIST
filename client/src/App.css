@@ -2,320 +2,323 @@
 @import "./components/utils/alerts/alerts.theme.css";
 
 /* Global styles */
-body {
-    caret-color: var(--caret-color);
-    font-family: "Inter", sans-serif;
-}
+@layer base {
 
-a {
-    color: var(--color-link);
-    text-decoration: none;
-    font-size: 1.1rem;
-}
-
-a:hover {
-    color: var(--color-link-hover);
-    text-decoration: underline;
-}
-
-h1,
-h2 {
-    color: var(--color-primary-heading);
-}
-
-#header-title {
-    font-weight: bolder;
-    color: var(--color-primary-heading);
-    font-size: 1.75rem;
-}
-
-#header-title:hover {
-    text-decoration: none;
-}
-
-/* Light mode theme variables */
-:root {
-    --bg-primary: white;
-    --bg-secondary: #f0f0f0;
-    --text-primary: black;
-    --border-primary: #d1d2d6;
-    --form-input: #d1d5db;
-    --on: #8b5cf6;
-    --off: #9ca3af;
-    --submit-primary: #3b82f6;
-    --submit-primary-hover: #2563eb;
-    --button-primary: #51a2ff;
-    --button-primary-hover: #5594e0;
-    --button-secondary: #7c6fc9;
-    --button-secondary-hover: #9083d9;
-    --button-tertiary: #e5e7eb;
-    --button-tertiary-hover: #d1d5db;
-    --link: #64748b;
-    --link-hover: #4f46e5;
-    --required: #ef4444;
-    --delete: #ef4444;
-    --delete-hover: #dc2626;
-    --warning: #ef4444;
-    --muted: #6b7280;
-    --todo-text: #111111;
-    --todo-notes-bg: #f5f5f5;
-    --caret-color: #7c3aed;
-    --highlight-primary: #a78bfa;
-    --accent-from: #8b5cf6;
-    --accent-to: #3b82f6;
-    --accent-from-hover: #7c3aed;
-    --accent-to-hover: #2563eb;
-    --primary-heading: #7c3aed;
-}
-
-/* Dark mode theme variables */
-:root.dark {
-    --bg-primary: #0b1220;
-    --bg-secondary: #131c2e;
-    --text-primary: #e6edf7;
-    --border-primary: #2a364f;
-    --form-input: #334155;
-    --on: #a78bfa;
-    --off: #64748b;
-    --submit-primary: #3b82f6;
-    --submit-primary-hover: #0073ff;
-    --button-primary: #818cf8;
-    --button-primary-hover: #6366f1;
-    --button-secondary: #3d3a9e;
-    --button-secondary-hover: #4338ca;
-    --button-tertiary: #596780;
-    --button-tertiary-hover: #404b5e;
-    --delete: #ef4444;
-    --delete-hover: #dc2626;
-    --warning: #f87171;
-    --link: #cbd5e1;
-    --link-hover: #c4b5fd;
-    --required: #fb7185;
-    --muted: #dddddd;
-    --todo-text: #e6edf7;
-    --todo-notes-bg: #2d3748;
-    --caret-color: #a78bfa;
-    --highlight-primary: #8b5cf6;
-    --accent-from: #7c3aed;
-    --accent-to: #2563eb;
-    --accent-from-hover: #6d28d9;
-    --accent-to-hover: #1d4ed8;
-    --primary-heading: #c4b5fd;
-}
-
-/* Map theme variables to Tailwind's color system */
-@theme {
-    --color-primary-bg: var(--bg-primary);
-    --color-secondary-bg: var(--bg-secondary);
-    --color-primary-text: var(--text-primary);
-    --color-primary-border: var(--border-primary);
-    --color-form-input: var(--form-input);
-    --color-required: var(--required);
-    --color-on: var(--on);
-    --color-off: var(--off);
-    --color-submit-primary: var(--submit-primary);
-    --color-submit-primary-hover: var(--submit-primary-hover);
-    --color-button-primary: var(--button-primary);
-    --color-button-primary-hover: var(--button-primary-hover);
-    --color-button-tertiary: var(--button-tertiary);
-    --color-button-tertiary-hover: var(--button-tertiary-hover);
-    --color-button-secondary: var(--button-secondary);
-    --color-button-secondary-hover: var(--button-secondary-hover);
-    --color-delete: var(--delete);
-    --color-delete-hover: var(--delete-hover);
-    --color-warning: var(--warning);
-    --color-link: var(--link);
-    --color-link-hover: var(--link-hover);
-    --color-muted: var(--muted);
-    --color-todo-text: var(--todo-text);
-    --color-todo-notes-bg: var(--todo-notes-bg);
-    --color-highlight-primary: var(--highlight-primary);
-    --color-accent-from: var(--accent-from);
-    --color-accent-to: var(--accent-to);
-    --color-accent-from-hover: var(--accent-from-hover);
-    --color-accent-to-hover: var(--accent-to-hover);
-    --color-primary-heading: var(--primary-heading);
-    --animate-rotate-x: rotate-x 0.15s ease-out forwards;
-}
-
-@layer components {
-    .todo-title-input {
-        scrollbar-width: thin;
-        scrollbar-color: var(--highlight-primary) transparent;
+    h1,
+    h2 {
+        color: var(--color-primary-heading);
     }
 
-    .todo-title-input::-webkit-scrollbar {
-        height: 3px;
+    body {
+        caret-color: var(--caret-color);
+        font-family: "Inter", sans-serif;
+
+        a {
+            color: var(--color-link);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        a:hover {
+            color: var(--color-link-hover);
+            text-decoration: underline;
+        }
+
+        #header-title {
+            font-weight: bolder;
+            color: var(--color-primary-heading);
+            font-size: 1.75rem;
+        }
+
+        #header-title:hover {
+            text-decoration: none;
+        }
     }
 
-    .todo-title-input::-webkit-scrollbar-track {
-        background: transparent;
+    /* Light mode theme variables */
+    :root {
+        --bg-primary: white;
+        --bg-secondary: #f0f0f0;
+        --text-primary: black;
+        --border-primary: #d1d2d6;
+        --form-input: #d1d5db;
+        --on: #8b5cf6;
+        --off: #9ca3af;
+        --submit-primary: #3b82f6;
+        --submit-primary-hover: #2563eb;
+        --button-primary: #51a2ff;
+        --button-primary-hover: #5594e0;
+        --button-secondary: #7c6fc9;
+        --button-secondary-hover: #9083d9;
+        --button-tertiary: #e5e7eb;
+        --button-tertiary-hover: #d1d5db;
+        --link: #64748b;
+        --link-hover: #4f46e5;
+        --required: #ef4444;
+        --delete: #ef4444;
+        --delete-hover: #dc2626;
+        --warning: #ef4444;
+        --muted: #6b7280;
+        --todo-text: #111111;
+        --todo-notes-bg: #f5f5f5;
+        --caret-color: #7c3aed;
+        --highlight-primary: #a78bfa;
+        --accent-from: #8b5cf6;
+        --accent-to: #3b82f6;
+        --accent-from-hover: #7c3aed;
+        --accent-to-hover: #2563eb;
+        --primary-heading: #7c3aed;
     }
 
-    .todo-title-input::-webkit-scrollbar-thumb {
-        background-color: var(--highlight-primary);
-        border-radius: 9999px;
-    }
-}
-
-/* Custom utilities for animations */
-@layer utilities {
-    .spacing-ease-in {
-        letter-spacing: 0.2em;
-        animation: spacing-extend 0.15s ease-in forwards;
-    }
-
-    .spacing-ease-out {
-        letter-spacing: normal;
-        animation: spacing-contract 0.15s ease-out forwards;
-    }
-
-    .counttimer-highlight {
-        animation: bg-in-out 0.8s ease-in-out forwards;
-    }
-
-    .hint-arrow {
-        animation: bounce-down 1.2s ease-in-out infinite;
-    }
-
-    .timer-warning-pulse {
-        animation: timer-warning-pulse 0.8s ease-in-out;
-    }
-
-    .title-tap {
-        animation: title-tap 0.5s ease-in-out;
-    }
-
-    .todo-enter {
-        animation: todo-enter 0.25s ease-out;
+    /* Dark mode theme variables */
+    :root.dark {
+        --bg-primary: #0b1220;
+        --bg-secondary: #131c2e;
+        --text-primary: #e6edf7;
+        --border-primary: #2a364f;
+        --form-input: #334155;
+        --on: #a78bfa;
+        --off: #64748b;
+        --submit-primary: #3b82f6;
+        --submit-primary-hover: #0073ff;
+        --button-primary: #818cf8;
+        --button-primary-hover: #6366f1;
+        --button-secondary: #3d3a9e;
+        --button-secondary-hover: #4338ca;
+        --button-tertiary: #596780;
+        --button-tertiary-hover: #404b5e;
+        --delete: #ef4444;
+        --delete-hover: #dc2626;
+        --warning: #f87171;
+        --link: #cbd5e1;
+        --link-hover: #c4b5fd;
+        --required: #fb7185;
+        --muted: #dddddd;
+        --todo-text: #e6edf7;
+        --todo-notes-bg: #2d3748;
+        --caret-color: #a78bfa;
+        --highlight-primary: #8b5cf6;
+        --accent-from: #7c3aed;
+        --accent-to: #2563eb;
+        --accent-from-hover: #6d28d9;
+        --accent-to-hover: #1d4ed8;
+        --primary-heading: #c4b5fd;
     }
 
-    .todo-confirm {
-        animation: todo-confirm 0.25s ease-out forwards;
+    /* Map theme variables to Tailwind's color system */
+    @theme {
+        --color-primary-bg: var(--bg-primary);
+        --color-secondary-bg: var(--bg-secondary);
+        --color-primary-text: var(--text-primary);
+        --color-primary-border: var(--border-primary);
+        --color-form-input: var(--form-input);
+        --color-required: var(--required);
+        --color-on: var(--on);
+        --color-off: var(--off);
+        --color-submit-primary: var(--submit-primary);
+        --color-submit-primary-hover: var(--submit-primary-hover);
+        --color-button-primary: var(--button-primary);
+        --color-button-primary-hover: var(--button-primary-hover);
+        --color-button-tertiary: var(--button-tertiary);
+        --color-button-tertiary-hover: var(--button-tertiary-hover);
+        --color-button-secondary: var(--button-secondary);
+        --color-button-secondary-hover: var(--button-secondary-hover);
+        --color-delete: var(--delete);
+        --color-delete-hover: var(--delete-hover);
+        --color-warning: var(--warning);
+        --color-link: var(--link);
+        --color-link-hover: var(--link-hover);
+        --color-muted: var(--muted);
+        --color-todo-text: var(--todo-text);
+        --color-todo-notes-bg: var(--todo-notes-bg);
+        --color-highlight-primary: var(--highlight-primary);
+        --color-accent-from: var(--accent-from);
+        --color-accent-to: var(--accent-to);
+        --color-accent-from-hover: var(--accent-from-hover);
+        --color-accent-to-hover: var(--accent-to-hover);
+        --color-primary-heading: var(--primary-heading);
+        --animate-rotate-x: rotate-x 0.15s ease-out forwards;
     }
 
-    .todo-exit {
-        animation: todo-exit 0.3s ease-in forwards;
-    }
-}
+    @layer components {
+        .todo-title-input {
+            scrollbar-width: thin;
+            scrollbar-color: var(--highlight-primary) transparent;
+        }
 
-/* Keyframes */
-@keyframes spacing-extend {
-    0% {
-        letter-spacing: normal;
-    }
+        .todo-title-input::-webkit-scrollbar {
+            height: 3px;
+        }
 
-    100% {
-        letter-spacing: 0.2em;
-    }
-}
+        .todo-title-input::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-@keyframes spacing-contract {
-    0% {
-        letter-spacing: 0.2em;
-    }
-
-    100% {
-        letter-spacing: normal;
-    }
-}
-
-@keyframes bg-in-out {
-    0% {
-        background-color: transparent;
+        .todo-title-input::-webkit-scrollbar-thumb {
+            background-color: var(--highlight-primary);
+            border-radius: 9999px;
+        }
     }
 
-    50% {
-        background-color: var(--color-highlight-primary);
+    /* Custom utilities for animations */
+    @layer utilities {
+        .spacing-ease-in {
+            letter-spacing: 0.2em;
+            animation: spacing-extend 0.15s ease-in forwards;
+        }
+
+        .spacing-ease-out {
+            letter-spacing: normal;
+            animation: spacing-contract 0.15s ease-out forwards;
+        }
+
+        .counttimer-highlight {
+            animation: bg-in-out 0.8s ease-in-out forwards;
+        }
+
+        .hint-arrow {
+            animation: bounce-down 1.2s ease-in-out infinite;
+        }
+
+        .timer-warning-pulse {
+            animation: timer-warning-pulse 0.8s ease-in-out;
+        }
+
+        .title-tap {
+            animation: title-tap 0.5s ease-in-out;
+        }
+
+        .todo-enter {
+            animation: todo-enter 0.25s ease-out;
+        }
+
+        .todo-confirm {
+            animation: todo-confirm 0.25s ease-out forwards;
+        }
+
+        .todo-exit {
+            animation: todo-exit 0.3s ease-in forwards;
+        }
     }
 
-    100% {
-        background-color: transparent;
-    }
-}
+    /* Keyframes */
+    @keyframes spacing-extend {
+        0% {
+            letter-spacing: normal;
+        }
 
-@keyframes todo-confirm {
-    0% {
-        background-color: transparent;
-    }
-
-    40% {
-        background-color: #22c55e;
+        100% {
+            letter-spacing: 0.2em;
+        }
     }
 
-    100% {
-        background-color: transparent;
-    }
-}
+    @keyframes spacing-contract {
+        0% {
+            letter-spacing: 0.2em;
+        }
 
-@keyframes bounce-down {
-
-    0%,
-    100% {
-        transform: translateY(0);
+        100% {
+            letter-spacing: normal;
+        }
     }
 
-    50% {
-        transform: translateY(6px);
-    }
-}
+    @keyframes bg-in-out {
+        0% {
+            background-color: transparent;
+        }
 
-@keyframes timer-warning-pulse {
+        50% {
+            background-color: var(--color-highlight-primary);
+        }
 
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
-}
-
-@keyframes title-tap {
-    0% {
-        letter-spacing: normal;
+        100% {
+            background-color: transparent;
+        }
     }
 
-    50% {
-        letter-spacing: 0.15em;
+    @keyframes todo-confirm {
+        0% {
+            background-color: transparent;
+        }
+
+        40% {
+            background-color: #22c55e;
+        }
+
+        100% {
+            background-color: transparent;
+        }
     }
 
-    100% {
-        letter-spacing: normal;
-    }
-}
+    @keyframes bounce-down {
 
-@keyframes rotate-x {
-    from {
-        transform: rotate(0deg);
-    }
+        0%,
+        100% {
+            transform: translateY(0);
+        }
 
-    to {
-        transform: rotate(90deg);
-    }
-}
-
-@keyframes todo-enter {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
+        50% {
+            transform: translateY(6px);
+        }
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+    @keyframes timer-warning-pulse {
 
-@keyframes todo-exit {
-    from {
-        opacity: 1;
-        transform: translateY(0);
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
     }
 
-    to {
-        opacity: 0;
-        transform: translateY(-6px);
+    @keyframes title-tap {
+        0% {
+            letter-spacing: normal;
+        }
+
+        50% {
+            letter-spacing: 0.15em;
+        }
+
+        100% {
+            letter-spacing: normal;
+        }
+    }
+
+    @keyframes rotate-x {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(90deg);
+        }
+    }
+
+    @keyframes todo-enter {
+        from {
+            opacity: 0;
+            transform: translateY(6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes todo-exit {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
     }
 }
