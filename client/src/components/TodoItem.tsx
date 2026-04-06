@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { GripVertical, Minus, Plus } from "lucide-react";
+import { useState, useRef } from "react";
+import { GripVertical, Minus, Plus, Trash2 } from "lucide-react";
 import { useDndContext } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -22,12 +22,24 @@ export type ToggleExpandHandler = (id: number) => void;
 export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, onToggleExpand, onToggleComplete, onUpdateTitle, onUpdateNotes, onDelete }: { todo: Todo, isRemoving?: boolean, onRemoveComplete?: () => void, onToggleExpand: ToggleExpandHandler, onToggleComplete: ToggleCompleteHandler, onUpdateTitle: UpdateTitleHandler, onUpdateNotes: UpdateNotesHandler, onDelete: DeleteHandler }) {
     const { id, completed, title, expanded = false, notes = "" } = todo;
     const [flashing, setFlashing] = useState(false);
+    const [hasEntered, setHasEntered] = useState(false);
+    const titleOnFocus = useRef<string>("");
     const { active } = useDndContext();
 
-    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleTitleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
+            e.currentTarget.blur();
+        }
+    };
+
+    const handleTitleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        titleOnFocus.current = e.currentTarget.value;
+    };
+
+    const handleTitleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+        if (e.currentTarget.value !== titleOnFocus.current) {
             setFlashing(true);
-            setTimeout(() => setFlashing(false), 600);
         }
     };
     const {
@@ -50,12 +62,16 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
         <li
             ref={setNodeRef}
             style={style}
-            onAnimationEnd={() => { if (isRemoving) onRemoveComplete?.(); }}
+            onAnimationEnd={(e) => {
+                if (isRemoving) onRemoveComplete?.();
+                if (e.animationName === "todo-enter") setHasEntered(true);
+                if (e.animationName === "todo-confirm") setFlashing(false);
+            }}
             className={`
                 flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
                 ${flashing ? "todo-confirm" : ""}
-                ${isRemoving ? "todo-exit" : "todo-enter"}
+                ${isRemoving ? "todo-exit" : (hasEntered ? "" : "todo-enter")}
             `}
         >
             <div className="flex flex-row items-center gap-2">
@@ -82,23 +98,36 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <input
-                className={
-                    `${completed ? "line-through text-muted" : "text-todo-text"}
-                    text-center flex-1 mx-2 text-wrap
-                    border-none focus:ring-1 focus:outline-none
-                    focus:ring-primary-border rounded bg-transparent focus:bg-secondary-bg
-                    h-7`}
-                value={title}
-                placeholder="Empty Todo"
-                onChange={(e) => onUpdateTitle(id, e.target.value)}
-                onKeyDown={handleTitleKeyDown}
-            />
+            <div className={`flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:bg-form-input ${flashing ? "bg-transparent" : "bg-secondary-bg"}`}>
+                <textarea
+                    className={
+                        `${completed ? "line-through text-muted" : "text-todo-text"}
+                        text-center w-full
+                        border-none focus:outline-none focus:ring-0
+                        bg-transparent
+                        resize-none whitespace-nowrap overflow-x-auto todo-title-input`}
+                    rows={1}
+                    value={title}
+                    placeholder="Empty Todo"
+                    maxLength={100}
+                    onChange={(e) => onUpdateTitle(id, e.target.value)}
+                    onKeyDown={handleTitleKeyDown}
+                    onFocus={handleTitleFocus}
+                    onBlur={handleTitleBlur}
+                />
+            </div>
+            <button
+                className="w-9 h-9 inline-flex items-center justify-center rounded text-delete hover:bg-delete hover:text-white"
+                aria-label="Delete todo"
+                onClick={() => onDelete(id)}
+            >
+                <Trash2 size={16} />
+            </button>
             <label className="w-11 h-11 inline-flex items-center justify-center cursor-pointer">
                 <input
                     type="checkbox"
                     checked={completed}
-                    className="w-5 h-5"
+                    className="w-5 h-5 accent-[var(--highlight-primary)]"
                     onChange={() => {
                         onToggleComplete(id);
                     }}
@@ -110,11 +139,10 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                         className="text-todo-text min-h-20 max-h-50 bg-todo-notes-bg p-3 rounded resize-none w-full"
                         value={notes}
                         placeholder="Add notes here..."
+                        maxLength={500}
                         onChange={(e) => onUpdateNotes(id, e.target.value)}
                     />
-                    <button className="h-9 text-sm px-5 bg-delete hover:bg-delete-hover text-white rounded self-end" onClick={() => onDelete(id)}>
-                        Delete
-                    </button>
+                    <span className="text-xs text-muted">{notes.length}/500</span>
                 </div>
             )}
         </li>

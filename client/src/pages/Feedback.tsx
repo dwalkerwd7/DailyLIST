@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import PageAlert, { type PageAlertProps } from '../components/utils/PageAlert';
+import PageAlert, { type PageAlertProps } from '../components/utils/alerts/PageAlert';
 import { APIPaths } from '../app-constants';
 
 const successSubmitAlert: PageAlertProps = {
@@ -23,6 +23,7 @@ const alreadySubmittedAlert: PageAlertProps = {
 
 export default function Feedback() {
     const [formData, setFormData] = useState({
+        category: '',
         name: '',
         email: '',
         message: '',
@@ -93,6 +94,23 @@ export default function Feedback() {
             )}
             {!hasSubmittedFeedback && hasLoaded && (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 justify-center">
+                    <div className="flex flex-col">
+                        <label htmlFor="category" className="block text-sm font-medium text-primary-text mb-1">
+                            Type
+                        </label>
+                        <select
+                            id="category"
+                            className="bg-secondary-bg border border-form-input rounded-md py-2 px-4 text-primary-text focus:outline-none focus:ring-2 focus:ring-form-input"
+                            required
+                            value={formData.category}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        >
+                            <option value="" disabled>Select a type...</option>
+                            <option value="issue">Issue</option>
+                            <option value="suggestion">Suggestion</option>
+                            <option value="comment">Comment</option>
+                        </select>
+                    </div>
                     <div className="flex flex-col">
                         <label htmlFor="name" className="block text-sm font-medium text-primary-text mb-1">
                             Name
