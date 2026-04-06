@@ -15,7 +15,8 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import ModalAlert, { openModalAlert, type ModalAlertState } from "./utils/alerts/ModalAlert";
+import ModalAlert from "./utils/alerts/ModalAlert";
+import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
 import ProgressBar from "./utils/ProgressBar";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import { MAX_TODO_LIFETIME, APIPaths } from "../app-constants";
