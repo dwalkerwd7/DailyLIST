@@ -9,36 +9,33 @@ type PageAlertProps = {
     type: AlertType
 };
 
+const titleColorsByType: Record<AlertType, string> = {
+    success: "text-alert-success-title",
+    error: "text-alert-error-title",
+    info: "text-alert-info-title",
+    warning: "text-alert-warning-title",
+    critical: "text-alert-critical-title"
+};
+
+const colorsBasedOnType: Record<AlertType, string> = {
+    success: "bg-alert-success-bg/80 text-alert-success border-alert-success",
+    error: "bg-alert-error-bg/80 text-alert-error border-alert-error",
+    info: "bg-alert-info-bg/80 text-alert-info border-alert-info",
+    warning: "bg-alert-warning-bg/80 text-alert-warning border-alert-warning",
+    critical: "bg-alert-critical-bg/80 text-alert-critical border-alert-critical"
+};
+
 export default function PageAlert({ title = '', closable = false, msg, type }: PageAlertProps) {
     const [dismissedMsg, setDismissedMsg] = useState('');
     const visible = msg.length > 0 && msg !== dismissedMsg;
 
     const handleClose = (elem: HTMLButtonElement | null) => {
-        if (!closable) {
-            return; // Don't close if the button is disabled
-        }
-
+        if (!closable) return;
         if (elem && elem.parentElement) {
             elem.parentElement.classList.add('alert-fade-out');
         } else {
             setDismissedMsg(msg);
         }
-    };
-
-    const titleColorsByType: Record<AlertType, string> = {
-        success: "text-alert-success-title",
-        error: "text-alert-error-title",
-        info: "text-alert-info-title",
-        warning: "text-alert-warning-title",
-        critical: "text-alert-critical-title"
-    };
-
-    const colorsBasedOnType: Record<AlertType, string> = {
-        success: "bg-alert-success-bg/80 text-alert-success border-alert-success",
-        error: "bg-alert-error-bg/80 text-alert-error border-alert-error",
-        info: "bg-alert-info-bg/80 text-alert-info border-alert-info",
-        warning: "bg-alert-warning-bg/80 text-alert-warning border-alert-warning",
-        critical: "bg-alert-critical-bg/80 text-alert-critical border-alert-critical"
     };
 
     return visible ? (
