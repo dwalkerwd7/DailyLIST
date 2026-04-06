@@ -1,5 +1,5 @@
 import { useState } from "react";
-import RotatingX from "../svg/RotatingX";
+import { X } from "lucide-react";
 
 type AlertType = 'error' | 'success' | 'info' | 'warning' | 'critical';
 type PageAlertProps = {
@@ -59,7 +59,7 @@ export default function PageAlert({ title = '', closable = false, msg, type }: P
                         hover:scale-105 hover:bg-secondary-bg focus:outline-none focus:ring-2 focus:ring-button-primary"
                     onClick={(e) => handleClose(e.currentTarget)}
                 >
-                    <RotatingX />
+                    <X className="h-4 w-4 group-hover:animate-rotate-x" aria-hidden="true" />
                 </button>
             )}
         </div>
