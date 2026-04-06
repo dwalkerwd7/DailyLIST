@@ -1,6 +1,35 @@
 # Changelog
 
-## v0.8
+## v0.8.1
+
+### Features
+- Added Home nav link to header with exact-match active highlighting
+- Feedback form now requires a category selection (Issue, Suggestion, Comment) which is included in the log
+- Checkboxes are now purple using the theme's highlight color
+- Todo title input replaced with a single-line textarea with a styled purple horizontal scrollbar when text overflows
+- Notes section now shows a visible character counter (0/500)
+- Delete button moved into the main todo row as a trash icon, between the title and checkbox
+
+### Improvements
+- Todo title input is now vertically centered with a subtle background and focus color change instead of a focus ring
+- Todo title wrapper goes transparent during the confirm flash so the green shows through
+- Confirm animation now triggers on blur only when the title has actually changed; Enter blurs the textarea
+- Confirm animation resets via `animationend` instead of a hardcoded `setTimeout`
+- `todo-enter` animation no longer re-triggers on re-renders after initial mount
+- Notes area background lightened in both light and dark mode
+- Progress bar extracted into a reusable `ProgressBar` component with max-width and centering
+- Alert heading colors now correctly use per-type color tokens instead of the global purple heading color
+- `PageAlert` close state replaced `useEffect` + boolean with a `dismissedMsg` string — no more setState in an effect
+- `PageAlert` close animation uses `animationend` instead of a hardcoded `setTimeout`
+- `RotatingX` component removed — close button now uses a Lucide `X` icon with a CSS keyframe rotation
+- `openModalAlert` and related types moved to `modalAlertUtils.ts` so `ModalAlert.tsx` only exports a component (fixes Fast Refresh)
+- Responsive min and max widths on the home page container for sm, md, and lg screens
+
+### Bug fixes
+- Fixed confirm flash animation never playing — `todo-confirm` was defined before `todo-enter` in the stylesheet, causing `todo-enter` to always win the cascade
+
+
+## v0.8.0
 
 ### Features
 - Purple used as the completion/on color (toggle switch, progress bar, timer all-complete state, confirm flash)
