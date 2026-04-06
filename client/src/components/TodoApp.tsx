@@ -327,7 +327,7 @@ export default function TodoApp() {
             </DndContext>
             {todos.length === 0 && (
                 <div className="flex flex-col items-center gap-2 py-4 text-muted">
-                    <p className="text-sm">Add your first task for today</p>
+                    <p className="text-sm">Add your first task for the day</p>
                     <ArrowDown className="hint-arrow" size={20} />
                 </div>
             )}
