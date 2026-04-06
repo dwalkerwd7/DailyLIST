@@ -33,6 +33,14 @@ export default function PageAlert({ title = '', closable = false, msg, type }: P
         }
     };
 
+    const titleColorsByType: Record<AlertType, string> = {
+        success: "text-alert-success-title",
+        error: "text-alert-error-title",
+        info: "text-alert-info-title",
+        warning: "text-alert-warning-title",
+        critical: "text-alert-critical-title"
+    };
+
     const colorsBasedOnType: Record<AlertType, string> = {
         success: "bg-alert-success-bg/80 text-alert-success border-alert-success",
         error: "bg-alert-error-bg/80 text-alert-error border-alert-error",
@@ -48,7 +56,7 @@ export default function PageAlert({ title = '', closable = false, msg, type }: P
             mt-4 px-4 py-2 rounded-md border
         `}>
             <div className="flex flex-col items-center">
-                {title && <h3 className="font-bold mb-1">{title}</h3>}
+                {title && <h3 className={`font-bold mb-1 ${titleColorsByType[type]}`}>{title}</h3>}
                 <p>{ msg }</p>
             </div>
             { closable && (

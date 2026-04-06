@@ -32,6 +32,14 @@ const buttonColorsByType: Record<AlertType, string> = {
     critical: "bg-alert-critical-bg text-white hover:brightness-95"
 };
 
+const titleColorsByType: Record<AlertType, string> = {
+    success: "text-alert-success-title",
+    error: "text-alert-error-title",
+    info: "text-alert-info-title",
+    warning: "text-alert-warning-title",
+    critical: "text-alert-critical-title"
+};
+
 function openModalAlert(
     setter: React.Dispatch<React.SetStateAction<ModalAlertState>>,
     type: AlertType,
@@ -79,7 +87,7 @@ export default function ModalAlert({
             <div className={`mb-4 block w-full rounded-full text-center border px-3 py-1 text-sm font-semibold uppercase tracking-wide ${colorsByType[type]}`}>
                 {type}
             </div>
-            <h2 className={`mb-2 text-xl font-bold text-alert-${type}-title`}>
+            <h2 className={`mb-2 text-xl font-bold ${titleColorsByType[type]}`}>
                 {title}
             </h2>
             <p className="mb-6 text-sm text-primary-text">{message}</p>
