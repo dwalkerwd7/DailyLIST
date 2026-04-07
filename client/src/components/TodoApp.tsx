@@ -19,7 +19,7 @@ import ModalAlert from "./utils/alerts/ModalAlert";
 import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
 import ProgressBar from "./utils/ProgressBar";
 import Counter, { type CounterHandle } from "./utils/Counter";
-import { MAX_TODO_LIFETIME, APIPaths } from "../app-constants";
+import { APIPaths } from "../app-constants";
 import TodoItem, {
     type Todo,
     type ToggleCompleteHandler,
@@ -61,6 +61,7 @@ export default function TodoApp() {
     };
 
     const startTimerAnew = () => {
+        const MAX_TODO_LIFETIME = 24 * 60 * 60 * 1000;
         expiresAtRef.current = Date.now() + MAX_TODO_LIFETIME;
         counterHandle.current?.setTime(MAX_TODO_LIFETIME);
         counterHandle.current?.startTimer();
