@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build-client": "cd ../client && npm run build",
-    "dev": "npm run build-client && nodemon --exec ts-node src/server.ts",
+    "build-client:dev": "cd ../client && npm run build:dev",
+    "dev": "npm run build-client:dev && nodemon --exec ts-node src/server.ts",
     "build": "npm run build-client && tsc --outDir dist/",
     "permissions": "chmod +x node_modules/.bin/varlock && chmod +x node_modules/.bin/tsc",
-    "start": "npm run permissions && varlock run -- node dist/server.js"
+    "start": "npm run build && npm run permissions && varlock run -- node dist/server.js"
   },
   "keywords": [],
   "author": "",
