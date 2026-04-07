@@ -44,6 +44,7 @@
         --form-input: #d1d5db;
         --on: #8b5cf6;
         --off: #9ca3af;
+        --confirm: #00ff00;
         --submit-primary: #3b82f6;
         --submit-primary-hover: #2563eb;
         --button-primary: #51a2ff;
@@ -79,6 +80,7 @@
         --form-input: #334155;
         --on: #a78bfa;
         --off: #64748b;
+        --confirm: #32cd32;
         --submit-primary: #3b82f6;
         --submit-primary-hover: #0073ff;
         --button-primary: #818cf8;
@@ -115,6 +117,7 @@
         --color-required: var(--required);
         --color-on: var(--on);
         --color-off: var(--off);
+        --color-confirm: var(--confirm);
         --color-submit-primary: var(--submit-primary);
         --color-submit-primary-hover: var(--submit-primary-hover);
         --color-button-primary: var(--button-primary);
@@ -137,6 +140,7 @@
         --color-accent-from-hover: var(--accent-from-hover);
         --color-accent-to-hover: var(--accent-to-hover);
         --color-primary-heading: var(--primary-heading);
+
         --animate-rotate-x: rotate-x 0.15s ease-out forwards;
     }
 
@@ -237,16 +241,14 @@
     }
 
     @keyframes todo-confirm {
-        0% {
-            background-color: transparent;
-        }
 
+        0%,
         40% {
-            background-color: #22c55e;
+            background-color: var(--on);
         }
 
         100% {
-            background-color: transparent;
+            background-color: var(--bg-secondary);
         }
     }
 
