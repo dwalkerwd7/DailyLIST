@@ -1,12 +1,49 @@
 @import "tailwindcss";
 @import "./components/utils/alerts/alerts.theme.css";
 
+/* Map theme variables to Tailwind's color system */
+@theme {
+    --color-primary-bg: var(--bg-primary);
+    --color-secondary-bg: var(--bg-secondary);
+    --color-primary-text: var(--text-primary);
+    --color-primary-border: var(--border-primary);
+    --color-form-input: var(--form-input);
+    --color-required: var(--required);
+    --color-on: var(--on);
+    --color-off: var(--off);
+    --color-confirm: var(--confirm);
+    --color-submit-primary: var(--submit-primary);
+    --color-submit-primary-hover: var(--submit-primary-hover);
+    --color-button-primary: var(--button-primary);
+    --color-button-primary-hover: var(--button-primary-hover);
+    --color-button-tertiary: var(--button-tertiary);
+    --color-button-tertiary-hover: var(--button-tertiary-hover);
+    --color-button-secondary: var(--button-secondary);
+    --color-button-secondary-hover: var(--button-secondary-hover);
+    --color-delete: var(--delete);
+    --color-delete-hover: var(--delete-hover);
+    --color-warning: var(--warning);
+    --color-link: var(--link);
+    --color-link-hover: var(--link-hover);
+    --color-muted: var(--muted);
+    --color-todo-text: var(--todo-text);
+    --color-todo-notes-bg: var(--todo-notes-bg);
+    --color-highlight-primary: var(--highlight-primary);
+    --color-accent-from: var(--accent-from);
+    --color-accent-to: var(--accent-to);
+    --color-accent-from-hover: var(--accent-from-hover);
+    --color-accent-to-hover: var(--accent-to-hover);
+    --color-primary-heading: var(--primary-heading);
+
+    --animate-rotate-x: rotate-x 0.15s ease-out forwards;
+}
+
 /* Global styles */
 @layer base {
 
     h1,
     h2 {
-        color: var(--color-primary-heading);
+        color: var(--primary-heading);
     }
 
     body {
@@ -20,14 +57,17 @@
         }
 
         a:hover {
-            color: var(--color-link-hover);
+            color: var(--link-hover);
             text-decoration: underline;
         }
 
         #header-title {
             font-weight: bolder;
-            color: var(--color-primary-heading);
             font-size: 1.75rem;
+            background: linear-gradient(to right, #a855f7, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         #header-title:hover {
@@ -106,221 +146,197 @@
         --accent-to-hover: #1d4ed8;
         --primary-heading: #c4b5fd;
     }
+}
 
-    /* Map theme variables to Tailwind's color system */
-    @theme {
-        --color-primary-bg: var(--bg-primary);
-        --color-secondary-bg: var(--bg-secondary);
-        --color-primary-text: var(--text-primary);
-        --color-primary-border: var(--border-primary);
-        --color-form-input: var(--form-input);
-        --color-required: var(--required);
-        --color-on: var(--on);
-        --color-off: var(--off);
-        --color-confirm: var(--confirm);
-        --color-submit-primary: var(--submit-primary);
-        --color-submit-primary-hover: var(--submit-primary-hover);
-        --color-button-primary: var(--button-primary);
-        --color-button-primary-hover: var(--button-primary-hover);
-        --color-button-tertiary: var(--button-tertiary);
-        --color-button-tertiary-hover: var(--button-tertiary-hover);
-        --color-button-secondary: var(--button-secondary);
-        --color-button-secondary-hover: var(--button-secondary-hover);
-        --color-delete: var(--delete);
-        --color-delete-hover: var(--delete-hover);
-        --color-warning: var(--warning);
-        --color-link: var(--link);
-        --color-link-hover: var(--link-hover);
-        --color-muted: var(--muted);
-        --color-todo-text: var(--todo-text);
-        --color-todo-notes-bg: var(--todo-notes-bg);
-        --color-highlight-primary: var(--highlight-primary);
-        --color-accent-from: var(--accent-from);
-        --color-accent-to: var(--accent-to);
-        --color-accent-from-hover: var(--accent-from-hover);
-        --color-accent-to-hover: var(--accent-to-hover);
-        --color-primary-heading: var(--primary-heading);
-
-        --animate-rotate-x: rotate-x 0.15s ease-out forwards;
+/* Other utilities */
+@layer components {
+    .todo-title-input {
+        scrollbar-width: thin;
+        scrollbar-color: var(--highlight-primary) transparent;
     }
 
-    @layer components {
-        .todo-title-input {
-            scrollbar-width: thin;
-            scrollbar-color: var(--highlight-primary) transparent;
-        }
-
-        .todo-title-input::-webkit-scrollbar {
-            height: 3px;
-        }
-
-        .todo-title-input::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .todo-title-input::-webkit-scrollbar-thumb {
-            background-color: var(--highlight-primary);
-            border-radius: 9999px;
-        }
+    .todo-title-input::-webkit-scrollbar {
+        height: 3px;
     }
 
-    /* Custom utilities for animations */
-    @layer utilities {
-        .spacing-ease-in {
-            letter-spacing: 0.2em;
-            animation: spacing-extend 0.15s ease-in forwards;
-        }
-
-        .spacing-ease-out {
-            letter-spacing: normal;
-            animation: spacing-contract 0.15s ease-out forwards;
-        }
-
-        .counttimer-highlight {
-            animation: bg-in-out 0.8s ease-in-out forwards;
-        }
-
-        .hint-arrow {
-            animation: bounce-down 1.2s ease-in-out infinite;
-        }
-
-        .timer-warning-pulse {
-            animation: timer-warning-pulse 0.8s ease-in-out;
-        }
-
-        .title-tap {
-            animation: title-tap 0.5s ease-in-out;
-        }
-
-        .todo-enter {
-            animation: todo-enter 0.25s ease-out;
-        }
-
-        .todo-confirm {
-            animation: todo-confirm 0.25s ease-out forwards;
-        }
-
-        .todo-exit {
-            animation: todo-exit 0.3s ease-in forwards;
-        }
+    .todo-title-input::-webkit-scrollbar-track {
+        background: transparent;
     }
 
-    /* Keyframes */
-    @keyframes spacing-extend {
-        0% {
-            letter-spacing: normal;
-        }
+    .todo-title-input::-webkit-scrollbar-thumb {
+        background-color: var(--highlight-primary);
+        border-radius: 9999px;
+    }
+}
 
-        100% {
-            letter-spacing: 0.2em;
-        }
+/* Animation utilities */
+@layer utilities {
+    .spacing-ease-in {
+        letter-spacing: 0.2em;
+        animation: spacing-extend 0.15s ease-in forwards;
     }
 
-    @keyframes spacing-contract {
-        0% {
-            letter-spacing: 0.2em;
-        }
-
-        100% {
-            letter-spacing: normal;
-        }
+    .spacing-ease-out {
+        letter-spacing: normal;
+        animation: spacing-contract 0.15s ease-out forwards;
     }
 
-    @keyframes bg-in-out {
-        0% {
-            background-color: transparent;
-        }
-
-        50% {
-            background-color: var(--color-highlight-primary);
-        }
-
-        100% {
-            background-color: transparent;
-        }
+    .counttimer-highlight {
+        animation: bg-in-out 0.8s ease-in-out forwards;
     }
 
-    @keyframes todo-confirm {
-
-        0%,
-        40% {
-            background-color: var(--on);
-        }
-
-        100% {
-            background-color: var(--bg-secondary);
-        }
+    .hint-arrow {
+        animation: bounce-down 1.2s ease-in-out infinite;
     }
 
-    @keyframes bounce-down {
-
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(6px);
-        }
+    .timer-warning-pulse {
+        animation: timer-warning-pulse 0.8s ease-in-out;
     }
 
-    @keyframes timer-warning-pulse {
-
-        0%,
-        100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.3;
-        }
+    .title-tap {
+        animation: title-tap 0.5s ease-in-out;
     }
 
-    @keyframes title-tap {
-        0% {
-            letter-spacing: normal;
-        }
-
-        50% {
-            letter-spacing: 0.15em;
-        }
-
-        100% {
-            letter-spacing: normal;
-        }
+    .todo-enter {
+        animation: todo-enter 0.25s ease-out;
     }
 
-    @keyframes rotate-x {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(90deg);
-        }
+    .todo-confirm {
+        animation: todo-confirm 0.25s ease-out forwards;
     }
 
-    @keyframes todo-enter {
-        from {
-            opacity: 0;
-            transform: translateY(6px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .todo-exit {
+        animation: todo-exit 0.3s ease-in forwards;
     }
 
-    @keyframes todo-exit {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .timer-dimming {
+        opacity: 0.3;
+        transition: opacity 1.0s ease, color 1.0s ease;
+    }
 
-        to {
-            opacity: 0;
-            transform: translateY(-6px);
-        }
+    .timer-revealing {
+        opacity: 1;
+        transition: opacity 0.3s ease, color 0.3s ease;
+    }
+
+}
+
+
+/* Keyframes */
+@keyframes spacing-extend {
+    0% {
+        letter-spacing: normal;
+    }
+
+    100% {
+        letter-spacing: 0.2em;
+    }
+}
+
+@keyframes spacing-contract {
+    0% {
+        letter-spacing: 0.2em;
+    }
+
+    100% {
+        letter-spacing: normal;
+    }
+}
+
+@keyframes bg-in-out {
+    0% {
+        background-color: transparent;
+    }
+
+    50% {
+        background-color: var(--color-highlight-primary);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@keyframes todo-confirm {
+
+    0%,
+    40% {
+        background-color: var(--on);
+    }
+
+    100% {
+        background-color: var(--bg-secondary);
+    }
+}
+
+@keyframes bounce-down {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+@keyframes timer-warning-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes title-tap {
+    0% {
+        letter-spacing: normal;
+    }
+
+    50% {
+        letter-spacing: 0.15em;
+    }
+
+    100% {
+        letter-spacing: normal;
+    }
+}
+
+@keyframes rotate-x {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes todo-enter {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes todo-exit {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-6px);
     }
 }
