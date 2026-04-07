@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.8.2
+
+### Features
+- Timer dims (fades to muted color, 30% opacity) after the activation/deactivation highlight animation ends — applies regardless of warning state
+- Timer is revealed on mouse hover or touch tap (toggle), and re-dims on mouse leave
+- During warning pulse, dim is suppressed so the red warning color shows through
+- Invisible hit area div wraps the timer for easier hover/touch interaction
+
+### Improvements
+- Header title changed from solid purple to a purple → indigo gradient
+- Confirmation flash now scoped to the title input container only (not the whole todo row), color changed to purple
+- Home page max-width narrowed one step at `md` and `lg` breakpoints; `sm` uses full width
+- `App.css` restructured: `@theme`, `@layer components`, `@layer utilities`, and `@keyframes` are now top-level instead of nested inside `@layer base`
+- `Counter` refactored to call `onTick` directly in the interval callback instead of inside a `setCurrentTime` updater, preventing potential double-invocation in strict/concurrent mode
+
+
 ## v0.8.1
 
 ### Features
