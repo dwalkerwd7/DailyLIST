@@ -293,7 +293,7 @@ export default function TodoApp() {
     const completedCount = todos.filter(t => t.completed).length;
     const allComplete = todos.length > 0 && completedCount === todos.length;
     const timerRevealed = isTimerHovered || isTimerTouchRevealed;
-    const timerDimActive = isDimmed && !timerRevealed && !isPulsing;
+    const timerDimActive = isDimmed && !timerRevealed && !isPulsing && !counterHandle.current?.isRunning();
 
     return (
         <div className="flex flex-col items-center gap-3 w-full px-4 sm:px-0">

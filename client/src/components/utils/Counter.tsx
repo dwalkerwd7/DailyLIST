@@ -6,6 +6,7 @@ type CounterHandle = {
     stopTimer: () => void;
     setTime: (time: number) => void;
     getTime: () => number;
+    isRunning: () => boolean;
 };
 
 type CounterProps = {
@@ -83,7 +84,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
         stopTimer,
         setTime: (time) => { currentTimeRef.current = time; setCurrentTime(time); },
         getTime: () => currentTimeRef.current,
-
+        isRunning: () => active
     }));
 
     return (
