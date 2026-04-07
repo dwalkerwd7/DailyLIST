@@ -7,11 +7,8 @@ import fs from 'fs'
 
 const app = express()
 const PORT = process.env.PORT!
-const DEV_MODE = process.env.NODE_ENV !== 'production'
-const BASE_PATH = process.env.BASE_PATH! || '/'
-
-// matching public dir path on server if in production mode
-let PUBLIC_PATH = path.join(__dirname, '../public/')
+//const DEV_MODE = process.env.NODE_ENV !== 'production'
+const PUBLIC_PATH = path.join(__dirname, '../public/')
 
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
@@ -33,7 +30,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 /* Serve public dir at base path */
-app.use(BASE_PATH, express.static(PUBLIC_PATH))
+app.use('/', express.static(PUBLIC_PATH))
 
 /* Utility functions */
 const initialize = () => {
@@ -54,16 +51,6 @@ const getSubmittedIPs = (): string[] => {
 
 /* Run on every startup */
 initialize()
-
-/* Middleware to strip base path from api calls. My portfolio server does this automatically, so only need this for dev mode. */
-if (DEV_MODE) {
-    app.use((req, _res, next) => {
-        if (req.url.startsWith(`${BASE_PATH}/api/`)) {
-            req.url = req.url.slice(BASE_PATH.length) || '/'
-        }
-        next()
-    })
-}
 
 /* Todo APIs */
 app.post('/api/todos', (req, res) => {
