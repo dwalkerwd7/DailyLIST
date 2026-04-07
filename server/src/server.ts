@@ -7,30 +7,12 @@ import fs from 'fs'
 
 const app = express()
 const PORT = process.env.PORT!
-//const DEV_MODE = process.env.NODE_ENV !== 'production'
 const PUBLIC_PATH = path.join(__dirname, '../public/')
-
 const COOKIE_NAME = "dailylist_todos"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!)
 const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
 const FEEDBACK_CONTENT_PATH = path.join(LOG_DIR, 'feedback_content.log')
-
-/* Security middleware because tailwind styles are inline */
-app.use(helmet.contentSecurityPolicy({
-    directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
-    }
-}))
-
-app.use(express.json())
-app.use(cookieParser())
-
-/* Serve public dir at base path */
-app.use('/', express.static(PUBLIC_PATH))
 
 /* Utility functions */
 const initialize = () => {
@@ -51,6 +33,20 @@ const getSubmittedIPs = (): string[] => {
 
 /* Run on every startup */
 initialize()
+
+/* Security middleware because tailwind styles are inline */
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:"],
+    }
+}))
+
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.static(PUBLIC_PATH))
 
 /* Todo APIs */
 app.post('/api/todos', (req, res) => {
