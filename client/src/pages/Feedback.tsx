@@ -84,7 +84,7 @@ export default function Feedback() {
 
     return (
         <main className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-4xl font-bold mb-4 text-primary-text">We'd love to hear from you!</h1>
+            <h1 className="text-4xl font-bold mb-4">We'd love to hear from you!</h1>
             <p className="text-lg text-primary-text mb-8">Your feedback helps us improve DailyLIST. Please share your thoughts, suggestions, or report any issues you encounter.</p>
             <PageAlert
                 {...alertMessage}
