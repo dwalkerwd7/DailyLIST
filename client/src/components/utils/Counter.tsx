@@ -85,7 +85,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
         setTime: (time) => { currentTimeRef.current = time; setCurrentTime(time); },
         getTime: () => currentTimeRef.current,
         isRunning: () => active
-    }));
+    }), [active]);
 
     return (
         <span id="counttimer-bg" className="inline-flex items-center justify-center rounded-md w-max h-max p-1">
