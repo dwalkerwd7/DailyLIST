@@ -2,12 +2,12 @@ export default function About() {
     return (
         <main className="mx-auto max-w-4xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
             <div className="space-y-10">
-                <h1 className="text-4xl font-bold text-primary-text text-center">
+                <h1 className="text-4xl font-bold text-center">
                     About DailyLIST
                 </h1>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-primary-text">The App</h2>
+                    <h2 className="text-2xl font-semibold">The App</h2>
                     <div className="space-y-3 text-primary-text">
                         <p>
                             DailyLIST is a minimal todo app built around one idea: your list
@@ -29,7 +29,7 @@ export default function About() {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-primary-text">The Stack</h2>
+                    <h2 className="text-2xl font-semibold">The Stack</h2>
                     <ul className="list-disc list-inside space-y-1 text-primary-text">
                         <li>React + TypeScript (client)</li>
                         <li>Tailwind CSS v4</li>
@@ -40,7 +40,7 @@ export default function About() {
                 </section>
 
                 <section className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-primary-text">The Developer</h2>
+                    <h2 className="text-2xl font-semibold">The Developer</h2>
                     <div className="space-y-3 text-primary-text">
                         <p>
                             Built by <strong>Derek Walker</strong>, a full-stack JavaScript

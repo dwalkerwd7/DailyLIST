@@ -65,12 +65,10 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
             onAnimationEnd={(e) => {
                 if (isRemoving) onRemoveComplete?.();
                 if (e.animationName === "todo-enter") setHasEntered(true);
-                if (e.animationName === "todo-confirm") setFlashing(false);
             }}
             className={`
-                flex flex-row flex-wrap items-center justify-between py-2 px-2 block w-full mb-2 rounded
+                flex flex-row flex-wrap items-center justify-between py-2 px-2 w-full mb-2 rounded
                 ${active ? (isDragging ? "border-button-primary bg-button-tertiary border-dashed border-2" : "border-primary-border border-dashed border-2") : "border border-primary-border"}
-                ${flashing ? "todo-confirm" : ""}
                 ${isRemoving ? "todo-exit" : (hasEntered ? "" : "todo-enter")}
             `}
         >
@@ -98,7 +96,15 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                     {expanded ? <Minus size={16} /> : <Plus size={16} />}
                 </button>
             </div>
-            <div className={`flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:bg-form-input ${flashing ? "bg-transparent" : "bg-secondary-bg"}`}>
+            <div
+                className={`
+                    flex-1 self-stretch flex items-center mx-1 px-1 rounded focus-within:bg-form-input bg-secondary-bg
+                    ${flashing ? "todo-confirm" : ""}
+                `}
+                onAnimationEnd={(e) => {
+                    if (e.animationName === "todo-confirm") setFlashing(false);
+                }}
+            >
                 <textarea
                     className={
                         `${completed ? "line-through text-muted" : "text-todo-text"}
@@ -127,7 +133,7 @@ export default function TodoItem({ todo, isRemoving = false, onRemoveComplete, o
                 <input
                     type="checkbox"
                     checked={completed}
-                    className="w-5 h-5 accent-[var(--highlight-primary)]"
+                    className="w-5 h-5 accent-[--highlight-primary]"
                     onChange={() => {
                         onToggleComplete(id);
                     }}
