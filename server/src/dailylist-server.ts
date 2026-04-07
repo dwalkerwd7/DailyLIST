@@ -123,6 +123,11 @@ app.post('/api/feedback', (req, res) => {
     return res.json({ ok: true })
 })
 
+/* Portfolio microservice contract */
+app.get('/api/render', (_req, res) => {
+    res.sendFile(path.join(PUBLIC_PATH, 'index.html'))
+})
+
 /* SPA fallback */
 app.get(`{*splat}`, (_req, res) => {
     res.sendFile(path.join(PUBLIC_PATH, 'index.html'))
