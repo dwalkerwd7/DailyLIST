@@ -34,24 +34,26 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
     const [active, setActive] = useState(false);
 
     const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+    const currentTimeRef = useRef(startTime);
+
 
     useEffect(() => {
-        if(active) {
-            if (currentTime === -1) {
+        if (active) {
+            if (currentTimeRef.current === -1) {
+                currentTimeRef.current = startTime;
                 setCurrentTime(startTime);
             }
             intervalRef.current = setInterval(() => {
-                setCurrentTime((prev) => {
-                    const next = prev !== endTime ? prev + step : prev;
-                    onTick?.(next);
-                    return next;
-                });
+                const next = currentTimeRef.current !== endTime ? currentTimeRef.current + step : currentTimeRef.current;
+                currentTimeRef.current = next;
+                setCurrentTime(next);
+                onTick?.(next);
             }, Math.abs(step));
         } else {
             clearInterval(intervalRef.current);
         }
 
-        if(intervalRef.current && indicateStartStop) {
+        if (intervalRef.current && indicateStartStop) {
             const el = document.getElementById("counttimer-bg");
             if (el && indicateStartStopClass.length > 0) {
                 el.classList.remove(indicateStartStopClass);
@@ -71,6 +73,7 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
 
     const stopTimer = () => {
         setActive(false);
+        currentTimeRef.current = -1;
         setCurrentTime(-1);
     };
 
@@ -78,8 +81,8 @@ const Counter = forwardRef<CounterHandle, CounterProps>(({
         startTimer,
         pauseTimer,
         stopTimer,
-        setTime: (time) => setCurrentTime(time),
-        getTime: () => currentTime,
+        setTime: (time) => { currentTimeRef.current = time; setCurrentTime(time); },
+        getTime: () => currentTimeRef.current,
 
     }));
 
