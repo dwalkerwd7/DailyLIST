@@ -8,8 +8,8 @@
     "build-client:dev": "cd ../client && npm run build:dev",
     "dev": "npm run build-client:dev && nodemon --exec ts-node src/server.ts",
     "build": "npm run build-client && tsc --outDir dist/",
-    "permissions": "chmod +x node_modules/.bin/varlock && chmod +x node_modules/.bin/tsc",
-    "start": "npm run build && npm run permissions && varlock run -- node dist/server.js"
+    "permissions": "chmod +x node_modules/.bin/tsc",
+    "start": "npm run build && node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,7 @@
     "cookie-parser": "^1.4.7",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
-    "varlock": "^0.6.2"
+    "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
