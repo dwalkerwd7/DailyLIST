@@ -31,8 +31,8 @@ const getSubmittedIPs = (): string[] => {
     return fs.readFileSync(FEEDBACK_IPS_PATH, 'utf-8').split('\n').filter(Boolean)
 }
 
-/* Run on every startup */
-initialize()
+/* Run on every startup unless in production container */
+if (process.env.NODE_ENV !== "production") initialize()
 
 /* Security middleware because tailwind styles are inline */
 app.use(helmet.contentSecurityPolicy({
