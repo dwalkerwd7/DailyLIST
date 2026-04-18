@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import express from 'express'
-import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import path from 'path'
 import fs from 'fs'
@@ -33,16 +32,6 @@ const getSubmittedIPs = (): string[] => {
 
 /* Run on every startup unless in production container */
 if (process.env.NODE_ENV !== "production") initialize()
-
-/* Security middleware because tailwind styles are inline */
-app.use(helmet.contentSecurityPolicy({
-    directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:"],
-    }
-}))
 
 app.use(express.json())
 app.use(cookieParser())
