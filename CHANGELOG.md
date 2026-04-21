@@ -1,5 +1,20 @@
 # Changelog
 
+## v0.9.0
+
+### Features
+- Achievement toasts — short-lived notifications that appear on the controls bar when milestones are reached, persisted via cookie so each fires only once per day
+- Achievements: first todo added, first completed, 5 added, 10 added, 5 completed, 10 completed, all completed
+- Web Audio API sounds for todo actions: add, complete, uncomplete, delete
+- Distinct achievement sounds per milestone using scheduled sine-wave arpeggios
+
+### Improvements
+- Achievement definitions extracted to `achievements.ts` with typed `Record<string, Achievement>` shape
+- Sound synthesis isolated in `sounds.ts`; `AudioContext` created lazily on first use to respect browser autoplay policy
+- Achievement milestone checks extracted into `checkAchievements(prev, curr)` function
+- Achievement API endpoints (`GET/POST /api/achievements`) use a plain `string[]` cookie — no `startTime` needed since cookie expiry is the source of truth
+
+
 ## v0.8.2
 
 ### Features
