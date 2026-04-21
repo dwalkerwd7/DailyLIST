@@ -2,7 +2,7 @@
   "name": "DailyLIST - server",
   "version": "0.8.2",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "build-client": "cd ../client && npm run build",
     "build-client:dev": "cd ../client && npm run build:dev",
