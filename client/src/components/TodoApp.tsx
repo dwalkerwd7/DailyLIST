@@ -17,9 +17,11 @@ import {
 } from "@dnd-kit/sortable";
 import ModalAlert from "./utils/alerts/ModalAlert";
 import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
+import AchievementToast from "./utils/AchievementToast";
 import ProgressBar from "./utils/ProgressBar";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import { APIPaths } from "../app-constants";
+import { ACHIEVEMENTS, type Achievement } from "../achievements";
 import TodoItem, {
     type Todo,
     type ToggleCompleteHandler,
@@ -40,12 +42,17 @@ export default function TodoApp() {
     const [isTimerHovered, setIsTimerHovered] = useState(false);
     const [isTimerTouchRevealed, setIsTimerTouchRevealed] = useState(false);
 
+    const [toastQueue, setToastQueue] = useState<(Achievement & { id: string })[]>([]);
+
     const counterHandle = useRef<CounterHandle>(null);
     const expiresAtRef = useRef<number | null>(null);
     const hasLoaded = useRef(false);
     const isWarningRef = useRef(false);
     const lastWarningMinuteRef = useRef(-1);
     const timerTouchRef = useRef(false);
+    const firedAchievementsRef = useRef<Set<string>>(new Set());
+    const achievementsLoadedRef = useRef(false);
+    const prevTodosRef = useRef<Todo[]>([]);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -89,6 +96,51 @@ export default function TodoApp() {
         }
     };
 
+    const checkAchievements = (prev: Todo[], curr: Todo[]) => {
+        const fired = firedAchievementsRef.current;
+        const prevCompleted = prev.filter(t => t.completed).length;
+        const currCompleted = curr.filter(t => t.completed).length;
+        const prevAllComplete = prev.length > 0 && prev.every(t => t.completed);
+        const currAllComplete = curr.length > 0 && curr.every(t => t.completed);
+
+        if (!fired.has("first_todo_added") && prev.length === 0 && curr.length >= 1)
+            queueAchievement("first_todo_added");
+        if (!fired.has("ten_added") && prev.length < 10 && curr.length >= 10)
+            queueAchievement("ten_added");
+        if (!fired.has("first_completed") && prevCompleted === 0 && currCompleted >= 1)
+            queueAchievement("first_completed");
+        if (!fired.has("five_completed") && prevCompleted < 5 && currCompleted >= 5)
+            queueAchievement("five_completed");
+        if (!fired.has("all_completed") && !prevAllComplete && currAllComplete)
+            queueAchievement("all_completed");
+    };
+
+    const queueAchievement = (id: string) => {
+        const achievement = ACHIEVEMENTS[id];
+        if (!achievement) return;
+        firedAchievementsRef.current.add(id);
+        setToastQueue(prev => [...prev, { id, ...achievement }]);
+        void fetch(APIPaths.achievements, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id }),
+        });
+    };
+
+    const loadAchievements = async () => {
+        try {
+            const response = await fetch(APIPaths.achievements);
+            if (response.ok) {
+                const data = await response.json();
+                firedAchievementsRef.current = new Set(data.fired);
+            }
+        } catch (err) {
+            console.error("Error fetching achievements:", err);
+        } finally {
+            achievementsLoadedRef.current = true;
+        }
+    };
+
     const loadTodos = async () => {
         try {
             const response = await fetch(APIPaths.todos);
@@ -129,6 +181,7 @@ export default function TodoApp() {
 
     useEffect(() => {
         void loadTodos();
+        void loadAchievements();
     }, []);
 
     useEffect(() => {
@@ -164,6 +217,8 @@ export default function TodoApp() {
         }
 
         if (hasLoaded.current) {
+            if (achievementsLoadedRef.current) checkAchievements(prevTodosRef.current, todos);
+            prevTodosRef.current = todos;
             void saveTodos(todos);
         }
     }, [todos]);
@@ -291,6 +346,8 @@ export default function TodoApp() {
         return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
     };
 
+    const dismissToast = () => setToastQueue(prev => prev.slice(1));
+
     const completedCount = todos.filter(t => t.completed).length;
     const allComplete = todos.length > 0 && completedCount === todos.length;
     const timerRevealed = isTimerHovered || isTimerTouchRevealed;
@@ -323,7 +380,7 @@ export default function TodoApp() {
                     />
                 </span>
             </div>
-            <div className="flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
+            <div className="relative flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded
                     ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
@@ -334,6 +391,14 @@ export default function TodoApp() {
                 <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
                     Reset List
                 </button>
+                {toastQueue.length > 0 && (
+                    <AchievementToast
+                        key={toastQueue[0].id}
+                        message={toastQueue[0].message}
+                        Icon={toastQueue[0].Icon}
+                        onDismiss={dismissToast}
+                    />
+                )}
             </div>
             {todos.length > 0 && (
                 <ProgressBar value={completedCount} max={todos.length} />
