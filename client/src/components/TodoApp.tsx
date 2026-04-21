@@ -22,6 +22,7 @@ import ProgressBar from "./utils/ProgressBar";
 import Counter, { type CounterHandle } from "./utils/Counter";
 import { APIPaths } from "../app-constants";
 import { ACHIEVEMENTS, type Achievement } from "../achievements";
+import { playAchievementSound, playTodoAdded, playTodoCompleted, playTodoUncompleted, playTodoDeleted } from "../sounds";
 import TodoItem, {
     type Todo,
     type ToggleCompleteHandler,
@@ -105,12 +106,16 @@ export default function TodoApp() {
 
         if (!fired.has("first_todo_added") && prev.length === 0 && curr.length >= 1)
             queueAchievement("first_todo_added");
+        if (!fired.has("five_added") && prev.length < 5 && curr.length >= 5)
+            queueAchievement("five_added");
         if (!fired.has("ten_added") && prev.length < 10 && curr.length >= 10)
             queueAchievement("ten_added");
         if (!fired.has("first_completed") && prevCompleted === 0 && currCompleted >= 1)
             queueAchievement("first_completed");
         if (!fired.has("five_completed") && prevCompleted < 5 && currCompleted >= 5)
             queueAchievement("five_completed");
+        if (!fired.has("ten_completed") && prevCompleted < 10 && currCompleted >= 10)
+            queueAchievement("ten_completed");
         if (!fired.has("all_completed") && !prevAllComplete && currAllComplete)
             queueAchievement("all_completed");
     };
@@ -120,6 +125,7 @@ export default function TodoApp() {
         if (!achievement) return;
         firedAchievementsRef.current.add(id);
         setToastQueue(prev => [...prev, { id, ...achievement }]);
+        playAchievementSound(id);
         void fetch(APIPaths.achievements, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -236,6 +242,7 @@ export default function TodoApp() {
             return;
         }
 
+        playTodoAdded();
         setTodos((prev) => {
             if (prev.length === 0) {
                 startTimerAnew();
@@ -251,6 +258,8 @@ export default function TodoApp() {
     };
 
     const handleToggleComplete: ToggleCompleteHandler = (id: number) => {
+        const todo = todos.find(t => t.id === id);
+        if (todo) todo.completed ? playTodoUncompleted() : playTodoCompleted();
         const newTodos = todos.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
         setTodos(newTodos);
     };
@@ -285,6 +294,7 @@ export default function TodoApp() {
 
     const handleDeleteTodo: DeleteHandler = (id: number) => {
         openModalAlert(setModalAlertProps, "warning", "Delete Todo", "Are you sure you want to delete this todo?", "Delete", () => {
+            playTodoDeleted();
             setModalAlertProps(null);
             setAllExpanded(false);
             setRemovingIds((prev) => new Set(prev).add(id));
