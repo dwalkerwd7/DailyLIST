@@ -1,6 +1,6 @@
 # DailyLIST
 
-A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no unnecessary features, just a clean way to track your daily tasks.
+A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no accounts, no sync, no backlog. Just what matters today. It is an experiment in minimizing the usability gap with user-centered design.
 
 You can view this app in all its glory at `derekwalker.tech/dailylist`
 
@@ -9,7 +9,12 @@ You can view this app in all its glory at `derekwalker.tech/dailylist`
 - **Daily Reset** — Your list automatically resets every 24 hours, encouraging a fresh start each day
 - **Simple Todo Management** — Create, check off, and delete todos with minimal friction
 - **Optional Notes** — Add brief notes to any todo for extra context
+- **Drag-and-Drop Reordering** — Rearrange todos in any order you like
+- **Progress Bar** — Visual indicator of how many todos you've completed
+- **Achievements** — Milestone-based achievements with toast notifications and sound effects
+- **Sound Effects** — Subtle audio feedback for todo actions
 - **Clean UI** — Focused design with light and dark theme support
+- **Cookie-based Persistence** — No accounts or database; state is stored in HTTPOnly cookies
 
 ## Tech Stack
 
@@ -59,8 +64,8 @@ Variables are managed by [Varlock](https://varlock.dev). The `package.json` scri
 Varlock is indeed overkill right now, but it was implemented for possible future usage.
 
 ## Future Development
-In the near future, I will modernize my portfolio server by transitioning to a microservices architecture which will make DailyLIST a more accessible project to use out of the box.
+My portfolio has been modernized to a microservices architecture. Technically, this can be containerized and deployed on a server with docker compose.
 
 ## Contributing
 
-Feel free to fork and submit pull requests. This is a basic project, so it's a great opportunity to contribute to open source software!
+Any and all constructive, and contributive PR's will most likely be accepted. Go ahead, make this app better!
