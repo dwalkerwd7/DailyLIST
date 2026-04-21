@@ -8,6 +8,7 @@ const app = express()
 const PORT = process.env.PORT!
 const PUBLIC_PATH = path.join(__dirname, '../public/')
 const COOKIE_NAME = "dailylist_todos"
+const ACHIEVEMENTS_COOKIE = "dailylist_achievements"
 const COOKIE_LIFETIME = 24 * 60 * 60 * 1000
 const LOG_DIR = path.join(__dirname, process.env.LOG_PATH!)
 const FEEDBACK_IPS_PATH = path.join(LOG_DIR, 'feedback_ips.log')
@@ -74,6 +75,28 @@ app.get('/api/todos', (req, res) => {
     } else {
         return res.json({ todos, expiresAt: startTime + COOKIE_LIFETIME })
     }
+})
+
+/* Achievement APIs */
+app.get('/api/achievements', (req, res) => {
+    const cookie = req.cookies[ACHIEVEMENTS_COOKIE]
+    const fired: string[] = cookie ? JSON.parse(cookie) : []
+    return res.json({ fired })
+})
+
+app.post('/api/achievements', (req, res) => {
+    const { id } = req.body
+    const existing: string[] = req.cookies[ACHIEVEMENTS_COOKIE] ? JSON.parse(req.cookies[ACHIEVEMENTS_COOKIE]) : []
+    const fired = Array.from(new Set([...existing, id]))
+
+    res.cookie(ACHIEVEMENTS_COOKIE, JSON.stringify(fired), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: COOKIE_LIFETIME
+    })
+
+    return res.json({ ok: true })
 })
 
 /* Feedback APIs */
