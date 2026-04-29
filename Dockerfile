@@ -21,12 +21,11 @@ WORKDIR /app
 COPY --from=build /app/server/package*.json ./
 RUN npm ci --omit=dev
 
-COPY --from=build /app/server/dist/ ./dist/
-COPY --from=build /app/server/public/ ./public/
+COPY --from=build --chown=node:node /app/server/dist/ ./dist/
+COPY --from=build --chown=node:node /app/server/public/ ./public/
 
 ENV NODE_ENV=production
 
-RUN chown -R node:node /app
 USER node
 
 EXPOSE 3001
