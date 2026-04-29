@@ -26,6 +26,9 @@ COPY --from=build /app/server/public/ ./public/
 
 ENV NODE_ENV=production
 
+RUN chown -R node:node /app
+USER node
+
 EXPOSE 3001
 
 CMD ["node", "dist/server.js"]
