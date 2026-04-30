@@ -129,5 +129,5 @@ app.get(`{*splat}`, (_req, res) => {
 
 /* Start the server */
 app.listen(PORT, () => {
-    console.log(`DailyLIST server running on port ${PORT}`)
+    console.log(`DailyLIST server running on ${PORT}`)
 })
