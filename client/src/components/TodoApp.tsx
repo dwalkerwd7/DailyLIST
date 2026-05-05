@@ -17,7 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import ModalAlert from "./utils/alerts/ModalAlert";
 import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
-import AchievementToast from "./utils/AchievementToast";
+import ControlsBar from "./ControlsBar";
 import ProgressBar from "./utils/ProgressBar";
 import { type CounterHandle } from "./utils/Counter";
 import TimerDisplay from "./TimerDisplay";
@@ -378,26 +378,13 @@ export default function TodoApp() {
                 formatString={timeLeftFormatString}
                 onTick={handleCounterTick}
             />
-            <div className="relative flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
-                <button className={`
-                    h-9 px-4 text-sm text-todo-text rounded
-                    ${allExpanded ? "bg-button-secondary hover:bg-button-secondary-hover" : "bg-button-tertiary hover:bg-button-tertiary-hover"}
-                `} onClick={handleToggleExpandAll}
-                >
-                    {allExpanded ? "Collapse All" : "Expand All"}
-                </button>
-                <button className="h-9 px-4 text-sm bg-delete hover:bg-delete-hover text-white rounded" onClick={handleResetList}>
-                    Reset List
-                </button>
-                {toastQueue.length > 0 && (
-                    <AchievementToast
-                        key={toastQueue[0].id}
-                        message={toastQueue[0].message}
-                        Icon={toastQueue[0].Icon}
-                        onDismiss={dismissToast}
-                    />
-                )}
-            </div>
+            <ControlsBar
+                allExpanded={allExpanded}
+                toastQueue={toastQueue}
+                onToggleExpandAll={handleToggleExpandAll}
+                onResetList={handleResetList}
+                onDismissToast={dismissToast}
+            />
             {todos.length > 0 && (
                 <ProgressBar value={completedCount} max={todos.length} />
             )}
