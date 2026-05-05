@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import ModalAlert from "./utils/alerts/ModalAlert";
 import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
 import ControlsBar from "./ControlsBar";
-import { type CounterHandle } from "./utils/Counter";
 import TimerDisplay from "./TimerDisplay";
+import useTimer from "../hooks/useTimer";
 import TodoList, { arrayMove, type DragEndEvent } from "./TodoList";
 import AddTodoButton from "./AddTodoButton";
 import { APIPaths } from "../app-constants";
@@ -23,54 +23,19 @@ export default function TodoApp() {
   const [removingIds, setRemovingIds] = useState<Set<number>>(new Set());
   const [allExpanded, setAllExpanded] = useState(false);
   const [modalAlertProps, setModalAlertProps] = useState<ModalAlertState>(null);
-  const [isWarning, setIsWarning] = useState(false);
-  const [isPulsing, setIsPulsing] = useState(false);
-  const [isDimmed, setIsDimmed] = useState(false);
-  const [isTimerHovered, setIsTimerHovered] = useState(false);
-  const [isTimerTouchRevealed, setIsTimerTouchRevealed] = useState(false);
-
   const { toastQueue, achievementsLoadedRef, loadAchievements, checkAchievements, dismissToast } = useAchievements();
+  const {
+    counterHandle, timerTouchRef,
+    isWarning, isPulsing, isDimmed, isTimerHovered, isTimerTouchRevealed,
+    setIsTimerHovered, setIsTimerTouchRevealed,
+    handleCounterTick, timeLeftFormatString,
+    startTimerAnew, initializeTimer, resetTimerState, pauseTimer, resumeIfActive,
+  } = useTimer();
 
-  const counterHandle = useRef<CounterHandle>(null);
-  const expiresAtRef = useRef<number | null>(null);
   const hasLoaded = useRef(false);
-  const isWarningRef = useRef(false);
-  const lastWarningMinuteRef = useRef(-1);
-  const timerTouchRef = useRef(false);
   const prevTodosRef = useRef<Todo[]>([]);
 
-  const generateNewTodoID = () => {
-    return Math.floor(Math.random() * 9000) + 1000;
-  };
-
-  const startTimerAnew = () => {
-    const MAX_TODO_LIFETIME = 24 * 60 * 60 * 1000;
-    expiresAtRef.current = Date.now() + MAX_TODO_LIFETIME;
-    counterHandle.current?.setTime(MAX_TODO_LIFETIME);
-    counterHandle.current?.startTimer();
-  };
-
-  const handleCounterTick = (currentTime: number) => {
-    const timeLeft = expiresAtRef.current ? expiresAtRef.current - Date.now() : currentTime;
-    const warning = timeLeft > 0 && timeLeft <= 30 * 60 * 1000;
-
-    if (warning !== isWarningRef.current) {
-      isWarningRef.current = warning;
-      setIsWarning(warning);
-      if (!warning) {
-        lastWarningMinuteRef.current = -1;
-      }
-    }
-
-    if (warning) {
-      const currentMinute = Math.floor(timeLeft / 60000);
-      if (currentMinute !== lastWarningMinuteRef.current) {
-        lastWarningMinuteRef.current = currentMinute;
-        setIsPulsing(true);
-        setTimeout(() => setIsPulsing(false), 800);
-      }
-    }
-  };
+  const generateNewTodoID = () => Math.floor(Math.random() * 9000) + 1000;
 
   const loadTodos = async () => {
     try {
@@ -79,11 +44,7 @@ export default function TodoApp() {
         const data = await response.json();
         setTodos(data.todos);
 
-        if (data.expiresAt) {
-          expiresAtRef.current = data.expiresAt;
-          counterHandle.current?.setTime(data.expiresAt - Date.now());
-          counterHandle.current?.startTimer();
-        }
+        if (data.expiresAt) initializeTimer(data.expiresAt);
       }
     } catch (err) {
       console.error("Error fetching todos:", err);
@@ -115,36 +76,11 @@ export default function TodoApp() {
     void loadAchievements();
   }, []);
   useEffect(() => {
-    const el = document.getElementById("counttimer-bg");
-    if (!el) return;
-    const handler = (e: AnimationEvent) => {
-      if (e.animationName === "bg-in-out") {
-        setIsDimmed(true);
-        setIsTimerTouchRevealed(false);
-      }
-    };
-    el.addEventListener("animationend", handler);
-    return () => el.removeEventListener("animationend", handler);
-  }, []);
-
-
-  useEffect(() => {
     const allComplete = todos.length > 0 && todos.every(t => t.completed);
 
-    if (todos.length === 0) {
-      expiresAtRef.current = null;
-      counterHandle.current?.stopTimer();
-      setIsWarning(false);
-      setIsPulsing(false);
-      setIsDimmed(false);
-      setIsTimerTouchRevealed(false);
-      isWarningRef.current = false;
-      lastWarningMinuteRef.current = -1;
-    } else if (allComplete) {
-      counterHandle.current?.pauseTimer();
-    } else if (expiresAtRef.current) {
-      counterHandle.current?.startTimer();
-    }
+    if (todos.length === 0) resetTimerState();
+    else if (allComplete) pauseTimer();
+    else resumeIfActive();
 
     if (hasLoaded.current) {
       if (achievementsLoadedRef.current) checkAchievements(prevTodosRef.current, todos);
@@ -266,20 +202,6 @@ export default function TodoApp() {
       setAllExpanded(false);
       setModalAlertProps(null);
     });
-  };
-
-  const timeLeftFormatString = (_ms: number) => {
-    const ms = expiresAtRef.current ? expiresAtRef.current - Date.now() : _ms;
-    const seconds = Math.floor(ms / 1000);
-
-    if (seconds < 0) {
-      return "24:00:00";
-    }
-
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
   const completedCount = todos.filter(t => t.completed).length;
