@@ -7,8 +7,8 @@ import TimerDisplay from "./TimerDisplay";
 import TodoList, { arrayMove, type DragEndEvent } from "./TodoList";
 import AddTodoButton from "./AddTodoButton";
 import { APIPaths } from "../app-constants";
-import { ACHIEVEMENTS, type Achievement } from "../achievements";
-import { playAchievementSound, playTodoAdded, playTodoCompleted, playTodoUncompleted, playTodoDeleted } from "../sounds";
+import { playTodoAdded, playTodoCompleted, playTodoUncompleted, playTodoDeleted } from "../sounds";
+import useAchievements from "../hooks/useAchievements";
 import {
   type Todo,
   type ToggleCompleteHandler,
@@ -29,7 +29,7 @@ export default function TodoApp() {
   const [isTimerHovered, setIsTimerHovered] = useState(false);
   const [isTimerTouchRevealed, setIsTimerTouchRevealed] = useState(false);
 
-  const [toastQueue, setToastQueue] = useState<(Achievement & { id: string })[]>([]);
+  const { toastQueue, achievementsLoadedRef, loadAchievements, checkAchievements, dismissToast } = useAchievements();
 
   const counterHandle = useRef<CounterHandle>(null);
   const expiresAtRef = useRef<number | null>(null);
@@ -37,8 +37,6 @@ export default function TodoApp() {
   const isWarningRef = useRef(false);
   const lastWarningMinuteRef = useRef(-1);
   const timerTouchRef = useRef(false);
-  const firedAchievementsRef = useRef<Set<string>>(new Set());
-  const achievementsLoadedRef = useRef(false);
   const prevTodosRef = useRef<Todo[]>([]);
 
   const generateNewTodoID = () => {
@@ -71,56 +69,6 @@ export default function TodoApp() {
         setIsPulsing(true);
         setTimeout(() => setIsPulsing(false), 800);
       }
-    }
-  };
-
-  const checkAchievements = (prev: Todo[], curr: Todo[]) => {
-    const fired = firedAchievementsRef.current;
-    const prevCompleted = prev.filter(t => t.completed).length;
-    const currCompleted = curr.filter(t => t.completed).length;
-    const prevAllComplete = prev.length > 0 && prev.every(t => t.completed);
-    const currAllComplete = curr.length > 0 && curr.every(t => t.completed);
-
-    if (!fired.has("first_todo_added") && prev.length === 0 && curr.length >= 1)
-      queueAchievement("first_todo_added");
-    if (!fired.has("five_added") && prev.length < 5 && curr.length >= 5)
-      queueAchievement("five_added");
-    if (!fired.has("ten_added") && prev.length < 10 && curr.length >= 10)
-      queueAchievement("ten_added");
-    if (!fired.has("first_completed") && prevCompleted === 0 && currCompleted >= 1)
-      queueAchievement("first_completed");
-    if (!fired.has("five_completed") && prevCompleted < 5 && currCompleted >= 5)
-      queueAchievement("five_completed");
-    if (!fired.has("ten_completed") && prevCompleted < 10 && currCompleted >= 10)
-      queueAchievement("ten_completed");
-    if (!fired.has("all_completed") && !prevAllComplete && currAllComplete)
-      queueAchievement("all_completed");
-  };
-
-  const queueAchievement = (id: string) => {
-    const achievement = ACHIEVEMENTS[id];
-    if (!achievement) return;
-    firedAchievementsRef.current.add(id);
-    setToastQueue(prev => [...prev, { id, ...achievement }]);
-    playAchievementSound(id);
-    void fetch(APIPaths.achievements, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-  };
-
-  const loadAchievements = async () => {
-    try {
-      const response = await fetch(APIPaths.achievements);
-      if (response.ok) {
-        const data = await response.json();
-        firedAchievementsRef.current = new Set(data.fired);
-      }
-    } catch (err) {
-      console.error("Error fetching achievements:", err);
-    } finally {
-      achievementsLoadedRef.current = true;
     }
   };
 
@@ -166,7 +114,6 @@ export default function TodoApp() {
     void loadTodos();
     void loadAchievements();
   }, []);
-
   useEffect(() => {
     const el = document.getElementById("counttimer-bg");
     if (!el) return;
@@ -204,8 +151,7 @@ export default function TodoApp() {
       prevTodosRef.current = todos;
       void saveTodos(todos);
     }
-  }, [todos]); // eslint-disable-line react-hooks/exhaustive-deps
-
+  }, [todos]);
   const handleAddTodo = () => {
     if (todos.length >= 20) {
       openModalAlert(
@@ -335,8 +281,6 @@ export default function TodoApp() {
     const s = seconds % 60;
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
-
-  const dismissToast = () => setToastQueue(prev => prev.slice(1));
 
   const completedCount = todos.filter(t => t.completed).length;
   const allComplete = todos.length > 0 && completedCount === todos.length;
