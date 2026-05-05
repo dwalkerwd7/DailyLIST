@@ -1,8 +1,8 @@
 # DailyLIST
 
-A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no accounts, no sync, no backlog. Just what matters today. It is an experiment in minimizing the usability gap with user-centered design.
+A minimalist daily todo list app that resets every 24 hours. Built with simplicity and usability in mind — no accounts, no sync, no backlog. Just what matters today. It is an experiment in minimizing the usability gap and providing a good user experience with user-centered design.
 
-You can view this app in all its glory at `derekwalker.tech/dailylist`
+You can view this app at `derekwalker.tech/dailylist`
 
 ## Features
 
