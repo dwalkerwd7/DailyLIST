@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.0.0
+
+### Features
+- Dockerfile added for containerized deployment — multi-stage build serving the React client via Express
+
+### Improvements
+- Docker image runs as a non-root user for better security
+- Dockerfile uses inline `chown` to avoid extra image layers
+- Footer size reduced
+- `TodoApp` refactored: `TimerDisplay`, `ControlsBar`, `TodoList`, and `AddTodoButton` extracted as standalone components; DnD sensor setup moved into `TodoList`
+- Logic extracted into three custom hooks: `useAchievements`, `useTimer`, `useTodos`; `TodoApp` reduced to 70 lines
+- `ModalAlert` rewritten to use native React `createPortal` instead of `react-modal`; overlay click and Escape key close the modal
+- ESLint `react-hooks/exhaustive-deps` rule disabled project-wide; glob fixed to cover all subdirectories
+
+
 ## v0.9.0
 
 ### Features

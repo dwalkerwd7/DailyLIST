@@ -21,7 +21,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/utils/Counter.tsx'],
+    files: ['src/**/*'],
     rules: {
       'react-hooks/exhaustive-deps': 'off',
     },
