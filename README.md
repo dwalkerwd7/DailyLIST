@@ -60,12 +60,3 @@ The pathing (`client/.env`, `server/.env.schema` BASE_PATH and `dailylist-server
 ### Environment Variables
 
 Variables are managed by [Varlock](https://varlock.dev). The `package.json` scripts handle loading environment variables automatically — no need to call `npx varlock load` manually.
-
-Varlock is indeed overkill right now, but it was implemented for possible future usage.
-
-## Future Development
-My portfolio has been modernized to a microservices architecture. Technically, this can be containerized and deployed on a server with docker compose.
-
-## Contributing
-
-Any and all constructive, and contributive PR's will most likely be accepted. Go ahead, make this app better!
