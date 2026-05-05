@@ -1,4 +1,4 @@
-FROM node:22-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY server/ ./server/
 RUN cd server && npm run build
 
 
-FROM node:22-alpine AS production
+FROM node:24-alpine AS production
 
 WORKDIR /app
 
@@ -30,4 +30,5 @@ USER node
 
 EXPOSE 3001
 
-CMD ["node", "dist/server.js"]
+ENTRYPOINT ["node"]
+CMD ["dist/server.js"]
