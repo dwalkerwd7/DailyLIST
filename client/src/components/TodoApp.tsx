@@ -19,7 +19,8 @@ import ModalAlert from "./utils/alerts/ModalAlert";
 import { openModalAlert, type ModalAlertState } from "./utils/alerts/modalAlertUtils";
 import AchievementToast from "./utils/AchievementToast";
 import ProgressBar from "./utils/ProgressBar";
-import Counter, { type CounterHandle } from "./utils/Counter";
+import { type CounterHandle } from "./utils/Counter";
+import TimerDisplay from "./TimerDisplay";
 import { APIPaths } from "../app-constants";
 import { ACHIEVEMENTS, type Achievement } from "../achievements";
 import { playAchievementSound, playTodoAdded, playTodoCompleted, playTodoUncompleted, playTodoDeleted } from "../sounds";
@@ -360,36 +361,23 @@ export default function TodoApp() {
 
     const completedCount = todos.filter(t => t.completed).length;
     const allComplete = todos.length > 0 && completedCount === todos.length;
-    const timerRevealed = isTimerHovered || isTimerTouchRevealed;
-    const timerDimActive = isDimmed && !timerRevealed && !isPulsing && counterHandle.current?.isRunning();
 
     return (
         <div className="flex flex-col items-center gap-3 w-full px-4 sm:px-0">
-            <p className="text-lg text-center text-muted">
-                Your list automatically resets in:
-            </p>
-            <div
-                className="px-8 select-none cursor-default"
-                onMouseEnter={() => { if (!timerTouchRef.current) setIsTimerHovered(true); }}
-                onMouseLeave={() => { if (!timerTouchRef.current) setIsTimerHovered(false); }}
-                onTouchStart={() => { timerTouchRef.current = true; if (isDimmed) setIsTimerTouchRevealed(prev => !prev); }}
-            >
-                <span
-                    className={`inline-flex mb-2 ${isPulsing ? "timer-warning-pulse" : ""} ${timerDimActive ? "timer-dimming" : "timer-revealing"}`}
-                >
-                    <Counter
-                        ref={counterHandle}
-                        startTime={-1}
-                        endTime={0}
-                        step={-1000}
-                        formatString={timeLeftFormatString}
-                        onTick={handleCounterTick}
-                        indicateStartStop={true}
-                        indicateStartStopClass="counttimer-highlight"
-                        className={`font-bold text-xl ${timerDimActive ? "text-muted" : allComplete ? "text-on" : isWarning ? "text-warning" : "text-primary-text"}`}
-                    />
-                </span>
-            </div>
+            <TimerDisplay
+                isPulsing={isPulsing}
+                isDimmed={isDimmed}
+                isWarning={isWarning}
+                allComplete={allComplete}
+                isTimerHovered={isTimerHovered}
+                isTimerTouchRevealed={isTimerTouchRevealed}
+                counterHandle={counterHandle}
+                timerTouchRef={timerTouchRef}
+                setIsTimerHovered={setIsTimerHovered}
+                setIsTimerTouchRevealed={setIsTimerTouchRevealed}
+                formatString={timeLeftFormatString}
+                onTick={handleCounterTick}
+            />
             <div className="relative flex flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 w-full border-b border-primary-border pb-3">
                 <button className={`
                     h-9 px-4 text-sm text-todo-text rounded

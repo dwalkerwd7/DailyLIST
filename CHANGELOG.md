@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0
+
+### Features
+- Dockerfile added for containerized deployment — multi-stage build serving the React client via Express
+
+### Improvements
+- Docker image runs as a non-root user for better security
+- Dockerfile uses inline `chown` to avoid extra image layers
+- Footer size reduced
+
+
 ## v0.9.0
 
 ### Features
